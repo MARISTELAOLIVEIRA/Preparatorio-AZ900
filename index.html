@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- EDITE AQUI: título e descrição da disciplina -->
+  <title>Preparatório AZ-900 · Stela</title>
+  <meta name="description" content="Preparatório AZ-900 Microsoft Azure Fundamentals da Profa. Maristela, Faculdade de Tecnologia e Inovação Senac DF: encontros, trilhas do Microsoft Learn, vídeos, treinos e o caminho até a prova.">
+
+  <link rel="icon" href="assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script src="assets/js/placa.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,400..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/estilo.css">
+  <link rel="stylesheet" href="assets/css/disciplina.css">
+  <link rel="stylesheet" href="assets/css/aula.css">
+  <link rel="stylesheet" href="assets/css/neon.css">
+  <link rel="stylesheet" href="css/az900.css">
+</head>
+<body>
+
+  <!-- ===================== BARRA DO TOPO (igual em todos os sites) ===================== -->
+  <header class="barra">
+    <div class="envolve">
+      <div class="marcas">
+        <a class="marca" href="/" title="Portal da Stela">
+          <img src="assets/img/estrela.webp" alt="" width="26" height="24">
+          <span class="marca-texto">Stela</span>
+        </a>
+        <a class="marca-disc" href="./" title="Página inicial do preparatório">AZ-900</a>
+      </div>
+      <button type="button" class="btn-menu" id="btn-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="nav" id="menu" aria-label="Seções do preparatório">
+        <a href="#dominios">A prova</a>
+        <a href="#encontros">Encontros</a>
+        <a href="#progresso">Meu progresso</a>
+        <a href="#videos">Vídeos</a>
+        <a href="#treinos">Treinos</a>
+        <a href="#caminho">Até a prova</a>
+        <a href="#links">Links</a>
+      </nav>
+      <div class="ajustes">
+        <button type="button" id="btn-tema" aria-label="Mudar para o tema claro">
+          <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        </button>
+        <button type="button" id="btn-fonte" aria-label="Aumentar o tamanho do texto">A+</button>
+        <button type="button" id="btn-movimento" aria-pressed="false">
+          <svg class="pausar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tocar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <span class="rotulo">Pausar animações</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== ABERTURA ===================== -->
+    <section class="abertura">
+      <canvas class="chuva-matrix" aria-hidden="true"></canvas>
+      <div class="envolve abertura-grade">
+        <div>
+          <p class="trilha-migalhas" data-revela>
+            <a href="/">Stela</a> <span aria-hidden="true">/</span>
+            <a href="/#cursos">Preparatórios</a> <span aria-hidden="true">/</span>
+            <span>AZ-900</span>
+          </p>
+          <p class="nome-oficial etiqueta ouro" data-revela style="--i:1">Microsoft Azure Fundamentals</p>
+          <h1 data-revela style="--i:1">Preparatório <span class="neon">AZ-900</span></h1>
+          <p class="quem" data-revela style="--i:1"><span class="memoji" title="Profa. Maristela"><img src="assets/img/memoji.png" alt="Memoji da Profa. Maristela" width="44" height="44"></span>Profa. Maristela · Faculdade de Tecnologia e Inovação Senac DF</p>
+          <p class="subtitulo" data-revela style="--i:2">Dez encontros práticos e as trilhas gratuitas do Microsoft Learn até a primeira certificação de nuvem da Microsoft.</p>
+          <p class="chamada" data-revela style="--i:3">
+            Sala de aula invertida: a teoria fica no Microsoft Learn e nos vídeos curtos, e o encontro é para praticar,
+            resolver desafios e treinar para a prova. Serve para quem está começando em TI, para quem vem de outra área
+            e para quem já conhece outra nuvem.
+          </p>
+          <div class="acoes" data-revela style="--i:4">
+            <a class="botao" href="#encontros">Ver os encontros</a>
+            <a class="botao contorno" href="https://learn.microsoft.com/pt-br/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/">Abrir a trilha 1</a>
+          </div>
+        </div>
+        <div class="vitrine" data-revela style="--i:2">
+          <span class="tec logo-flutua neon-halo" title="Azure"><img src="assets/img/tec/azure.svg" alt="Azure" width="32" height="32"></span>
+          <div class="janela">
+            <div class="janela-barra">
+              <span class="semaforo" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="janela-titulo">cloud shell</span>
+            </div>
+            <pre class="codigo" aria-label="Comandos do Azure CLI que criam um grupo de recursos chamado filhotes na região Brasil Sul"><code><span class="linha"><span class="num">1</span><span class="com"># bora certificar</span></span><span class="linha"><span class="num">2</span>az login</span><span class="linha"><span class="num">3</span>az group create \</span><span class="linha"><span class="num">4</span>  --name filhotes \</span><span class="linha"><span class="num">5</span>  --location brazilsouth</span><span class="linha"><span class="num">6</span><span class="str">"provisioningState": "Succeeded"</span></span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== A PROVA ===================== -->
+    <section class="bloco alt" id="dominios">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">P1 · a prova</span>
+          <h2>Três domínios, uma certificação</h2>
+          <p>O AZ-900 cobre os conceitos de nuvem e o básico do Azure. Os pesos são do guia de estudo oficial, com as habilidades medidas a partir de 20/07/2026.</p>
+        </div>
+        <div class="dominios">
+          <div class="cartao luz d1" data-revela>
+            <span class="olho">Domínio 1 · encontros 1 e 2</span>
+            <span class="numero">25 a 30%</span>
+            <h3>Conceitos de nuvem</h3>
+            <p>O que é nuvem, modelos público, privado e híbrido, responsabilidade compartilhada, benefícios e IaaS, PaaS e SaaS.</p>
+          </div>
+          <div class="cartao luz d2" data-revela style="--i:1">
+            <span class="olho">Domínio 2 · encontros 3 a 7</span>
+            <span class="numero">35 a 40%</span>
+            <h3>Arquitetura e serviços do Azure</h3>
+            <p>Regiões e zonas, computação, rede, armazenamento, identidade, acesso e segurança.</p>
+          </div>
+          <div class="cartao luz d3" data-revela style="--i:2">
+            <span class="olho">Domínio 3 · encontros 8 e 9</span>
+            <span class="numero">30 a 35%</span>
+            <h3>Gerenciamento e governança</h3>
+            <p>Custos, governança e conformidade, ferramentas de gerenciamento e monitoramento.</p>
+          </div>
+        </div>
+        <p class="fonte" data-revela>Nota mínima para aprovação: 700. Fonte: <a href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900">guia de estudo oficial do AZ-900, Microsoft Learn</a>. A Microsoft atualiza o exame de tempos em tempos: confira o guia antes da prova.</p>
+      </div>
+    </section>
+
+    <!-- ===================== ENCONTROS ===================== -->
+    <!-- EDITE AQUI: os encontros são numerados e sem data (o material serve para várias turmas). -->
+    <section class="bloco" id="encontros">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">E1–E10 · encontros</span>
+          <h2>Dez encontros, mão na massa</h2>
+          <p>Cada encontro tem aquecimento, prática guiada, um desafio com caso, mini-simulado e a tarefa da quinzena. Toque num encontro para abrir.</p>
+        </div>
+        <ol class="log encontros" data-revela>
+          <li class="commit encontro d1">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Boas-vindas e o que é computação em nuvem</h3><span class="hash">E01</span></div>
+                <div class="meta"><span class="etiqueta d1">Domínio 1</span> <span>conceitos de nuvem</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Conceitos de computação em nuvem; nuvem pública, privada e híbrida.</li><li>Modelo de responsabilidade compartilhada.</li><li>Tour pelo portal do Azure, em demonstração.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Nuvem no dia a dia: streaming, banco, gov.br. Em duplas, descubram quais serviços que vocês usam dependem de nuvem, e de qual modelo. Depois, cartões com situações: a responsabilidade é do provedor ou do cliente?</p></div>
+                <div><h4>Mini-simulado</h4><p>5 questões de aquecimento no estilo da prova.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeos 1 e 2 · trilha 1, módulos de computação em nuvem e de benefícios. <a href="https://learn.microsoft.com/pt-br/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d1">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Benefícios da nuvem e tipos de serviço</h3><span class="hash">E02</span></div>
+                <div class="meta"><span class="etiqueta d1">Domínio 1</span> <span>conceitos de nuvem</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Alta disponibilidade, escalabilidade, confiabilidade, segurança e governança.</li><li>IaaS, PaaS e SaaS; modelo baseado em consumo e serverless.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>A pirâmide da responsabilidade: com cartões, as duplas montam o que fica com o cliente e com o provedor em IaaS, PaaS e SaaS. Quem já conhece AWS monta a tabela de equivalências.</p></div>
+                <div><h4>Mini-simulado</h4><p>10 questões do domínio 1.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeo 3 · concluir a trilha 1 · trilha 2, módulo de arquitetura. <a href="https://learn.microsoft.com/pt-br/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d2">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Componentes da arquitetura do Azure</h3><span class="hash">E03</span></div>
+                <div class="meta"><span class="etiqueta d2">Domínio 2</span> <span>arquitetura e serviços</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Regiões, pares de regiões, regiões soberanas e zonas de disponibilidade.</li><li>Grupos de gerenciamento, assinaturas, grupos de recursos e recursos.</li><li>Exercício do Learn: criar um recurso (sandbox).</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>O caso de Brasília: um órgão público precisa manter os dados no Brasil. Que região escolher, e por quê? E monte a hierarquia de uma organização fictícia, do grupo de gerenciamento ao recurso.</p></div>
+                <div><h4>Mini-simulado</h4><p>10 questões de arquitetura.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeo 4 · trilha 2, computação. <a href="https://learn.microsoft.com/pt-br/training/paths/azure-fundamentals-describe-azure-architecture-services/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d2">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Computação e hospedagem de aplicações</h3><span class="hash">E04</span></div>
+                <div class="meta"><span class="etiqueta d2">Domínio 2</span> <span>arquitetura e serviços</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Máquinas virtuais, conjuntos de dimensionamento e de disponibilidade, Azure Virtual Desktop.</li><li>Contêineres, funções e App Service.</li><li>O que uma VM precisa: disco, rede, interface e IP.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Qual serviço de computação? Para cada cenário, a turma escolhe entre VM, contêiner, função ou aplicativo web, justificando custo e esforço de gerenciamento.</p></div>
+                <div><h4>Mini-simulado</h4><p>10 questões de computação.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeo 5 · trilha 2, rede. <a href="https://learn.microsoft.com/pt-br/training/paths/azure-fundamentals-describe-azure-architecture-services/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d2">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Redes no Azure e revisão do domínio 1</h3><span class="hash">E05</span></div>
+                <div class="meta"><span class="etiqueta d2">Domínio 2</span> <span>arquitetura e serviços</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Redes virtuais, sub-redes, emparelhamento e DNS do Azure.</li><li>VPN Gateway, ExpressRoute e endpoints públicos e privados.</li><li>Desenho de uma rede híbrida ligando a sede ao Azure.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>VPN ou ExpressRoute? Cenários de conectividade (uma loja pequena, um hospital, um banco) para a turma decidir. E um simulado parcial do domínio 1.</p></div>
+                <div><h4>Mini-simulado</h4><p>15 questões: domínio 1 e redes.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeo 6 · trilha 2, armazenamento. <a href="https://learn.microsoft.com/pt-br/training/paths/azure-fundamentals-describe-azure-architecture-services/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d2">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Armazenamento e migração</h3><span class="hash">E06</span></div>
+                <div class="meta"><span class="etiqueta d2">Domínio 2</span> <span>arquitetura e serviços</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Serviços de armazenamento, camadas (quente, fria e de arquivo) e redundância.</li><li>Contas de armazenamento; AzCopy, Gerenciador de Armazenamento e Sincronização de Arquivos.</li><li>Migrações para Azure e Azure Data Box.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Qual camada e qual redundância? Cenários com custo e disponibilidade. E a migração: Azure Migrate ou Data Box para cada caso.</p></div>
+                <div><h4>Mini-simulado</h4><p>10 questões de armazenamento.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeo 7 · trilha 2, identidade e segurança. <a href="https://learn.microsoft.com/pt-br/training/paths/azure-fundamentals-describe-azure-architecture-services/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d2">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Identidade, acesso e segurança</h3><span class="hash">E07</span></div>
+                <div class="meta"><span class="etiqueta d2">Domínio 2</span> <span>arquitetura e serviços</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Microsoft Entra ID e Domain Services; SSO, MFA e sem senha.</li><li>Acesso Condicional, RBAC, Zero Trust e defesa em profundidade.</li><li>Microsoft Defender para Nuvem.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Escape room de segurança: as equipes resolvem enigmas sobre MFA, Acesso Condicional, RBAC e Zero Trust para "sair" da sala. E um simulado parcial do domínio 2.</p></div>
+                <div><h4>Mini-simulado</h4><p>15 questões do domínio 2.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeo 8 · trilha 3, custos e governança. <a href="https://learn.microsoft.com/pt-br/training/paths/describe-azure-management-governance/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d3">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Custos, governança e conformidade</h3><span class="hash">E08</span></div>
+                <div class="meta"><span class="etiqueta d3">Domínio 3</span> <span>gerenciamento e governança</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Fatores de custo, calculadora de preços, Gerenciamento de Custos e tags.</li><li>Microsoft Purview, Azure Policy e bloqueios de recursos.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Desafio do orçamento: as equipes estimam o custo mensal de um sistema e propõem formas de economizar. E governança no setor público: como Azure Policy, tags e Purview ajudam um órgão a cumprir a LGPD.</p></div>
+                <div><h4>Mini-simulado</h4><p>10 questões de custos e governança.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeos 9 e 10 · concluir a trilha 3 · fazer a avaliação prática oficial. <a href="https://learn.microsoft.com/pt-br/training/paths/describe-azure-management-governance/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d3">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Gerenciamento, monitoramento e revisão geral</h3><span class="hash">E09</span></div>
+                <div class="meta"><span class="etiqueta d3">Domínio 3</span> <span>gerenciamento e governança</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Portal, Cloud Shell, CLI, PowerShell, Azure Arc, IaC e ARM.</li><li>Azure Advisor, Integridade do Serviço e Azure Monitor.</li><li>Exercício do Learn com o Azure CLI no Cloud Shell (sandbox).</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Jeopardy do Azure em equipes, revisando os três domínios, depois da análise coletiva dos resultados da avaliação prática oficial.</p></div>
+                <div><h4>Mini-simulado</h4><p>15 questões sobre todo o conteúdo.</p></div>
+                <div><h4>Para a quinzena</h4><p>Vídeos 11 e 12 · Exam Readiness Zone · refazer a avaliação prática até o resultado ficar consistente. <a href="https://learn.microsoft.com/pt-br/training/paths/describe-azure-management-governance/">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+          <li class="commit encontro d0">
+            <details>
+              <summary>
+                <div class="commit-linha"><h3>Simulado final e caminho até a prova</h3><span class="hash">E10</span></div>
+                <div class="meta"><span class="etiqueta d0">Todos os domínios</span> <span>revisão final</span></div>
+              </summary>
+              <div class="encontro-corpo">
+                <div><h4>Prática guiada</h4><ul><li>Simulado final completo, com tempo controlado.</li><li>Ambiente da prova na área restrita de demonstração.</li><li>Agendamento com a Pearson VUE e regras do dia da prova.</li></ul></div>
+                <div><h4>Desafio e caso</h4><p>Correção comentada por domínio e o mapa individual: cada um descobre os seus três pontos mais fracos e monta o plano até a prova.</p></div>
+                <div><h4>Mini-simulado</h4><p>As pegadinhas mais comuns.</p></div>
+                <div><h4>Para a quinzena</h4><p>Plano de estudos individual · próximos passos: AZ-104, SC-900 ou AI-900. <a href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900">Abrir no Microsoft Learn</a></p></div>
+              </div>
+            </details>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== MEU PROGRESSO ===================== -->
+    <section class="bloco alt" id="progresso">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">J1 · meu progresso</span>
+          <h2>As três trilhas do Microsoft Learn</h2>
+          <p>Marque os módulos que você já concluiu. O progresso fica salvo só neste navegador. As conquistas do seu perfil no Learn são a comprovação oficial.</p>
+        </div>
+        <div class="trilhas" data-revela>
+          <div class="cartao trilha-learn d1">
+            <h3><a href="https://learn.microsoft.com/pt-br/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/">Trilha 1 · conceitos de nuvem</a></h3>
+            <div class="progresso-atividade" data-progresso="trilha-1">
+              <span class="contagem">0 de 3</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="trilha-1">
+              <li><label><input type="checkbox"><span>Descrever a computação em nuvem</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever os benefícios do uso de serviços de nuvem</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever os tipos de serviço de nuvem</span></label></li>
+            </ol>
+          </div>
+          <div class="cartao trilha-learn d2">
+            <h3><a href="https://learn.microsoft.com/pt-br/training/paths/azure-fundamentals-describe-azure-architecture-services/">Trilha 2 · arquitetura e serviços</a></h3>
+            <div class="progresso-atividade" data-progresso="trilha-2">
+              <span class="contagem">0 de 4</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="trilha-2">
+              <li><label><input type="checkbox"><span>Descrever os componentes arquitetônicos principais do Azure</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever os serviços de computação e rede do Azure</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever os serviços de armazenamento do Azure</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever a identidade, o acesso e a segurança do Azure</span></label></li>
+            </ol>
+          </div>
+          <div class="cartao trilha-learn d3">
+            <h3><a href="https://learn.microsoft.com/pt-br/training/paths/describe-azure-management-governance/">Trilha 3 · gerenciamento e governança</a></h3>
+            <div class="progresso-atividade" data-progresso="trilha-3">
+              <span class="contagem">0 de 4</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="trilha-3">
+              <li><label><input type="checkbox"><span>Descrever o gerenciamento de custos no Azure</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever recursos e ferramentas no Azure para governança e conformidade</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever recursos e ferramentas para gerenciar e implantar recursos do Azure</span></label></li>
+              <li><label><input type="checkbox"><span>Descrever as ferramentas de monitoramento no Azure</span></label></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VÍDEOS ===================== -->
+    <section class="bloco" id="videos">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">V1–V12 · vídeos</span>
+          <h2>Vídeos curtos para estudar em casa</h2>
+          <p>De 8 a 12 minutos cada: conceitos, uma demonstração no portal e as pegadinhas de prova. Os links ficam no Teams da turma.</p>
+        </div>
+        <ol class="videos" data-revela>
+          <li class="painel-video d1"><span class="n">Vídeo 01 · Domínio 1</span><strong>O que é nuvem e quem é responsável pelo quê</strong><span class="gancho">Seu e-mail está na nuvem. Mas quem cuida da segurança dele?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d1"><span class="n">Vídeo 02 · Domínio 1</span><strong>Benefícios da nuvem</strong><span class="gancho">Por que uma empresa trocaria o próprio datacenter pela nuvem?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d1"><span class="n">Vídeo 03 · Domínio 1</span><strong>IaaS, PaaS, SaaS e serverless</strong><span class="gancho">Pizza em casa, delivery ou restaurante: qual é qual na nuvem?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d2"><span class="n">Vídeo 04 · Domínio 2</span><strong>Regiões, zonas e a hierarquia do Azure</strong><span class="gancho">Onde ficam fisicamente os dados de um órgão público de Brasília?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d2"><span class="n">Vídeo 05 · Domínio 2</span><strong>Computação no Azure</strong><span class="gancho">Servidor, contêiner ou função: qual escolher?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d2"><span class="n">Vídeo 06 · Domínio 2</span><strong>Redes no Azure</strong><span class="gancho">Como ligar a sede da empresa à nuvem com segurança?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d2"><span class="n">Vídeo 07 · Domínio 2</span><strong>Armazenamento no Azure</strong><span class="gancho">Onde guardar arquivos que quase ninguém acessa, pagando pouco?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d2"><span class="n">Vídeo 08 · Domínio 2</span><strong>Identidade e segurança</strong><span class="gancho">Senha forte basta?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d3"><span class="n">Vídeo 09 · Domínio 3</span><strong>Custos no Azure</strong><span class="gancho">A conta da nuvem veio alta. E agora?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d3"><span class="n">Vídeo 10 · Domínio 3</span><strong>Governança e conformidade</strong><span class="gancho">Como impedir que alguém crie recursos fora das regras?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d3"><span class="n">Vídeo 11 · Domínio 3</span><strong>Ferramentas de gerenciamento e IaC</strong><span class="gancho">Clicar no portal ou escrever código?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+          <li class="painel-video d3"><span class="n">Vídeo 12 · Domínio 3</span><strong>Monitoramento e como é a prova</strong><span class="gancho">Como saber se o problema é seu ou da Microsoft?</span><span class="status">Os links ficam no Teams da turma.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== TREINOS ===================== -->
+    <section class="bloco alt" id="treinos">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">T1 · treinos</span>
+          <h2>Treine quantas vezes quiser</h2>
+          <p>Cada resposta mostra na hora o que está certo e por quê.</p>
+        </div>
+        <div class="treinos">
+          <div class="cartao treino" id="servico" data-revela>
+            <h3>Qual é o serviço?</h3>
+            <p class="dica-treino">Leia a necessidade e escolha o serviço do Azure que resolve.</p>
+            <p class="pergunta" aria-live="polite"></p>
+            <div class="opcoes"></div>
+            <p class="retorno" aria-live="polite"></p>
+            <p class="placar"></p>
+            <button type="button" class="botao contorno proxima">Próxima</button>
+          </div>
+          <div class="cartao treino" id="simulado" data-revela style="--i:1">
+            <h3>Mini-simulado</h3>
+            <p class="dica-treino">Questões no estilo da prova, uma de cada vez.</p>
+            <p class="pergunta" aria-live="polite"></p>
+            <div class="opcoes"></div>
+            <p class="retorno" aria-live="polite"></p>
+            <p class="placar"></p>
+            <button type="button" class="botao contorno proxima">Próxima</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ATÉ A PROVA ===================== -->
+    <section class="bloco" id="caminho">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">C1 · até a prova</span>
+          <h2>Do Learn até o badge</h2>
+        </div>
+        <ol class="log" data-revela>
+          <li class="commit"><div class="commit-linha"><h3>Crie o perfil no Microsoft Learn</h3><span class="hash">01</span></div><p>É nele que ficam as conquistas das trilhas e o seu perfil de certificação.</p></li>
+          <li class="commit"><div class="commit-linha"><h3>Conclua as três trilhas</h3><span class="hash">02</span></div><p>No ritmo dos encontros, uma quinzena de cada vez.</p></li>
+          <li class="commit"><div class="commit-linha"><h3>Faça a avaliação prática oficial</h3><span class="hash">03</span></div><p>Gratuita, no Microsoft Learn. Refaça até o resultado ficar consistente.</p></li>
+          <li class="commit"><div class="commit-linha"><h3>Conheça o ambiente da prova</h3><span class="hash">04</span></div><p>A área restrita de demonstração mostra como são as telas e os tipos de questão.</p></li>
+          <li class="commit"><div class="commit-linha"><h3>Agende com a Pearson VUE</h3><span class="hash">05</span></div><p>Presencial ou online, pelo seu perfil de certificação. Leia as regras do dia da prova. A nota mínima é 700.</p></li>
+          <li class="commit"><div class="commit-linha"><h3>Divulgue a conquista</h3><span class="hash">06</span></div><p>Compartilhe o badge no LinkedIn. Próximos passos: AZ-104, SC-900 ou AI-900.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== LINKS ===================== -->
+    <section class="bloco alt" id="links">
+      <div class="envolve">
+        <div class="cab" data-revela>
+          <span class="olho">L1 · links oficiais</span>
+          <h2>Tudo gratuito, tudo da Microsoft</h2>
+        </div>
+        <div class="repos">
+          <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/" data-revela><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Trilha 1: conceitos de nuvem</h4><p>Domínio 1 da prova.</p><span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta d1">domínio 1</span></span></a>
+          <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/paths/azure-fundamentals-describe-azure-architecture-services/" data-revela style="--i:1"><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Trilha 2: arquitetura e serviços</h4><p>Domínio 2 da prova.</p><span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta d2">domínio 2</span></span></a>
+          <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/paths/describe-azure-management-governance/" data-revela style="--i:2"><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Trilha 3: gerenciamento e governança</h4><p>Domínio 3 da prova.</p><span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta d3">domínio 3</span></span></a>
+          <a class="repo luz" href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900" data-revela><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Guia de estudo oficial</h4><p>As habilidades medidas, tópico por tópico.</p><span class="repo-pe"><span class="ling" style="--cor:#9fd0b7"><i></i>Documentação</span><span class="etiqueta">referência</span></span></a>
+          <a class="repo luz" href="https://learn.microsoft.com/pt-br/credentials/certifications/exams/az-900/practice/assessment?assessment-type=practice&amp;assessmentId=23" data-revela style="--i:1"><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Avaliação prática oficial</h4><p>Simulado gratuito da própria Microsoft.</p><span class="repo-pe"><span class="ling" style="--cor:#ecc874"><i></i>Simulado</span><span class="etiqueta ouro">treino</span></span></a>
+          <a class="repo luz" href="https://aka.ms/examdemo" data-revela style="--i:2"><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Ambiente de demonstração da prova</h4><p>As telas e os tipos de questão, antes do dia.</p><span class="repo-pe"><span class="ling" style="--cor:#ecc874"><i></i>Prova</span><span class="etiqueta">conhecer</span></span></a>
+          <a class="repo luz" href="https://learn.microsoft.com/pt-br/shows/exam-readiness-zone/" data-revela><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span><h4>Exam Readiness Zone</h4><p>Vídeos oficiais de preparação para a prova.</p><span class="repo-pe"><span class="ling" style="--cor:#9fd0b7"><i></i>Vídeo</span><span class="etiqueta">revisão</span></span></a>
+          <a class="repo luz" href="https://azure.microsoft.com/pt-br/pricing/calculator/" data-revela style="--i:1"><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Azure</span><h4>Calculadora de preços</h4><p>Para o desafio do orçamento do encontro 8.</p><span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta">ferramenta</span></span></a>
+          <a class="repo luz" href="https://azure.microsoft.com/pt-br/free/students/" data-revela style="--i:2"><span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Azure</span><h4>Azure for Students</h4><p>Créditos gratuitos para estudantes praticarem.</p><span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta verde">gratuito</span></span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="envolve"><img src="assets/img/coracao.webp" alt="" width="30" height="28"><span>Preparatório AZ-900 · Faculdade de Tecnologia e Inovação Senac DF · Profa. Maristela Oliveira · <a href="/">Portal da Stela</a></span></div>
+  </footer>
+
+  <!-- ícone de repositório (Octicons, licença MIT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-repo" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></symbol>
+  </svg>
+
+  <script src="assets/js/aulas.js"></script>
+  <script src="assets/js/matrix.js"></script>
+  <script src="js/treinos.js"></script>
+</body>
+</html>
