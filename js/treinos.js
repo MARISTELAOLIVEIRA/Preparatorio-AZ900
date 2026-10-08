@@ -85,7 +85,8 @@
   }
 
   // monta um treino: cada rodada mostra uma pergunta, as opções e o retorno
-  function treino(caixa, rodadas) {
+  // aoCompletar(acertos, total): chamado quando o aluno passa por todas as questões uma vez
+  function treino(caixa, rodadas, aoCompletar) {
     if (!caixa) return;
     const pergunta = caixa.querySelector(".pergunta");
     const opcoes = caixa.querySelector(".opcoes");
@@ -95,6 +96,8 @@
     let fila = embaralha(rodadas);
     let feitas = 0;
     let acertos = 0;
+    let daRodada = 0;
+    let certasDaRodada = 0;
 
     function mostra() {
       if (!fila.length) {
@@ -119,6 +122,13 @@
           if (!certo) b.classList.add("errado");
           retorno.textContent = (certo ? "Compilou de primeira! " : "Curto-circuito. ") + r.explicacao;
           placar.textContent = acertos + " de " + feitas + " certas";
+          daRodada++;
+          if (certo) certasDaRodada++;
+          if (aoCompletar && daRodada === rodadas.length) {
+            aoCompletar(certasDaRodada, daRodada, placar);
+            daRodada = 0;
+            certasDaRodada = 0;
+          }
           proxima.focus();
         });
         opcoes.appendChild(b);
@@ -146,6 +156,13 @@
   });
 
   treino(document.getElementById("servico"), rodadasServico);
-  treino(document.getElementById("simulado"), rodadasSimulado);
+  treino(document.getElementById("simulado"), rodadasSimulado, function (certas, total, placar) {
+    // rodada completa: logado (js/conta.js), a nota vai para a nuvem
+    if (window.CONTA && CONTA.usuario()) {
+      CONTA.salvarTreino("mini-simulado", "estudo", certas, total).then(function (ok) {
+        if (ok) placar.textContent += " · rodada completa: " + certas + " de " + total + ", nota guardada na sua conta";
+      });
+    }
+  });
 
 })();
