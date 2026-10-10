@@ -153,3 +153,86 @@
   width: clamp(11rem, 26vw, 15rem);
   height: auto;
 }
+
+/* ---------- barra numa linha só: este preparatório tem 7 links no menu e o botão Entrar ---------- */
+/* até 1180px os links ficam no botão Menu (como no celular); acima disso, lado a lado e mais juntos */
+@media (max-width: 1180px) {
+  .nav {
+    display: none;
+  }
+
+  .btn-menu {
+    display: inline-block;
+  }
+
+  .nav.aberto {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    order: 3;
+    flex-basis: 100%;
+    border-top: 1px solid var(--borda);
+  }
+
+  .nav.aberto a {
+    padding: .8rem .1rem;
+    font-size: 1rem;
+    color: var(--texto);
+  }
+
+  .nav.aberto a + a {
+    border-top: 1px solid var(--borda);
+  }
+}
+
+@media (min-width: 1181px) {
+  .nav {
+    flex-wrap: nowrap;
+    gap: 1.1rem;
+  }
+}
+
+/* com o botão Entrar, em telas estreitas (até 700px) a barra só cabe numa linha se o botão de pausa
+   for só o ícone. O texto continua lá para leitores de tela. */
+@media (max-width: 700px) {
+  #btn-movimento {
+    width: 2.1rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  #btn-movimento .rotulo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* celular: botões mais juntos, para o logo, o Menu e os ajustes ficarem na mesma linha */
+@media (max-width: 520px) {
+  .barra .envolve {
+    gap: .6rem;
+  }
+
+  .ajustes {
+    gap: .25rem;
+  }
+
+  .ajustes button,
+  .btn-menu {
+    padding: .3rem .6rem;
+  }
+
+  .ajustes .marca {
+    margin-left: .4rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .ajustes .marca {
+    margin-left: .2rem;
+  }
+}

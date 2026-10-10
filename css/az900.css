@@ -305,10 +305,29 @@
 
 /* o botão "Entrar" da barra usa o mesmo estilo dos outros botões dela (estilo.css) */
 #btn-conta {
-  max-width: 11rem;
+  max-width: 9rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* telas estreitas: o "Olá, nome" encurta com reticências para a barra continuar numa linha só */
+@media (max-width: 600px) {
+  #btn-conta {
+    max-width: 7rem;
+  }
+}
+
+@media (max-width: 520px) {
+  #btn-conta {
+    max-width: 4.75rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #btn-conta {
+    max-width: 4rem;
+  }
 }
 
 .conta-janela {
