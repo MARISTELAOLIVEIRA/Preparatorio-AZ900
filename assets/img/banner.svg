@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="titulo descricao">
+  <title id="titulo">Preparatório AZ-900 · Microsoft Azure Fundamentals · Profa. Maristela · Senac DF</title>
+  <desc id="descricao">Banner escuro em azul: o título do preparatório à esquerda, três faixas para os três domínios da prova e, à direita, uma janela do Cloud Shell com o comando az group create criando o grupo de recursos filhotes na região brazilsouth, com a resposta provisioningState Succeeded.</desc>
+
+  <defs>
+    <clipPath id="cantos">
+      <rect width="1200" height="360" rx="24"/>
+    </clipPath>
+
+    <linearGradient id="fundo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1A33"/>
+      <stop offset="1" stop-color="#050B17"/>
+    </linearGradient>
+    <radialGradient id="brilhoAzul" cx="0%" cy="0%" r="65%">
+      <stop offset="0" stop-color="#0078D4" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#0078D4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brilhoCiano" cx="100%" cy="100%" r="55%">
+      <stop offset="0" stop-color="#50E6FF" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#50E6FF" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="brilho" x="-20%" y="-60%" width="140%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="halo"/>
+      <feMerge>
+        <feMergeNode in="halo"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Grade de pontos, como um mapa de regiões -->
+    <pattern id="pontos" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="14" r="1.3" fill="#1E3A63"/>
+    </pattern>
+
+    <style>
+      .titulo { font: 700 64px "Segoe UI", Arial, "Helvetica Neue", sans-serif; fill: #FFFFFF; }
+      .olho   { font: 700 16px Consolas, "Courier New", monospace; fill: #50E6FF; letter-spacing: 2px; }
+      .assina { font: 400 19px Consolas, "Courier New", monospace; fill: #7FC4FF; }
+      .rotulo { font: 400 14px Consolas, "Courier New", monospace; fill: #9FB3CF; }
+      .mono   { font: 400 16px Consolas, "Courier New", monospace; fill: #E3ECF7; white-space: pre; }
+      .prompt { fill: #50E6FF; }
+      .chave  { fill: #7FC4FF; }
+      .valor  { fill: #FFC76B; }
+      .ok     { fill: #3DDC97; }
+      .suave  { fill: #6F86A6; }
+      .cursor { animation: pisca 1s steps(1) infinite; }
+      @keyframes pisca { 50% { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    </style>
+  </defs>
+
+  <g clip-path="url(#cantos)">
+    <rect width="1200" height="360" fill="url(#fundo)"/>
+    <rect width="1200" height="360" fill="url(#pontos)"/>
+    <rect width="1200" height="360" fill="url(#brilhoAzul)"/>
+    <rect width="1200" height="360" fill="url(#brilhoCiano)"/>
+
+    <!-- Título -->
+    <text x="60" y="88" class="olho">MICROSOFT AZURE FUNDAMENTALS</text>
+    <text x="58" y="160" class="titulo" textLength="440" lengthAdjust="spacingAndGlyphs">Preparatório</text>
+    <text x="58" y="228" class="titulo" textLength="250" lengthAdjust="spacingAndGlyphs">AZ-900</text>
+    <text x="60" y="272" class="assina">&gt; Profa. Maristela_ · Senac DF</text>
+
+    <!-- Três faixas: os três domínios da prova -->
+    <g filter="url(#brilho)">
+      <rect x="60"  y="298" width="150" height="6" rx="3" fill="#50E6FF"/>
+      <rect x="218" y="298" width="150" height="6" rx="3" fill="#0078D4"/>
+      <rect x="376" y="298" width="150" height="6" rx="3" fill="#FFC76B"/>
+    </g>
+    <text x="60"  y="326" class="rotulo">conceitos</text>
+    <text x="218" y="326" class="rotulo">arquitetura</text>
+    <text x="376" y="326" class="rotulo">governança</text>
+
+    <!-- Janela do Cloud Shell -->
+    <g transform="translate(660 44)">
+      <rect width="494" height="280" rx="12" fill="#06101F" fill-opacity=".95" stroke="#0078D4" stroke-width="1.5"/>
+      <rect width="494" height="34" rx="12" fill="#0F2547"/>
+      <rect y="22" width="494" height="12" fill="#0F2547"/>
+      <circle cx="22" cy="17" r="6" fill="#FF5F57"/>
+      <circle cx="42" cy="17" r="6" fill="#FEBC2E"/>
+      <circle cx="62" cy="17" r="6" fill="#28C840"/>
+      <text x="247" y="22" text-anchor="middle" style="font: 400 14px Consolas, 'Courier New', monospace; fill: #9FB3CF">cloud shell — bash</text>
+
+      <text x="20" y="66"  class="mono suave"># bora certificar</text>
+      <text x="20" y="90"  class="mono"><tspan class="prompt">aluno@azure:~$</tspan> az login</text>
+      <text x="20" y="114" class="mono"><tspan class="prompt">aluno@azure:~$</tspan> az group create \</text>
+      <text x="20" y="136" class="mono">    --name filhotes --location brazilsouth</text>
+      <text x="20" y="162" class="mono">{</text>
+      <text x="20" y="184" class="mono">  <tspan class="chave">"name"</tspan>: <tspan class="valor">"filhotes"</tspan>,</text>
+      <text x="20" y="206" class="mono">  <tspan class="chave">"provisioningState"</tspan>: <tspan class="ok">"Succeeded"</tspan></text>
+      <text x="20" y="228" class="mono">}</text>
+      <text x="20" y="262" class="mono"><tspan class="prompt">aluno@azure:~$</tspan> <tspan class="cursor prompt">█</tspan></text>
+    </g>
+  </g>
+</svg>
