@@ -211,6 +211,23 @@
   font-size: .8rem;
 }
 
+/* aula no ar: o card ganha o link para a página da aula */
+.painel-video .abrir {
+  align-self: flex-start;
+  margin-top: .2rem;
+  padding: .3rem .8rem;
+  border-radius: 999px;
+  border: 1px solid var(--c);
+  color: var(--texto);
+  font-weight: 700;
+  font-size: .88rem;
+  text-decoration: none;
+}
+
+.painel-video .abrir:hover {
+  background: color-mix(in srgb, var(--c) 18%, transparent);
+}
+
 
 /* ---------- treinos ---------- */
 

@@ -1,0 +1,95 @@
+/*
+  treino.css: a cara do Stela Cloud no portal de treino do AZ-900 (versão 1 · 2026-11-11).
+  Fica por cima do portal.css (o visual do simulador de Fundamentos): cores por serviço, o nome do Azure
+  embaixo de cada serviço, os botões do topo (sino, ajuda, conta) e os passos das missões.
+  Nada de logo, ícone ou fonte da Microsoft: o logo é o do Stela Cloud (desenho original).
+*/
+
+/* cores por serviço, as mesmas do Stela Cloud (mais escuras no tema claro) */
+:root {
+  --c-identity: #b48cff; --c-storage: #3fd6c4; --c-network: #ff9f43;
+  --c-vault: #ecc874; --c-compute: #5aa9ff; --c-monitor: #4fd8ff;
+}
+[data-tema="claro"] {
+  --c-identity: #6b3fc9; --c-storage: #0f7f73; --c-network: #b05a00;
+  --c-vault: #8a6614; --c-compute: #1f5fae; --c-monitor: #0b6f8a;
+}
+
+/* o topo do Stela Cloud: escuro nos dois temas, com o dourado e a menta da Stela */
+.treino .sim-topo {
+  background: linear-gradient(90deg, #0d1411, color-mix(in srgb, var(--neon) 28%, #0d1411));
+  border-bottom: 1px solid rgba(214, 178, 94, .35);
+}
+.treino .sim-marca { display: inline-flex; align-items: center; gap: .45rem; }
+.treino .sim-marca img { flex: none; }
+
+.sim-icones { display: flex; gap: .3rem; align-items: center; }
+.sim-icones button {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .3rem .55rem; border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .22); background: rgba(0, 0, 0, .2);
+  color: #f2efe6; font: inherit; font-size: .9rem; cursor: pointer;
+}
+.sim-icones button:hover, .sim-icones button[aria-expanded="true"] { border-color: #ecc874; background: rgba(214, 178, 94, .18); }
+.sim-icones button:focus-visible { outline: 2px solid #ecc874; outline-offset: 2px; }
+.treino .sim-conta { opacity: 1; }
+
+/* o painel que abre embaixo do topo (conta, notificações, ajuda) */
+.sim-painel-topo {
+  margin: 0; padding: .9rem 1.1rem;
+  border-bottom: 1px solid var(--borda-forte);
+  background: var(--superficie-2);
+  animation: treino-surge .3s var(--suave);
+}
+.sim-painel-topo h3 { margin: 0 0 .5rem; font: 800 1.05rem var(--f-titulo); }
+.sim-painel-topo p { margin: .3rem 0; }
+.sim-avisos { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.sim-avisos li { border-left: 3px solid var(--ouro); padding-left: .6rem; color: var(--texto-2); font-size: .92rem; }
+.sim-avisos time { display: block; font: .75rem var(--f-mono); color: var(--texto-3); }
+.sim-bolinha {
+  display: inline-block; width: .7rem; height: .7rem; margin-right: .4rem; border-radius: 50%;
+  background: var(--menta); box-shadow: 0 0 0 0 var(--menta); animation: treino-pulsa 2s infinite;
+}
+
+/* menu lateral e cartões dos serviços: ícone na cor do serviço e o nome do Azure embaixo */
+.treino .sim-menu button {
+  display: flex; align-items: center; gap: .55rem;
+  border-left: 3px solid var(--cor, transparent);
+}
+.treino .sim-menu button span:first-child { flex: none; width: 1.4rem; text-align: center; }
+/* nos cartões, o ícone grande em cima e a faixa da cor do serviço no topo */
+.treino .sim-servicos button { border-top: 3px solid var(--cor, var(--borda-forte)); }
+.treino .sim-servicos button span + span { font-size: .88rem; font-weight: 700; }
+.treino .sim-menu small,
+.treino .sim-servicos small { display: block; font-size: .74rem; color: var(--texto-3); font-weight: 400; }
+.treino .sim-menu button[aria-current] { border-left-color: var(--cor, var(--ouro)); }
+.sim-equivale {
+  display: inline-block; margin: 0 0 .8rem; padding: .25rem .8rem; border-radius: 999px;
+  border: 1px solid var(--borda-forte); font-size: .88rem; color: var(--texto-2);
+}
+
+/* os passos da missão, marcados sozinhos */
+.sim-passos { list-style: none; margin: .4rem 0 0; padding: 0; display: grid; gap: .3rem; }
+.sim-passos li { padding: .25rem 0 !important; border: 0 !important; font-size: .86rem; display: block !important; }
+.sim-passos li.feito { color: var(--texto); animation: treino-surge .35s var(--suave); }
+.sim-barrinha {
+  display: block; height: 6px; margin-top: .4rem; border-radius: 999px;
+  background: linear-gradient(90deg, var(--menta) calc(var(--p) * 100%), var(--borda-forte) 0);
+  transition: background .4s;
+}
+
+@keyframes treino-surge { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes treino-pulsa { 70% { box-shadow: 0 0 0 7px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.pausado .sim-bolinha, .pausado .sim-painel-topo, .pausado .sim-passos li.feito { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .sim-bolinha, .sim-painel-topo, .sim-passos li.feito { animation: none; }
+}
+
+/* celular: o texto da conta some, ficam os ícones */
+@media (max-width: 720px) {
+  .treino .sim-conta { display: inline-flex; }
+  .sim-conta-texto { display: none; }
+  .treino .sim-topo { flex-wrap: wrap; }
+  .treino .sim-busca { order: 5; flex-basis: 100%; }
+  .sim-icones { margin-left: auto; }
+}

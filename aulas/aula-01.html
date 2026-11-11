@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- EDITE AQUI: número e tema da aula -->
+  <title>Aula 1: O que é nuvem e quem cuida do quê · Preparatório AZ-900 · Stela</title>
+  <meta name="description" content="Aula 1 do Preparatório AZ-900: o e-mail invadido, o shopping da responsabilidade compartilhada, o que é computação em nuvem, as camadas de quem cuida do quê, nuvem pública, privada, híbrida e multinuvem, o modelo baseado em consumo e o tour pelo portal de treino.">
+
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <script src="../assets/js/placa.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,400..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+  <link rel="stylesheet" href="../assets/css/disciplina.css">
+  <link rel="stylesheet" href="../assets/css/aula.css">
+  <link rel="stylesheet" href="../assets/css/neon.css?v=3">
+  <link rel="stylesheet" href="../css/interativos.css?v=1">
+  <link rel="stylesheet" href="../css/aula-az.css?v=1">
+  <link rel="stylesheet" href="../css/vivo.css?v=1">
+</head>
+<body>
+
+  <!-- ===================== BARRA DO TOPO (igual em todos os sites) ===================== -->
+  <header class="barra">
+    <div class="envolve">
+      <div class="marcas">
+        <a class="marca-disc marca-logo" href="../" title="Página inicial do preparatório"><img src="../assets/img/tec/azure.svg" alt="Preparatório AZ-900: página inicial" width="32" height="32"></a>
+      </div>
+      <button type="button" class="btn-menu" id="btn-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="nav" id="menu" aria-label="Partes da aula">
+        <a href="../#videos">← Preparatório</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#conceitos">Conceitos</a>
+        <a href="#demonstracao">Portal</a>
+        <a href="#pegadinha">Pegadinha</a>
+        <a href="#treino">Treino</a>
+        <a href="#atividade">Checklist</a>
+      </nav>
+      <div class="ajustes">
+        <button type="button" id="btn-tema" aria-label="Mudar para o tema claro">
+          <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        </button>
+        <button type="button" id="btn-fonte" aria-label="Aumentar o tamanho do texto">A+</button>
+        <button type="button" id="btn-movimento" aria-pressed="false">
+          <svg class="pausar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tocar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <span class="rotulo">Pausar animações</span>
+        </button>
+        <a class="marca" href="/" title="Portal da Stela">
+          <img src="../assets/img/estrela.webp" alt="" width="26" height="24">
+          <span class="marca-texto">Stela</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== CABEÇALHO DA AULA ===================== -->
+    <section class="aula-cab">
+      <canvas class="chuva-matrix" aria-hidden="true"></canvas>
+      <div class="envolve">
+        <p class="trilha-migalhas">
+          <a href="/">Stela</a> <span aria-hidden="true">/</span>
+          <a href="../">Preparatório AZ-900</a> <span aria-hidden="true">/</span>
+          <a href="../#videos">Aulas</a> <span aria-hidden="true">/</span>
+          <span>Aula 1</span>
+        </p>
+
+        <!-- EDITE AQUI: número, vídeo, domínio da prova e título -->
+        <div class="aula-etiquetas">
+          <span class="etiqueta senac">Fac Senac DF</span>
+          <span class="etiqueta ouro">Aula 1</span>
+          <span class="etiqueta">Vídeo 1</span>
+          <span class="etiqueta dominio" style="--cor:var(--d1)">Domínio 1 · Conceitos de nuvem</span>
+        </div>
+        <h1>O que é nuvem e quem cuida do <span class="neon">quê</span></h1>
+        <p class="subtitulo">A definição da Microsoft, a responsabilidade compartilhada, nuvem pública, privada, híbrida e multinuvem, e o primeiro passeio pelo portal.</p>
+      </div>
+    </section>
+
+    <!-- ===================== RESUMO ===================== -->
+    <section class="bloco faixa alt" aria-label="Resumo da aula">
+      <div class="envolve">
+        <div class="resumo">
+          <div class="cartao">
+            <span class="olho">Objetivo</span>
+            <p>Explicar o que é nuvem, dizer quem cuida de cada parte (você ou a Microsoft) e reconhecer numa questão o modelo de nuvem.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Revezamento</span>
+            <p>Primeiro esta página (e o vídeo 1, quando sair). Depois, o módulo <strong>Descrever a computação em nuvem</strong>, no Microsoft Learn.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Na prova</span>
+            <p>Domínio 1, Conceitos de nuvem: <strong>25 a 30%</strong> das questões.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bloco">
+      <div class="envolve aula-corpo">
+
+        <!-- ===================== ROTEIRO DA AULA ===================== -->
+        <section class="parte" id="video">
+          <div class="cab">
+            <span class="olho">V1 · roteiro da aula</span>
+            <h2>O que você vai aprender</h2>
+            <p>Os assuntos da aula, na ordem da página. Clique para ir direto a um deles. Viu o <strong>⏸ Pausa aqui</strong>? Pare e tente responder antes de abrir a resposta.</p>
+          </div>
+          <div class="cartao">
+            <ol class="roteiro-video sem-tempo">
+              <li><a href="#gancho">G1 · Seu e-mail está na nuvem. Quem cuida da segurança dele?</a></li>
+              <li><a href="#simulador">SIM1 · A cozinha vai para o shopping: quem cuida do quê</a></li>
+              <li><a href="#c1">C1 · O que é nuvem, na definição da Microsoft</a></li>
+              <li><a href="#c2">C2 · A responsabilidade compartilhada, camada por camada</a></li>
+              <li><a href="#c3">C3 · Nuvem pública, privada, híbrida e multinuvem</a></li>
+              <li><a href="#c4">C4 · Pagar pelo que usa: o modelo baseado em consumo</a></li>
+              <li><a href="#placa">X1 · Desmonte a nuvem: a placa de sucata</a></li>
+              <li><a href="#demonstracao">D1 · Faça junto: tour pelo portal de treino</a></li>
+              <li><a href="#pegadinha">P1 · A pegadinha: privada não é "no meu prédio"</a></li>
+              <li><a href="#learn">Agora é no Microsoft Learn</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== GANCHO (vivo.js, parte 1) ===================== -->
+        <section class="parte" id="gancho">
+          <div class="cab">
+            <span class="olho">G1 · gancho</span>
+            <h2>O e-mail invadido</h2>
+          </div>
+          <div class="gancho plantao" data-plantao data-link="#simulador" data-link-texto="Separe quem cuida de quê no simulador logo abaixo">
+            <p class="gancho-evento">🛵 Cerrado Delivery · segunda, 7h12</p>
+            <span class="tarja">🔴 Alerta de segurança</span>
+            <p class="manchete">"Novo acesso à sua conta de e-mail, de um computador em outro país."</p>
+            <div class="letreiro" aria-hidden="true"><span>O e-mail do Cerrado Delivery fica no Microsoft 365 · a senha era a mesma do Wi-Fi da cozinha · a verificação em duas etapas estava desligada · alguém mandou cupons falsos para os clientes…</span></div>
+            <button type="button" class="botao" data-abrir>▶ E agora, de quem é a culpa?</button>
+            <div class="gancho-voto" data-revela hidden>
+              <p class="gancho-pergunta" tabindex="-1">Seu e-mail está na nuvem. Mas quem cuida da segurança dele?</p>
+              <div class="gancho-botoes">
+                <button type="button" aria-pressed="false" data-explica="Em parte. A Microsoft cuida do datacenter, dos servidores e do programa do e-mail. Mas a senha fraca e a verificação desligada eram da equipe.">🏢 A Microsoft</button>
+                <button type="button" aria-pressed="false" data-explica="Em parte. A senha e a verificação em duas etapas são suas. Mas o prédio, os servidores e o programa do e-mail são da Microsoft.">🙋 Eu</button>
+                <button type="button" aria-pressed="false" data-explica="Isso! A Microsoft cuida do datacenter e do serviço; a senha, a verificação em duas etapas e quem tem acesso são seus. Isso tem nome: responsabilidade compartilhada.">🤝 Os dois</button>
+              </div>
+              <p class="gancho-resposta" aria-live="polite"></p>
+            </div>
+          </div>
+          <p class="fonte">História fictícia, criada para a aula.</p>
+        </section>
+
+        <!-- ===================== ESTUDO DE CASO ===================== -->
+        <section class="parte" id="caso">
+          <div class="cab">
+            <span class="olho">EC1 · estudo de caso</span>
+            <h2>O servidor no fundo da cozinha</h2>
+          </div>
+          <div class="cartao caso">
+            <p>O <strong>Cerrado Delivery</strong> é um aplicativo de entrega de comida de Brasília. O sistema dos pedidos roda num servidor no fundo da cozinha central, na Asa Norte.</p>
+            <p>No almoço, o aplicativo fica lento. No domingo à noite, dia de pizza, trava. E na última queda de energia da quadra, ficou duas horas fora do ar.</p>
+            <p>A Lia, sócia que cuida da tecnologia, quer levar o sistema para o Azure. O Rafa, sócio da cozinha, pergunta: "Então a segurança fica toda com a Microsoft?"</p>
+            <h3>Para pensar</h3>
+            <ol>
+              <li>Na nuvem, quem cuida da energia quando a quadra fica sem luz?</li>
+              <li>E quem decide quem da equipe tem a senha do sistema?</li>
+              <li>Comprar mais servidores para o domingo à noite resolve. E no resto da semana?</li>
+            </ol>
+            <p class="fonte">Empresa fictícia, criada para o preparatório. Ela volta em todas as aulas e nas missões do <a href="../portal/">portal de treino</a>.</p>
+          </div>
+        </section>
+
+        <!-- ===================== SIMULADOR (vivo.js, parte 2) ===================== -->
+        <section class="parte" id="simulador">
+          <div class="cab">
+            <span class="olho">SIM1 · simulador</span>
+            <h2>A cozinha vai para o shopping</h2>
+            <p>Levar o sistema para a nuvem é como levar a cozinha para a praça de alimentação de um shopping. O <strong>shopping</strong> (a Microsoft) cuida do prédio. A <strong>loja</strong> (o Cerrado Delivery) cuida do que é dela. E algumas coisas dependem do contrato. Escolha uma coluna para cada tarefa e aperte <strong>Conferir</strong>.</p>
+          </div>
+          <div class="sim" data-central="shopping">
+            <ol class="central">
+              <li class="central-linha" data-tarefa="vigia">
+                <span class="tarefa"><strong>🛡️ O vigia na porta do shopping</strong><small>na nuvem: a segurança física do datacenter</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida do vigia na porta">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="chave">
+                <span class="tarefa"><strong>🔑 Quem recebe a chave da loja</strong><small>na nuvem: as contas, as senhas e a verificação em duas etapas</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida da chave da loja">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="fogao">
+                <span class="tarefa"><strong>🍳 A manutenção do fogão</strong><small>na nuvem: o sistema operacional</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida da manutenção do fogão">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="caderno">
+                <span class="tarefa"><strong>📒 O caderno de clientes e as receitas</strong><small>na nuvem: os dados</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida do caderno de clientes">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="luz">
+                <span class="tarefa"><strong>⚡ A luz, o gerador e o ar-condicionado</strong><small>na nuvem: energia e refrigeração do datacenter</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida da luz e do ar-condicionado">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="caixa">
+                <span class="tarefa"><strong>🧾 O sistema do caixa</strong><small>na nuvem: o aplicativo</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida do sistema do caixa">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="celular">
+                <span class="tarefa"><strong>📱 O celular do caixa</strong><small>na nuvem: os aparelhos que acessam o sistema</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida do celular do caixa">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="corredor">
+                <span class="tarefa"><strong>🚧 Os corredores, os cabos e os elevadores</strong><small>na nuvem: os servidores e a rede física</small></span>
+                <div class="dz-botoes" role="group" aria-label="Quem cuida dos corredores e dos cabos">
+                  <button type="button" data-motor="microsoft" aria-pressed="false">🏬 Shopping (Microsoft)</button>
+                  <button type="button" data-motor="voce" aria-pressed="false">🍲 Loja (você)</button>
+                  <button type="button" data-motor="depende" aria-pressed="false">🤝 Depende do serviço</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+            </ol>
+            <div class="sim-acoes"><button type="button" class="vai">▶ Conferir</button><span>placar: <span class="central-placar" data-placar>–</span></span></div>
+            <p class="casa-fala" aria-live="polite"></p>
+          </div>
+          <p class="fonte">Simulação para a aula, com as áreas de responsabilidade da Microsoft (C2, logo abaixo).</p>
+
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>O fogão e o sistema do caixa ficaram em "depende". Depende de quê?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Do serviço que a loja contrata. Fogão próprio: a manutenção é dela. Fogão da praça de alimentação: é do shopping. Na nuvem é igual: numa <strong>máquina virtual</strong>, o sistema operacional é seu; num <strong>serviço pronto</strong>, é da Microsoft. Esses jeitos de contratar têm nome (IaaS, PaaS e SaaS) e são o assunto da aula 3.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== CONCEITOS ===================== -->
+        <section class="parte" id="conceitos">
+          <div class="cab">
+            <span class="olho">C1–C4 · conceitos</span>
+            <h2>O que a prova quer que você saiba</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c1">
+            <div class="texto">
+              <span class="olho">C1</span>
+              <h3>Nuvem, na definição da Microsoft</h3>
+              <p>Para a Microsoft, computação em nuvem é a <strong>entrega de serviços de computação pela internet</strong>: máquinas virtuais, armazenamento, bancos de dados e rede. E também coisas novas, como Internet das Coisas, aprendizado de máquina e inteligência artificial.</p>
+              <ul>
+                <li><strong>Pela internet:</strong> os servidores ficam nos datacenters da Microsoft, e você usa de onde estiver.</li>
+                <li><strong>Sem esperar a obra:</strong> precisou de mais máquinas? Não precisa construir um datacenter novo.</li>
+                <li><strong>Cresce e diminui:</strong> mais máquinas no domingo à noite, menos na segunda de manhã.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-compute/3-what-cloud-compute">Microsoft Learn, O que é computação em nuvem?</a>, consultado em 11/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> a AWS define como a entrega de recursos de TI <strong>sob demanda</strong>, pela internet, com <strong>pagamento conforme o uso</strong>. É a mesma ideia, com outras palavras (<a href="https://aws.amazon.com/what-is-cloud-computing/">AWS, What is cloud computing?</a>, consultado em 04/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c2">
+            <div class="texto">
+              <span class="olho">C2</span>
+              <h3>A responsabilidade compartilhada, camada por camada</h3>
+              <p>No seu datacenter, tudo é com você. Indo para a nuvem, uma parte passa para a Microsoft. Quanto? <strong>Depende do serviço.</strong> Clique em cada modelo e veja a linha subir.</p>
+              <div class="camadas-resp" data-camadas>
+                <div class="casa-modos" role="group" aria-label="Escolha o modelo">
+                  <button type="button" data-modelo="0" aria-pressed="true"><span class="ico" aria-hidden="true">🏢</span><strong>No seu datacenter</strong><small>local</small></button>
+                  <button type="button" data-modelo="1" aria-pressed="false"><span class="ico" aria-hidden="true">🖥️</span><strong>Máquina virtual</strong><small>IaaS</small></button>
+                  <button type="button" data-modelo="2" aria-pressed="false"><span class="ico" aria-hidden="true">🧰</span><strong>Plataforma pronta</strong><small>PaaS</small></button>
+                  <button type="button" data-modelo="3" aria-pressed="false"><span class="ico" aria-hidden="true">📧</span><strong>Programa pronto</strong><small>SaaS</small></button>
+                </div>
+                <ol class="camadas-lista">
+                  <li class="camada-az" data-quem="vvvv"><span class="dia"><span aria-hidden="true">📒</span><span>O caderno de clientes</span></span><span class="tec-nome">Dados</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vvvv"><span class="dia"><span aria-hidden="true">🎛️</span><span>Como a loja se organiza</span></span><span class="tec-nome">Configurações</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vvvv"><span class="dia"><span aria-hidden="true">🔑</span><span>Quem tem a chave</span></span><span class="tec-nome">Identidades e usuários</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vvvc"><span class="dia"><span aria-hidden="true">📱</span><span>O celular do caixa</span></span><span class="tec-nome">Dispositivos</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vvcc"><span class="dia"><span aria-hidden="true">🧾</span><span>O sistema do caixa</span></span><span class="tec-nome">Aplicativos</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vvcm"><span class="dia"><span aria-hidden="true">🚪</span><span>Quem entra pela porta dos fundos</span></span><span class="tec-nome">Controles de rede</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vvmm"><span class="dia"><span aria-hidden="true">🍳</span><span>A manutenção do fogão</span></span><span class="tec-nome">Sistema operacional</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vmmm"><span class="dia"><span aria-hidden="true">🚧</span><span>Corredores e cabos</span></span><span class="tec-nome">Servidores e rede físicos</span><span class="quem"></span></li>
+                  <li class="camada-az" data-quem="vmmm"><span class="dia"><span aria-hidden="true">🏬</span><span>O prédio, a luz e o vigia</span></span><span class="tec-nome">Datacenter físico</span><span class="quem"></span></li>
+                </ol>
+                <ul class="camadas-legenda">
+                  <li><i style="--c:var(--vivo-voce)"></i>você</li>
+                  <li><i class="listra"></i>os dois</li>
+                  <li><i style="--c:var(--neon)"></i>Microsoft</li>
+                </ul>
+                <p class="casa-fala" aria-live="polite"></p>
+              </div>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/azure/security/fundamentals/shared-responsibility">Microsoft Learn, Responsabilidade compartilhada na nuvem</a> (a matriz de responsabilidades) e <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-compute/4-describe-shared-responsibility-model">Descrever o modelo de responsabilidade compartilhada</a>, consultados em 11/11/2026.</p>
+              <details class="pausa-aqui">
+                <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>O e-mail do Cerrado Delivery é um programa pronto. Quem tinha que ligar a verificação em duas etapas da equipe?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+                <div class="pausa-resposta"><p>A própria equipe. Mesmo no programa pronto (SaaS), as <strong>identidades e os usuários</strong> continuam com você. A Microsoft oferece a verificação; ligar é com você.</p></div>
+              </details>
+              <p class="dica"><strong>Na prova:</strong> <strong>sempre seus</strong>, em qualquer modelo: os dados, as contas e quem tem acesso. <strong>Sempre da Microsoft</strong>, na nuvem: o datacenter, a rede física e os servidores físicos. O resto depende do serviço.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o nome é o mesmo, modelo de responsabilidade compartilhada. A AWS resume assim: ela cuida da segurança <strong>da</strong> nuvem, e você, da segurança <strong>na</strong> nuvem (<a href="https://aws.amazon.com/compliance/shared-responsibility-model/">AWS, Shared Responsibility Model</a>, consultado em 11/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c3">
+            <div class="texto">
+              <span class="olho">C3</span>
+              <h3>Nuvem pública, privada, híbrida e multinuvem</h3>
+              <p>Os modelos de nuvem dizem <strong>onde</strong> os recursos ficam e <strong>quem</strong> usa. A prova cobra os quatro.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Modelo</th><th>O que quer dizer</th><th>Exemplo</th></tr></thead><tbody>
+                <tr><td><strong>Pública</strong><span class="termo-en">public cloud</span></td><td>Criada e mantida por um provedor. Qualquer pessoa ou empresa pode contratar. Sem comprar equipamento, e você paga pelo que usa.</td><td>O Cerrado Delivery leva o sistema inteiro para o Azure.</td></tr>
+                <tr><td><strong>Privada</strong><span class="termo-en">private cloud</span></td><td>Usada por uma organização só. Dá mais controle, mas custa mais. Pode ficar no prédio dela <strong>ou num datacenter de terceiros</strong>, dedicado a ela.</td><td>Uma rede de hospitais com uma nuvem só dela.</td></tr>
+                <tr><td><strong>Híbrida</strong><span class="termo-en">hybrid cloud</span></td><td>Pública e privada ligadas, funcionando juntas. A empresa escolhe o que fica em cada lado.</td><td>O aplicativo no Azure; o sistema fiscal antigo no servidor da cozinha, conectado a ele.</td></tr>
+                <tr><td><strong>Multinuvem</strong><span class="termo-en">multicloud</span></td><td>Dois ou mais provedores de nuvem <strong>pública</strong> ao mesmo tempo.</td><td>O aplicativo no Azure e os e-mails de propaganda num serviço de outro provedor.</td></tr>
+              </tbody></table></div>
+              <ul>
+                <li><strong>Azure Arc:</strong> gerencia tudo de um lugar só, seja Azure, nuvem privada, híbrida ou multinuvem.</li>
+                <li><strong>Solução VMware no Azure:</strong> para quem já usa VMware na nuvem privada e quer levar para a pública ou para a híbrida.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-compute/5-define-cloud-models">Microsoft Learn, Definir modelos de nuvem</a>, consultado em 11/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> a AWS usa outros nomes: nuvem (tudo na nuvem), híbrida e local (<em>on-premises</em>). A ideia é a mesma.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c4">
+            <div class="texto">
+              <span class="olho">C4</span>
+              <h3>Pagar pelo que usa: o modelo baseado em consumo</h3>
+              <p>Na nuvem você não compra o servidor: <strong>aluga</strong> pelo tempo que usa e devolve quando termina. Isso muda o tipo de gasto.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Gasto</th><th>O que é</th><th>No Cerrado Delivery</th></tr></thead><tbody>
+                <tr><td><strong>CapEx</strong><span class="termo-en">despesa de capital</span></td><td>Gastar antes, com equipamento físico: servidores, rede, sala.</td><td>Comprar três servidores para aguentar o domingo à noite.</td></tr>
+                <tr><td><strong>OpEx</strong><span class="termo-en">despesa operacional</span></td><td>Pagar aos poucos, pelos serviços que usou. <strong>A nuvem é OpEx.</strong></td><td>Ligar mais máquinas só no domingo à noite e pagar só essas horas.</td></tr>
+              </tbody></table></div>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-compute/6-describe-consumption-based-model">Microsoft Learn, Descrever o modelo baseado em consumo</a>, consultado em 11/11/2026.</p>
+              <p class="dica">Os benefícios da nuvem (alta disponibilidade, escalabilidade e outros) são o assunto da aula 2. Os preços, da aula 9.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== DESMONTE A NUVEM (vivo.js, parte 4) ===================== -->
+        <section class="parte" id="placa">
+          <div class="cab">
+            <span class="olho">X1 · desmonte a nuvem</span>
+            <h2>A nuvem é o computador de outra pessoa</h2>
+            <p>Num prédio enorme, com milhares deles. Clique nas peças desta placa-mãe e descubra o nome de cada uma no Azure. Tem uma placa velha ou sucata em casa? Procure as mesmas peças nela.</p>
+          </div>
+          <div class="placa-nuvem" data-placa>
+            <div class="placa-desenho">
+              <svg viewBox="0 0 400 300" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+                <path class="placa-trilha" d="M70 102 V150 H150 M268 60 H280 V150 H248 M200 186 V216 M130 236 H168 M60 192 V150 H150"/>
+                <path class="placa-pulso" d="M70 102 V150 H150 M268 60 H280 V150 H248 M60 192 V150 H150"/>
+                <g class="placa-enfeite">
+                  <circle cx="20" cy="20" r="6"/><circle cx="380" cy="20" r="6"/><circle cx="20" cy="280" r="6"/><circle cx="380" cy="280" r="6"/>
+                  <circle cx="150" cy="150" r="3"/><circle cx="248" cy="150" r="3"/><circle cx="200" cy="216" r="3"/><circle cx="130" cy="236" r="3"/><circle cx="60" cy="150" r="3"/>
+                  <rect x="300" y="250" width="22" height="9" rx="2"/><rect x="330" y="250" width="22" height="9" rx="2"/><rect x="186" y="40" width="9" height="22" rx="2"/><rect x="204" y="40" width="9" height="22" rx="2"/>
+                </g>
+              </svg>
+              <button type="button" class="peca rede" data-peca="rede" aria-pressed="false"><span>REDE<br>RJ45</span></button>
+              <button type="button" class="peca cpu" data-peca="cpu" aria-pressed="false"><span>CPU</span></button>
+              <button type="button" class="peca ram" data-peca="ram" aria-pressed="false"><span>RAM</span></button>
+              <button type="button" class="peca disco" data-peca="disco" aria-pressed="false"><span>SSD</span></button>
+              <button type="button" class="peca energia" data-peca="energia" aria-pressed="false"><span>FONTE<br>COOLER</span></button>
+            </div>
+            <div class="placa-ficha" aria-live="polite">
+              <span class="olho">placa-mãe de sucata</span>
+              <h4>Clique numa peça</h4>
+              <p>Cada peça desta placa tem um nome no Azure. Tudo o que você aluga numa máquina virtual está aqui.</p>
+              <p class="placa-contagem">0 de 5 peças</p>
+            </div>
+          </div>
+          <p class="fonte">Os detalhes de cada peça (tamanhos, discos e redes) voltam nas aulas 5, 6 e 7.</p>
+        </section>
+
+        <!-- ===================== DEMONSTRAÇÃO ===================== -->
+        <section class="parte" id="demonstracao">
+          <div class="cab">
+            <span class="olho">D1 · demonstração</span>
+            <h2>Faça junto: tour pelo portal de treino</h2>
+            <p>Abra o portal de treino noutra aba, siga um passo de cada vez e marque cada um aqui. O portal também marca sozinho, na lista de missões.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p><a class="botao" href="../portal/" target="_blank" rel="noopener">☁️ Abrir o portal de treino</a></p>
+              <div class="progresso-atividade" data-progresso="portal-aula-01">
+                <span class="contagem">0 de 6</span>
+                <span class="barra-progresso"><span></span></span>
+              </div>
+              <ol class="checklist" id="portal-aula-01">
+                <li><label><input type="checkbox"><span>Na barra de pesquisa do topo, digitei <strong>máquinas</strong> e achei o serviço.</span></label></li>
+                <li><label><input type="checkbox"><span>Abri <strong>Criar um recurso</strong> e vi as categorias: computação, rede, armazenamento…</span></label></li>
+                <li><label><input type="checkbox"><span>Abri <strong>Todos os recursos</strong>. Vazio, por enquanto.</span></label></li>
+                <li><label><input type="checkbox"><span>Cliquei na <strong>conta</strong>, no canto de cima, e achei a assinatura e o diretório.</span></label></li>
+                <li><label><input type="checkbox"><span>Abri as <strong>notificações</strong>, no sino.</span></label></li>
+                <li><label><input type="checkbox"><span>Abri <strong>Ajuda + suporte</strong> e vi a integridade do serviço.</span></label></li>
+              </ol>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>No menu do portal, cada serviço do Stela Cloud tem o nome do Azure embaixo. Qual é o nome no Azure do <strong>Stela Compute</strong>?</li>
+                  <li>E o que a assinatura tem a ver com a fatura? Volte ao painel da conta e leia.</li>
+                </ol>
+              </div>
+              <p class="dica"><strong>No Azure de verdade:</strong> o portal do Azure tem o mesmo jeito, com a pesquisa no topo, Criar um recurso, Todos os recursos, o sino, o ponto de interrogação da ajuda e a conta no canto. Tem o Azure for Students? Faça o mesmo tour lá, só olhando.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o portal do Azure equivale ao <strong>console da AWS</strong>, também com a pesquisa no topo e os serviços por categoria.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== PEGADINHA ===================== -->
+        <section class="parte" id="pegadinha">
+          <div class="cab">
+            <span class="olho">P1 · pegadinha de prova</span>
+            <h2>Privada não é "no meu prédio"</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p>Os quatro modelos aparecem juntos nas alternativas. Duas confusões derrubam muita gente.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Confusão</th><th>O certo</th><th>A pista na questão</th></tr></thead><tbody>
+                <tr><td><strong>"Privada é a que fica no prédio da empresa"</strong></td><td>Privada é a de <strong>uma organização só</strong>. Pode ficar no prédio dela ou num datacenter de terceiros.</td><td>"Usada exclusivamente por", "uma única organização".</td></tr>
+                <tr><td><strong>"Híbrida é usar duas nuvens"</strong></td><td>Híbrida liga a <strong>pública com a privada</strong>. Duas públicas juntas é multinuvem.</td><td>"Datacenter local conectado ao Azure" é híbrida; "Azure e outro provedor" é multinuvem.</td></tr>
+              </tbody></table></div>
+              <details class="pausa-aqui">
+                <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Uma empresa não tem datacenter próprio. Usa o Azure para o site e outro provedor para as cópias de segurança. Híbrida ou multinuvem?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+                <div class="pausa-resposta"><p><strong>Multinuvem:</strong> são duas nuvens públicas, e nada de nuvem privada. Para ser híbrida, precisava ter uma parte privada ligada à pública.</p></div>
+              </details>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Um órgão público mantém uma nuvem só dele, num datacenter alugado. Que modelo é? <strong>Privada</strong>: é de uma organização só, mesmo fora do prédio.</li>
+                  <li>E o Cerrado Delivery, com o aplicativo no Azure e o sistema fiscal no servidor da cozinha? <strong>Híbrida</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== TREINO ===================== -->
+        <section class="parte" id="treino">
+          <div class="cab">
+            <span class="olho">T1–T2 · treino</span>
+            <h2>Classifique!</h2>
+            <p>Cada acerto de primeira vale <strong>10 XP</strong>. Errou? A dica aparece e você tenta de novo. No fim, você ganha uma insígnia.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-1">
+            <div class="texto">
+              <span class="olho">T1</span>
+              <h3>Quem cuida?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="voce:Sempre o cliente,microsoft:Sempre a Microsoft,depende:Depende do serviço" data-dica="Volte às camadas do C2: o que fica dourado em todos os modelos?">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="voce" data-explica="Os dados são do cliente em qualquer modelo, do datacenter local ao SaaS.">A lista de clientes do Cerrado Delivery, guardada na nuvem.</li>
+                    <li data-resposta="microsoft" data-explica="Segurança física do datacenter: na nuvem, é sempre da Microsoft.">A portaria e as câmeras do datacenter.</li>
+                    <li data-resposta="voce" data-explica="Contas e acessos são sempre do cliente: quem entra, com que senha, com que verificação.">Tirar o acesso de um entregador que saiu da empresa.</li>
+                    <li data-resposta="depende" data-explica="O sistema operacional é seu numa máquina virtual (IaaS) e da Microsoft num serviço pronto (PaaS e SaaS).">Atualizar o sistema operacional do servidor.</li>
+                    <li data-resposta="microsoft" data-explica="Trocar um disco físico que queimou é com quem tem o prédio e as máquinas: a Microsoft.">Trocar um disco físico que queimou num servidor do Azure.</li>
+                    <li data-resposta="depende" data-explica="O aplicativo instalado por você é seu; num programa pronto (SaaS), quem mantém é a Microsoft.">Corrigir uma falha no aplicativo.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-2">
+            <div class="texto">
+              <span class="olho">T2</span>
+              <h3>Qual modelo de nuvem?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="publica:Pública,privada:Privada,hibrida:Híbrida,multi:Multinuvem" data-dica="Volte à tabela do C3: quantas organizações usam, e quais nuvens estão ligadas?">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="publica" data-explica="Tudo num provedor que atende qualquer cliente: nuvem pública.">Uma startup põe o site, o banco de dados e os arquivos inteiros no Azure.</li>
+                    <li data-resposta="privada" data-explica="Uma organização só, com recursos dedicados: nuvem privada, mesmo num datacenter de terceiros.">Um banco mantém uma nuvem só dele, num datacenter alugado e dedicado.</li>
+                    <li data-resposta="hibrida" data-explica="O datacenter da empresa ligado ao Azure: nuvem híbrida.">Uma escola deixa as notas no servidor dela e liga esse servidor a um site no Azure.</li>
+                    <li data-resposta="multi" data-explica="Dois provedores de nuvem pública ao mesmo tempo: multinuvem.">Uma loja usa o Azure para o site e outro provedor de nuvem para os vídeos.</li>
+                    <li data-resposta="hibrida" data-explica="Quando o pico vem, a nuvem privada pega emprestada a capacidade da pública: híbrida.">Uma nuvem privada usa a nuvem pública só nos dias de pico.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== ATIVIDADE ===================== -->
+        <section class="parte" id="atividade">
+          <div class="cab">
+            <span class="olho">A1 · checklist</span>
+            <h2>Checklist da aula</h2>
+            <p>O que você marcar fica salvo neste navegador.</p>
+          </div>
+
+          <div class="cartao">
+            <div class="progresso-atividade" data-progresso="passos-aula-01">
+              <span class="contagem">0 de 10</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="passos-aula-01">
+              <li><label><input type="checkbox"><span>Estudei esta página até o fim (ou assisti ao vídeo 1, quando ele sair). <a href="#video">Veja o roteiro da aula</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Separei as oito tarefas do shopping e ganhei o troféu. <a href="#simulador">Veja o SIM1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei dizer, numa frase, o que é nuvem para a Microsoft. <a href="#c1">Veja o C1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que é sempre meu, o que é sempre da Microsoft e o que depende. <a href="#c2">Veja o C2</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Separo nuvem pública, privada, híbrida e multinuvem. <a href="#c3">Veja o C3</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei a diferença entre CapEx e OpEx. <a href="#c4">Veja o C4</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Desmontei a placa: sei o nome no Azure das cinco peças. <a href="#placa">Veja o X1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz o tour pelo portal de treino. <a href="#demonstracao">Veja o D1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz os dois treinos Classifique! e ganhei as insígnias. <a href="#treino">Veja o treino</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz o módulo "Descrever a computação em nuvem" no Microsoft Learn e marquei no <a href="../#progresso">Meu progresso</a>.</span></label></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== CONEXÃO STEAM ===================== -->
+        <section class="parte" id="steam">
+          <div class="cab">
+            <span class="olho">S1 · conexão STEAM</span>
+            <h2>A nuvem fora da tela</h2>
+          </div>
+          <div class="steam">
+            <div class="cartao">
+              <span class="letra">M</span>
+              <h3>Matemática</h3>
+              <p>Um servidor de R$ 24.000 comprado à vista (CapEx) ou um aluguel de R$ 2.000 por mês (OpEx)? Em quantos meses os dois custam o mesmo? E se o aluguel valer só nos 4 domingos do mês? (Números redondos, inventados para a conta.)</p>
+            </div>
+            <div class="cartao">
+              <span class="letra">E</span>
+              <h3>Engenharia</h3>
+              <p>Pegue uma placa de sucata e cole adesivos: dourado no que seria seu, azul no que seria da Microsoft. Faça uma vez para a máquina virtual e outra para o programa pronto. O que mudou de cor?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MICROSOFT LEARN ===================== -->
+        <section class="parte" id="learn">
+          <div class="cab">
+            <span class="olho">J1 · agora é no Microsoft Learn</span>
+            <h2>O revezamento: a sua vez no Learn</h2>
+            <p>Esta aula preparou o terreno. O módulo do Learn aprofunda, com a verificação de conhecimentos oficial, de graça e em português.</p>
+          </div>
+          <div class="repos">
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-compute/">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span>
+              <h4>Descrever a computação em nuvem</h4>
+              <p>Trilha 1, módulo 1: o que é nuvem, responsabilidade compartilhada, modelos e consumo.</p>
+              <span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="../assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta">próximo passo</span></span>
+            </a>
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Guia da prova</span>
+              <h4>AZ-900, guia de estudo</h4>
+              <p>O que a Microsoft diz que cai em cada domínio. Confira antes de agendar.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:var(--d1)"><i></i>Conceitos</span><span class="etiqueta">fonte</span></span>
+            </a>
+            <a class="repo luz" href="/Preparatorio-AWS/aulas/aula-01.html">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Preparatório AWS</span>
+              <h4>Aula 1: O que é computação em nuvem</h4>
+              <p>O mesmo assunto pelo lado da AWS, para quem faz os dois preparatórios.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:#ff9900"><i></i>AWS</span><span class="etiqueta">como é na AWS</span></span>
+            </a>
+          </div>
+        </section>
+
+        <nav class="nav-aulas" aria-label="Outras aulas">
+          <!-- EDITE AQUI: use <a href="aula-NN.html"> quando a página da aula vizinha for liberada; <span> enquanto não for -->
+          <a class="anterior" href="../#videos">
+            <span class="olho">← voltar</span>
+            <strong>Aulas do preparatório</strong>
+          </a>
+          <span class="proxima">
+            <span class="olho">próxima aula</span>
+            <strong>Aula 2: Benefícios da nuvem (em breve)</strong>
+          </span>
+        </nav>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="envolve">
+      <div class="rodape-fim" style="margin-top:0; padding-top:0; border-top:0">
+        <span><a href="../">Preparatório AZ-900</a> · Feito com ♥ e sucata eletrônica.</span>
+        <span>az account show --output table</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ícone de repositório (Octicons, licença MIT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-repo" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></symbol>
+  </svg>
+
+  <script src="../assets/js/aulas.js"></script>
+  <script src="../assets/js/classifica.js?v=2"></script>
+  <script src="../assets/js/matrix.js?v=2"></script>
+  <script src="../js/vivo.js?v=1"></script>
+</body>
+</html>

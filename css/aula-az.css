@@ -1,0 +1,366 @@
+/* ==============================================================
+   aula-az.css: as peças das páginas de aula do preparatório (versão 1 · 2026-11-11)
+   Cópia do aula-aws.css do Preparatório AWS (versão 7), com as cores dos três domínios do AZ-900
+   (as mesmas do az900.css). As aulas não carregam o az900.css, que é da página inicial.
+   ============================================================== */
+:root{
+  --noite:var(--fundo);
+  --painel:var(--superficie);
+  --painel2:var(--superficie-2);
+  --tinta:var(--texto);
+  --suave:var(--texto-2);
+  --linha:var(--borda-forte);
+  --d1:#5fd0de;        /* ciano: Conceitos de nuvem */
+  --d2:#6aa8ff;        /* azul: Arquitetura e serviços */
+  --d3:#b892f2;        /* lilás: Gerenciamento e governança */
+  --itn:var(--d1);     /* nomes antigos, das peças copiadas da AWS */
+  --srwe:var(--ouro-forte);
+  --ensa:#ec7096;
+  --tec:var(--d3);
+  --ok:var(--neon);
+  --erro:#ff5c7a;
+}
+/* tema claro: as cores dos domínios ficam mais fechadas, para manter o contraste */
+[data-tema="claro"]{--d1:#0b7a88;--d2:#1f5fbf;--d3:#6b3fb0;--ensa:#b4234a;--erro:#c22450}
+
+/* Peças das aulas ------------------------------------------- */
+
+/* etiqueta do domínio da prova, na cor dele */
+.etiqueta.dominio {
+  color: var(--cor, var(--itn));
+  border-color: currentColor;
+}
+
+/* a ordem do vídeo: uma trilha com um pulso de luz descendo pelos blocos */
+.roteiro-video {
+  position: relative;
+  display: grid;
+  gap: .55rem;
+  margin: 0;
+  padding: 0 0 0 1.6rem;
+  list-style: none;
+}
+
+.roteiro-video::before {
+  content: "";
+  position: absolute;
+  top: .4rem;
+  bottom: .4rem;
+  left: .45rem;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--neon), var(--ouro)) no-repeat,
+              var(--borda-forte);
+  background-size: 2px 18%, auto;
+  animation: pulso-trilha 3.2s linear infinite;
+}
+
+.roteiro-video li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  gap: .6rem;
+  align-items: baseline;
+}
+/* enquanto os vídeos não saem, o roteiro vai sem os tempos */
+.roteiro-video.sem-tempo li { grid-template-columns: 1fr; }
+
+/* o pad da trilha em cada bloco */
+.roteiro-video li::before {
+  content: "";
+  position: absolute;
+  left: -1.42rem;
+  top: .45rem;
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--fundo);
+  border: 2px solid var(--ouro);
+}
+
+.roteiro-video time {
+  font: 500 .85rem var(--f-mono);
+  color: var(--neon);
+}
+
+@keyframes pulso-trilha {
+  from { background-position: 0 -20%, 0 0; }
+  to   { background-position: 0 120%, 0 0; }
+}
+
+.pausado .roteiro-video::before {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roteiro-video::before {
+    animation: none;
+  }
+}
+
+/* termo da prova em inglês, ao lado do nome em português */
+.termo-en {
+  display: block;
+  font: 400 .8rem var(--f-mono);
+  color: var(--texto-3);
+}
+
+/* mapa da infraestrutura (aula 3): região, zonas e pontos de presença, com pulsos nas trilhas */
+.mapa-infra {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: .4rem 0 .2rem;
+}
+
+.mapa-infra text {
+  font: 500 13px var(--f-mono);
+  fill: var(--texto-2);
+}
+
+.mapa-infra .titulo-mapa {
+  font: 700 15px var(--f-titulo);
+  fill: var(--texto);
+}
+
+.mapa-infra .regiao {
+  fill: none;
+  stroke: var(--neon);
+  stroke-width: 2;
+}
+
+.mapa-infra .zona {
+  fill: var(--superficie-2);
+  stroke: var(--borda-forte);
+  stroke-width: 1.5;
+}
+
+.mapa-infra .dc {
+  fill: var(--chip);
+  stroke: var(--ouro);
+  stroke-width: 1;
+}
+
+.mapa-infra .pop {
+  fill: var(--fundo);
+  stroke: var(--itn);
+  stroke-width: 2;
+}
+
+/* a trilha fica parada; o pulso é um traço curto que corre por cima dela */
+.mapa-infra .trilha {
+  fill: none;
+  stroke: var(--borda-forte);
+  stroke-width: 2;
+}
+
+.mapa-infra .pulso {
+  fill: none;
+  stroke: var(--ouro-forte);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 10 190;
+  animation: pulso-mapa 2.6s linear infinite;
+}
+
+.mapa-infra .pulso.borda {
+  stroke: var(--itn);
+  animation-duration: 3.4s;
+}
+
+@keyframes pulso-mapa {
+  from { stroke-dashoffset: 200; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.pausado .mapa-infra .pulso {
+  animation: none;
+  stroke: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapa-infra .pulso {
+    animation: none;
+    stroke: none;
+  }
+}
+
+/* mapa da VPC (aula 5): sub-redes públicas e privadas, e o gateway de internet */
+.mapa-infra .sub-publica {
+  fill: var(--superficie);
+  stroke: var(--neon);
+  stroke-width: 1.5;
+}
+
+.mapa-infra .sub-privada {
+  fill: var(--superficie);
+  stroke: var(--itn);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.mapa-infra .gw {
+  fill: var(--chip);
+  stroke: var(--ouro);
+  stroke-width: 1.5;
+}
+
+/* texto em cima de um chip: o chip é escuro nos dois temas */
+.mapa-infra .no-chip {
+  fill: #f2efe6;
+}
+
+/* decodificador de nomes de instância (aula 6, js/instancia.js): usa o visual da calculadora do interativos.css */
+.decodifica-exemplos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.decodifica-exemplos button {
+  padding: .35rem .8rem;
+  border-radius: 999px;
+  border: 1px solid var(--borda-forte);
+  background: var(--superficie);
+  color: var(--texto);
+  font: 500 .88rem var(--f-mono);
+  cursor: pointer;
+}
+
+.decodifica-exemplos button:hover {
+  border-color: var(--neon);
+}
+
+/* simulador do Auto Scaling (aula 10, js/escala.js): uma fileira de máquinas que acendem */
+.escala {
+  display: grid;
+  gap: .8rem;
+  margin-top: 1rem;
+}
+
+.escala label {
+  display: grid;
+  gap: .4rem;
+  font-size: .92rem;
+  color: var(--texto-2);
+}
+
+.escala input[type="range"] {
+  width: 100%;
+  accent-color: var(--neon);
+}
+
+.escala-maquinas {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: .4rem;
+}
+
+.escala-maquina {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: var(--chip);
+  border: 1px solid var(--borda-forte);
+  transition: background .3s, box-shadow .3s;
+}
+
+.escala-maquina.ligada {
+  background: var(--neon);
+  border-color: var(--neon);
+  box-shadow: 0 0 10px var(--neon-brilho);
+}
+
+.pausado .escala-maquina {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .escala-maquina {
+    transition: none;
+  }
+}
+
+.escala-saida {
+  display: block;
+  padding: .8rem 1rem;
+  border-radius: var(--raio-p);
+  border: 1px solid color-mix(in srgb, var(--neon) 45%, transparent);
+  background: color-mix(in srgb, var(--neon) 8%, transparent);
+  color: var(--texto-2);
+}
+
+/* dicionário de pistas (aula 11, js/dicionario.js) */
+.dicionario {
+  display: grid;
+  gap: .6rem;
+  margin-top: .6rem;
+}
+
+.dicionario input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: .55rem .8rem;
+  border-radius: var(--raio-p);
+  border: 1px solid var(--borda-forte);
+  background: var(--superficie);
+  color: var(--texto);
+  font: 500 1rem var(--f-mono);
+}
+
+.dicionario input:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+}
+
+.dicionario-contagem {
+  margin: 0;
+  font-size: .9rem;
+  color: var(--texto-3);
+}
+
+/* o peso de cada domínio da prova (aula 12): barras na cor do domínio */
+.barras-dominio {
+  display: grid;
+  gap: .7rem;
+  margin: .8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barras-dominio li {
+  display: grid;
+  gap: .3rem;
+}
+
+.barras-dominio .rotulo-barra {
+  display: flex;
+  justify-content: space-between;
+  gap: .6rem;
+  font-size: .92rem;
+  color: var(--texto-2);
+}
+
+.barras-dominio .rotulo-barra b {
+  font-family: var(--f-mono);
+  color: var(--cor);
+}
+
+.barras-dominio .trilho {
+  height: .7rem;
+  border-radius: 999px;
+  background: var(--superficie-2);
+  border: 1px solid var(--borda);
+  overflow: hidden;
+}
+
+.barras-dominio .trilho span {
+  display: block;
+  height: 100%;
+  width: var(--peso);
+  border-radius: 999px;
+  background: var(--cor);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--cor) 60%, transparent);
+}
+
+/* Classifique!: a frase em cima e os botões embaixo, para as opções compridas não espremerem a frase */
+.classifica-itens > li { grid-template-columns: minmax(0, 1fr); }
