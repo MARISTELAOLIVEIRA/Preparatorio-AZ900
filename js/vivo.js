@@ -1,16 +1,17 @@
 /*
   vivo.js: as peças interativas das aulas "vivas" do Preparatório AZ-900. Só deste site.
-  versão 4 · 2026-11-12 · aulas 1 (nuvem e responsabilidade), 2 (benefícios), 3 (IaaS, PaaS, SaaS e serverless) e 4 (regiões e hierarquia)
+  versão 5 · 2026-11-12 · aulas 1 a 5 (nuvem, benefícios, modelos de serviço, regiões e hierarquia, computação)
   Nasceu do vivo.js do Preparatório AWS (versão 13): o plantão, a central e a placa são os mesmos,
   com os textos do Azure. Cada aula nova ganha as suas configurações aqui.
 
   1. [data-plantao] gancho com palpites (as respostas ficam nos botões, em data-explica)
-  2. [data-central] cada tarefa na sua coluna; data-central escolhe o conjunto (aula 1: "shopping"; aula 3: "pedidos")
+  2. [data-central] cada tarefa na sua coluna; data-central escolhe o conjunto (aula 1: "shopping"; 3: "pedidos"; 5: "frota")
   3. [data-camadas] quem cuida de cada camada em local, IaaS, PaaS e SaaS (aula 1: a responsabilidade; aula 3: data-camadas="pizza")
   4. [data-placa]   desmonte: as peças de uma placa (aula 1), as camadas de uma pizza (aula 3, "pizza") ou a hierarquia (aula 4, "hierarquia")
   5. [data-domingo] o domingo da pizza: fornos, forno gigante, segunda cozinha, alarme e porteiro, das 18h às 23h (aula 2)
   6. [data-noves]   a régua dos noves: quantos minutos por mês cabem fora do ar em cada SLA (aula 2)
   7. [data-derruba] derrube um datacenter: uma zona, três zonas, o par ou a cópia no Rio, contra três desastres (aula 4)
+  8. [data-nomevm]  leia o nome da máquina: família, vCPUs, letras extras e geração (aula 5)
 
   Com as animações pausadas (botão do topo ou "reduzir movimento"), tudo mostra o resultado direto.
 */
@@ -113,6 +114,39 @@
       _certas: "no modelo certo",
       _tudo: "🏆 <strong>Cada pedido no seu modelo!</strong> IaaS para levar e testar, PaaS para programar e analisar, SaaS para usar pronto e serverless para o que roda por evento.",
       _quase: "As amarelas funcionam, mas não são a melhor escolha; as vermelhas não servem. Troque e confira de novo."
+    },
+    frota: {
+      legado: { certo: "vm",
+        vm: "Carro alugado: a equipe escolhe o Windows Server, instala o sistema antigo e cuida das atualizações. Controle total.",
+        conteiner: ["meh", "Até daria para empacotar, mas o sistema antigo pede uma versão específica do Windows e cuidado com o sistema operacional. A máquina virtual é o caminho direto."],
+        outro: ["falha", "💥 Um sistema antigo que precisa de um Windows Server específico, com controle total do sistema: máquina virtual."] },
+      site: { certo: "app",
+        app: "Ponto no shopping: a equipe publica o código do site e da API, e o Azure cuida do servidor, da escala e da disponibilidade.",
+        vm: ["meh", "Funciona, mas aí a equipe cuida do sistema operacional e das atualizações. O pedido era só publicar o código."],
+        conteiner: ["meh", "Funciona, mas o pedido era só publicar o site e a API, sem montar contêineres."],
+        outro: ["falha", "💥 Site e API no ar o tempo todo, só publicando o código: Serviço de Aplicativo (App Service)."] },
+      partes: { certo: "conteiner",
+        conteiner: "Caixas térmicas padrão: cardápio, pedidos e pagamento, cada um no seu contêiner, crescendo separado. Com muitos contêineres, o AKS orquestra a frota.",
+        vm: ["meh", "Daria, com uma máquina para cada parte, mas é pesado: cada máquina com o seu sistema operacional para cuidar."],
+        outro: ["falha", "💥 Partes independentes, que crescem cada uma no seu ritmo: microsserviços em contêineres."] },
+      teste: { certo: "conteiner",
+        conteiner: "Uma caixa térmica avulsa: as Instâncias de Contêiner do Azure rodam um contêiner sem montar máquina nenhuma. O jeito mais rápido.",
+        vm: ["meh", "Daria, mas montar uma máquina inteira para testar um contêiner é muito trabalho."],
+        outro: ["falha", "💥 Rodar um contêiner já pronto, rapidinho: Instâncias de Contêiner do Azure."] },
+      cupom: { certo: "funcao",
+        funcao: "Motoboy de aplicativo: a função acorda a cada pedido, gera o cupom em segundos e dorme. Você paga só as corridas.",
+        vm: ["meh", "😴 Um carro alugado parado na porta o dia inteiro, para corridas de segundos."],
+        app: ["meh", "Funciona, mas fica no ar o tempo todo para um trabalho de segundos."],
+        outro: ["falha", "💥 Trabalho curto, disparado por um evento: Azure Functions."] },
+      caixa: { certo: "desktop",
+        desktop: "O mesmo caixa, de qualquer lugar: os atendentes entram de casa no mesmo Windows, com as mesmas ferramentas, e os dados não ficam no notebook deles.",
+        vm: ["meh", "Daria, com uma máquina para cada atendente, mas é muito mais trabalho do que a Área de Trabalho Virtual, que já é gerenciada."],
+        outro: ["falha", "💥 Desktop Windows igual para a equipe toda, de qualquer lugar: Área de Trabalho Virtual do Azure."] },
+      _faltou: "Faltou escolher o veículo de",
+      _unidade: ["trabalho", "trabalhos"],
+      _certas: "no veículo certo",
+      _tudo: "🏆 <strong>Frota montada!</strong> Máquina virtual para o sistema antigo, App Service para o site, contêineres para as partes e para o teste, Functions para o cupom e Área de Trabalho Virtual para os atendentes.",
+      _quase: "As amarelas funcionam, mas dão mais trabalho ou custam mais; as vermelhas não servem. Troque e confira de novo."
     }
   };
   document.querySelectorAll("[data-central]").forEach(function (box) {
@@ -440,6 +474,50 @@
     }));
     golpes.forEach(b => b.addEventListener("click", () => derruba(b.dataset.golpe)));
     monta();
+  });
+
+  // ===================== 8. leia o nome da máquina =====================
+  const FAMILIAS = {
+    B: "intermitente e econômica: testes com picos de CPU de vez em quando",
+    D: "finalidade geral: servidores web e de aplicativo",
+    E: "memória otimizada: bancos de dados em memória e análise",
+    F: "computação otimizada: muito processamento",
+    M: "memória enorme: bancos de dados de grandes empresas",
+    L: "armazenamento otimizado: muito disco, muita leitura e escrita",
+    N: "com GPU: inteligência artificial e gráficos"
+  };
+  // só as letras que o Microsoft Learn explica (as outras ficam para a documentação de tamanhos)
+  const LETRAS = { s: "aceita disco SSD Premium" };
+  document.querySelectorAll("[data-nomevm]").forEach(function (box) {
+    const entrada = box.querySelector("input");
+    const saida = box.querySelector(".nv-leitura");
+    function le(nome) {
+      const limpo = nome.trim().replace(/^Standard_/i, "");
+      const p = limpo.match(/^([A-Za-z])([A-Za-z]*?)(\d+)([a-z]*)(?:_v(\d+))?$/);
+      if (!p || !FAMILIAS[p[1].toUpperCase()]) {
+        saida.innerHTML = `<p>Não reconheci <strong>${limpo.replace(/[<>&"]/g, "") || "esse nome"}</strong>. Tente um destes: B2s, D2s_v5, E16s_v5, F4s_v2, M64.</p>`;
+        return;
+      }
+      const fam = p[1].toUpperCase();
+      const extras = p[4].split("").filter(l => LETRAS[l]).map(l => `<li><span class="nv-peca l">${l}</span> ${LETRAS[l]}</li>`).join("");
+      saida.innerHTML = `<p class="nv-nome">${["<span class=\"nv-peca f\">" + fam + p[2] + "</span>", "<span class=\"nv-peca n\">" + p[3] + "</span>", p[4] ? "<span class=\"nv-peca l\">" + p[4] + "</span>" : "", p[5] ? "<span class=\"nv-peca g\">_v" + p[5] + "</span>" : ""].join("")}</p>
+        <ul class="nv-lista">
+          <li><span class="nv-peca f">${fam}</span> série ${fam}: ${FAMILIAS[fam]}</li>
+          <li><span class="nv-peca n">${p[3]}</span> ${p[3]} vCPU${p[3] === "1" ? "" : "s"}</li>
+          ${extras}
+          ${p[5] ? `<li><span class="nv-peca g">v${p[5]}</span> geração ${p[5]} do hardware desta família</li>` : ""}
+        </ul>`;
+      saida.classList.remove("troca");
+      void saida.offsetWidth;
+      saida.classList.add("troca");
+    }
+    box.querySelectorAll("[data-vmnome]").forEach(b => b.addEventListener("click", function () {
+      box.querySelectorAll("[data-vmnome]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      entrada.value = b.dataset.vmnome;
+      le(b.dataset.vmnome);
+    }));
+    box.querySelector("form").addEventListener("submit", function (e) { e.preventDefault(); le(entrada.value); });
+    le("D2s_v5");
   });
 
   // ===================== 6. a régua dos noves =====================

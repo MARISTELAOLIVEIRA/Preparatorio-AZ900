@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- EDITE AQUI: número e tema da aula -->
+  <title>Aula 5: Computação no Azure · Preparatório AZ-900 · Stela</title>
+  <meta name="description" content="Aula 5 do Preparatório AZ-900: a frota do Cerrado (máquina virtual, contêiner, Functions, App Service e Área de Trabalho Virtual), as famílias de tamanho, conjuntos de dimensionamento e de disponibilidade, contêineres e AKS, o decodificador de nomes e a primeira máquina virtual no portal de treino.">
+
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <script src="../assets/js/placa.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,400..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+  <link rel="stylesheet" href="../assets/css/disciplina.css">
+  <link rel="stylesheet" href="../assets/css/aula.css">
+  <link rel="stylesheet" href="../assets/css/neon.css?v=3">
+  <link rel="stylesheet" href="../css/interativos.css?v=1">
+  <link rel="stylesheet" href="../css/aula-az.css?v=1">
+  <link rel="stylesheet" href="../css/vivo.css?v=5">
+</head>
+<body>
+
+  <!-- ===================== BARRA DO TOPO (igual em todos os sites) ===================== -->
+  <header class="barra">
+    <div class="envolve">
+      <div class="marcas">
+        <a class="marca-disc marca-logo" href="../" title="Página inicial do preparatório"><img src="../assets/img/tec/azure.svg" alt="Preparatório AZ-900: página inicial" width="32" height="32"></a>
+      </div>
+      <button type="button" class="btn-menu" id="btn-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="nav" id="menu" aria-label="Partes da aula">
+        <a href="../#videos">← Preparatório</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#conceitos">Conceitos</a>
+        <a href="#demonstracao">Portal</a>
+        <a href="#pegadinha">Pegadinha</a>
+        <a href="#treino">Treino</a>
+        <a href="#atividade">Checklist</a>
+      </nav>
+      <div class="ajustes">
+        <button type="button" id="btn-tema" aria-label="Mudar para o tema claro">
+          <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        </button>
+        <button type="button" id="btn-fonte" aria-label="Aumentar o tamanho do texto">A+</button>
+        <button type="button" id="btn-movimento" aria-pressed="false">
+          <svg class="pausar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tocar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <span class="rotulo">Pausar animações</span>
+        </button>
+        <a class="marca" href="/" title="Portal da Stela">
+          <img src="../assets/img/estrela.webp" alt="" width="26" height="24">
+          <span class="marca-texto">Stela</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== CABEÇALHO DA AULA ===================== -->
+    <section class="aula-cab">
+      <canvas class="chuva-matrix" aria-hidden="true"></canvas>
+      <div class="envolve">
+        <p class="trilha-migalhas">
+          <a href="/">Stela</a> <span aria-hidden="true">/</span>
+          <a href="../">Preparatório AZ-900</a> <span aria-hidden="true">/</span>
+          <a href="../#videos">Aulas</a> <span aria-hidden="true">/</span>
+          <span>Aula 5</span>
+        </p>
+
+        <!-- EDITE AQUI: número, vídeo, domínio da prova e título -->
+        <div class="aula-etiquetas">
+          <span class="etiqueta senac">Fac Senac DF</span>
+          <span class="etiqueta ouro">Aula 5</span>
+          <span class="etiqueta">Vídeo 5</span>
+          <span class="etiqueta dominio" style="--cor:var(--d2)">Domínio 2 · Arquitetura e serviços</span>
+        </div>
+        <h1>Computação no <span class="neon">Azure</span></h1>
+        <p class="subtitulo">Servidor, contêiner ou função: cada trabalho pede um tipo de computação. Máquinas virtuais e os tamanhos, contêineres, Functions, App Service e a Área de Trabalho Virtual.</p>
+      </div>
+    </section>
+
+        <!-- ===================== RESUMO ===================== -->
+    <section class="bloco faixa alt" aria-label="Resumo da aula">
+      <div class="envolve">
+        <div class="resumo">
+          <div class="cartao">
+            <span class="olho">Objetivo</span>
+            <p>Escolher entre máquina virtual, contêiner, Functions, App Service e Área de Trabalho Virtual, e ler o nome de um tamanho de máquina.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Revezamento</span>
+            <p>Primeiro esta página (e o vídeo 5, quando sair). Depois, o módulo <strong>Descrever os serviços de computação do Azure</strong>, no Microsoft Learn.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Na prova</span>
+            <p>Domínio 2, Arquitetura e serviços do Azure: <strong>35 a 40%</strong> das questões.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bloco">
+      <div class="envolve aula-corpo">
+
+        <!-- ===================== ROTEIRO DA AULA ===================== -->
+        <section class="parte" id="video">
+          <div class="cab">
+            <span class="olho">V5 · roteiro da aula</span>
+            <h2>O que você vai aprender</h2>
+            <p>Os assuntos da aula, na ordem da página. Clique para ir direto a um deles. Viu o <strong>⏸ Pausa aqui</strong>? Pare e tente responder antes de abrir a resposta.</p>
+          </div>
+          <div class="cartao">
+            <ol class="roteiro-video sem-tempo">
+              <li><a href="#gancho">G1 · Servidor, contêiner ou função: qual escolher?</a></li>
+              <li><a href="#simulador">SIM1 · A frota do Cerrado</a></li>
+              <li><a href="#c1">C1 · Máquinas virtuais e as famílias de tamanho</a></li>
+              <li><a href="#c2">C2 · Conjuntos de dimensionamento e de disponibilidade</a></li>
+              <li><a href="#c3">C3 · Área de Trabalho Virtual do Azure</a></li>
+              <li><a href="#c4">C4 · Contêineres: Instâncias, Aplicativos e AKS</a></li>
+              <li><a href="#c5">C5 · App Service e Functions: as outras opções de hospedagem</a></li>
+              <li><a href="#nome">X1 · Leia o nome da máquina</a></li>
+              <li><a href="#demonstracao">D1 · Faça junto: a primeira máquina virtual, no portal de treino</a></li>
+              <li><a href="#pegadinha">P1 · A pegadinha: dimensionamento não é disponibilidade</a></li>
+              <li><a href="#learn">Agora é no Microsoft Learn</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== GANCHO (vivo.js, parte 1) ===================== -->
+        <section class="parte" id="gancho">
+          <div class="cab">
+            <span class="olho">G1 · gancho</span>
+            <h2>Seis trabalhos, um só servidor?</h2>
+          </div>
+          <div class="gancho plantao" data-plantao data-link="#simulador" data-link-texto="Monte a frota no simulador, logo abaixo">
+            <p class="gancho-evento">🛵 Cerrado Delivery · reunião de planejamento</p>
+            <span class="tarja">🚚 Hora de crescer</span>
+            <p class="manchete">O sistema antigo, o site, o aplicativo em partes, o cupom, um teste e os atendentes em casa. Tudo vai para o Azure.</p>
+            <div class="letreiro" aria-hidden="true"><span>O Rafa quer pôr tudo num servidor só, igual ao do fundo da cozinha · a Lia diz que cada trabalho pede um tipo de computação · e o estagiário pergunta: "mas não é tudo computador?"…</span></div>
+            <button type="button" class="botao" data-abrir>▶ E aí, como escolher?</button>
+            <div class="gancho-voto" data-revela hidden>
+              <p class="gancho-pergunta" tabindex="-1">Servidor, contêiner ou função: qual escolher?</p>
+              <div class="gancho-botoes">
+                <button type="button" aria-pressed="false" data-explica="Um servidor (máquina virtual) dá controle total, mas também todo o trabalho: sistema, atualizações, cuidado. É o certo para alguns trabalhos, não para todos.">🖥️ Servidor para tudo</button>
+                <button type="button" aria-pressed="false" data-explica="Contêiner é ótimo para partes que crescem separadas, mas não é a resposta para tudo: um cupom de segundos pede outra coisa.">📦 Contêiner para tudo</button>
+                <button type="button" aria-pressed="false" data-explica="Isso! Cada trabalho pede um tipo de computação. O jeito de escolher é perguntar: quanto controle eu preciso, e quanto tempo isso fica rodando?">🧩 Depende do trabalho</button>
+              </div>
+              <p class="gancho-resposta" aria-live="polite"></p>
+            </div>
+          </div>
+          <p class="fonte">História fictícia, criada para a aula.</p>
+        </section>
+
+        <!-- ===================== ESTUDO DE CASO ===================== -->
+        <section class="parte" id="caso">
+          <div class="cab">
+            <span class="olho">EC1 · estudo de caso</span>
+            <h2>A lista de trabalhos</h2>
+          </div>
+          <div class="cartao caso">
+            <p>A Lia escreveu no quadro os seis trabalhos do <strong>Cerrado Delivery</strong>:</p>
+            <ol>
+              <li>O sistema antigo das marmitas, que só roda num Windows Server.</li>
+              <li>O site e a API dos pedidos.</li>
+              <li>O aplicativo novo, dividido em cardápio, pedidos e pagamento.</li>
+              <li>Um teste rápido de um contêiner que um parceiro mandou.</li>
+              <li>O cupom de cada compra.</li>
+              <li>Os atendentes que trabalham de casa, no mesmo Windows com as mesmas ferramentas.</li>
+            </ol>
+            <h3>Para pensar</h3>
+            <ol>
+              <li>Qual trabalho pede controle total do sistema operacional?</li>
+              <li>Qual roda só alguns segundos de cada vez?</li>
+              <li>Qual precisa crescer em partes, cada uma no seu ritmo?</li>
+            </ol>
+            <p class="fonte">Empresa fictícia, criada para o preparatório.</p>
+          </div>
+        </section>
+
+        <!-- ===================== SIMULADOR (vivo.js, parte 2) ===================== -->
+        <section class="parte" id="simulador">
+          <div class="cab">
+            <span class="olho">SIM1 · simulador</span>
+            <h2>A frota do Cerrado</h2>
+            <p>Cada trabalho vai num veículo. <strong>🚗 Carro alugado</strong> é a máquina virtual (você dirige e cuida). <strong>📦 Caixa térmica padrão</strong> é o contêiner (cabe em qualquer moto). <strong>⚡ Motoboy de aplicativo</strong> é o Functions (chamado só quando tem entrega). <strong>🏬 Ponto no shopping</strong> é o App Service (você monta o cardápio, o shopping cuida do resto). <strong>💻 O mesmo caixa, de qualquer lugar</strong> é a Área de Trabalho Virtual.</p>
+          </div>
+          <div class="sim" data-central="frota">
+            <ol class="central">
+              <li class="central-linha" data-tarefa="legado">
+                <span class="tarefa"><strong>🏚️ O sistema antigo das marmitas</strong><small>só roda num Windows Server específico</small></span>
+                <div class="dz-botoes" role="group" aria-label="Veículo para o sistema antigo">
+                  <button type="button" data-motor="vm" aria-pressed="false">🚗 Máquina virtual</button>
+                  <button type="button" data-motor="conteiner" aria-pressed="false">📦 Contêiner</button>
+                  <button type="button" data-motor="funcao" aria-pressed="false">⚡ Functions</button>
+                  <button type="button" data-motor="app" aria-pressed="false">🏬 App Service</button>
+                  <button type="button" data-motor="desktop" aria-pressed="false">💻 Área de Trabalho Virtual</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="site">
+                <span class="tarefa"><strong>🌐 O site e a API dos pedidos</strong><small>a equipe só quer publicar o código</small></span>
+                <div class="dz-botoes" role="group" aria-label="Veículo para o site e a API">
+                  <button type="button" data-motor="vm" aria-pressed="false">🚗 Máquina virtual</button>
+                  <button type="button" data-motor="conteiner" aria-pressed="false">📦 Contêiner</button>
+                  <button type="button" data-motor="funcao" aria-pressed="false">⚡ Functions</button>
+                  <button type="button" data-motor="app" aria-pressed="false">🏬 App Service</button>
+                  <button type="button" data-motor="desktop" aria-pressed="false">💻 Área de Trabalho Virtual</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="partes">
+                <span class="tarefa"><strong>🧩 O aplicativo em partes</strong><small>cardápio, pedidos e pagamento crescem cada um no seu ritmo</small></span>
+                <div class="dz-botoes" role="group" aria-label="Veículo para o aplicativo em partes">
+                  <button type="button" data-motor="vm" aria-pressed="false">🚗 Máquina virtual</button>
+                  <button type="button" data-motor="conteiner" aria-pressed="false">📦 Contêiner</button>
+                  <button type="button" data-motor="funcao" aria-pressed="false">⚡ Functions</button>
+                  <button type="button" data-motor="app" aria-pressed="false">🏬 App Service</button>
+                  <button type="button" data-motor="desktop" aria-pressed="false">💻 Área de Trabalho Virtual</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="teste">
+                <span class="tarefa"><strong>🧪 O contêiner do parceiro</strong><small>rodar rapidinho, sem montar nada</small></span>
+                <div class="dz-botoes" role="group" aria-label="Veículo para o teste do contêiner">
+                  <button type="button" data-motor="vm" aria-pressed="false">🚗 Máquina virtual</button>
+                  <button type="button" data-motor="conteiner" aria-pressed="false">📦 Contêiner</button>
+                  <button type="button" data-motor="funcao" aria-pressed="false">⚡ Functions</button>
+                  <button type="button" data-motor="app" aria-pressed="false">🏬 App Service</button>
+                  <button type="button" data-motor="desktop" aria-pressed="false">💻 Área de Trabalho Virtual</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="cupom">
+                <span class="tarefa"><strong>🎟️ O cupom de cada compra</strong><small>uns segundos a cada pedido</small></span>
+                <div class="dz-botoes" role="group" aria-label="Veículo para o cupom">
+                  <button type="button" data-motor="vm" aria-pressed="false">🚗 Máquina virtual</button>
+                  <button type="button" data-motor="conteiner" aria-pressed="false">📦 Contêiner</button>
+                  <button type="button" data-motor="funcao" aria-pressed="false">⚡ Functions</button>
+                  <button type="button" data-motor="app" aria-pressed="false">🏬 App Service</button>
+                  <button type="button" data-motor="desktop" aria-pressed="false">💻 Área de Trabalho Virtual</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="caixa">
+                <span class="tarefa"><strong>🎧 Os atendentes em casa</strong><small>o mesmo Windows, com as mesmas ferramentas, de qualquer lugar</small></span>
+                <div class="dz-botoes" role="group" aria-label="Veículo para os atendentes">
+                  <button type="button" data-motor="vm" aria-pressed="false">🚗 Máquina virtual</button>
+                  <button type="button" data-motor="conteiner" aria-pressed="false">📦 Contêiner</button>
+                  <button type="button" data-motor="funcao" aria-pressed="false">⚡ Functions</button>
+                  <button type="button" data-motor="app" aria-pressed="false">🏬 App Service</button>
+                  <button type="button" data-motor="desktop" aria-pressed="false">💻 Área de Trabalho Virtual</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+            </ol>
+            <div class="sim-acoes"><button type="button" class="vai">▶ Pôr a frota na rua</button><span>placar: <span class="central-placar" data-placar>–</span></span></div>
+            <p class="casa-fala" aria-live="polite"></p>
+          </div>
+          <p class="fonte">Simulação para a aula, com os serviços de computação do C1 ao C5.</p>
+
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Por que o aplicativo em partes vai em contêineres, e não numa máquina virtual só?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Porque cada parte cresce no seu ritmo. Se os pedidos lotam no domingo e o cardápio não, só o contêiner dos pedidos cresce. Numa máquina só, tudo cresce junto, e você paga pelo que não precisava.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== CONCEITOS ===================== -->
+        <section class="parte" id="conceitos">
+          <div class="cab">
+            <span class="olho">C1–C5 · conceitos</span>
+            <h2>O que a prova quer que você saiba</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c1">
+            <div class="texto">
+              <span class="olho">C1</span>
+              <h3>Máquinas virtuais e as famílias de tamanho</h3>
+              <p>As Máquinas Virtuais do Azure são <strong>IaaS</strong>: como um servidor físico, você controla o sistema operacional e o que está instalado, e cuida das atualizações. Elas nascem de uma <strong>imagem</strong>, um modelo com o sistema já pronto.</p>
+              <ul>
+                <li><strong>Quando usar:</strong> teste e desenvolvimento, aplicativos na nuvem, extensão do datacenter, recuperação de desastre e <em>lift-and-shift</em>.</li>
+                <li><strong>O que você escolhe:</strong> o tamanho (família, vCPUs e memória), os discos e a rede.</li>
+              </ul>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Família</th><th>Foco</th><th>Exemplo</th></tr></thead><tbody>
+                <tr><td><strong>B</strong></td><td>Intermitente e econômica</td><td>Testes com picos de CPU de vez em quando</td></tr>
+                <tr><td><strong>D</strong></td><td>Finalidade geral</td><td>Servidores web e de aplicativo</td></tr>
+                <tr><td><strong>E</strong></td><td>Memória otimizada</td><td>Bancos em memória, análise</td></tr>
+                <tr><td><strong>F</strong></td><td>Computação otimizada</td><td>Muito uso de CPU</td></tr>
+                <tr><td><strong>M</strong></td><td>Memória enorme</td><td>Bancos de grandes empresas</td></tr>
+                <tr><td><strong>L</strong></td><td>Armazenamento otimizado</td><td>Muito disco, muita leitura e escrita</td></tr>
+                <tr><td><strong>N</strong></td><td>Com GPU</td><td>Inteligência artificial e gráficos</td></tr>
+              </tbody></table></div>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/2-virtual-machines">Microsoft Learn, Descrever máquinas virtuais do Azure</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o Amazon EC2, com os tipos de instância no lugar das famílias, como você viu na aula 6 da AWS.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c2">
+            <div class="texto">
+              <span class="olho">C2</span>
+              <h3>Conjuntos de dimensionamento e de disponibilidade</h3>
+              <ul>
+                <li><strong>Conjunto de dimensionamento de máquinas virtuais:</strong> um grupo de máquinas <strong>iguais</strong>, com balanceamento de carga, que aumenta e diminui sozinho pela procura ou pelo horário. É a escala horizontal da aula 2.</li>
+                <li><strong>Conjunto de disponibilidade:</strong> espalha as máquinas para que uma manutenção ou uma falha de hardware não derrube todas de uma vez. Separa por <strong>domínio de atualização</strong> (as que reiniciam juntas na manutenção planejada) e <strong>domínio de falha</strong> (as que dividem a mesma energia e rede).</li>
+                <li>Nas regiões com zonas, espalhar por <strong>zonas</strong> costuma ser melhor, porque isola falhas maiores.</li>
+                <li>O conjunto de disponibilidade em si não cobra: você paga as máquinas.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/2-virtual-machines">Microsoft Learn, Descrever máquinas virtuais do Azure</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o conjunto de dimensionamento lembra o grupo do Auto Scaling, da aula 10 da AWS.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c3">
+            <div class="texto">
+              <span class="olho">C3</span>
+              <h3>Área de Trabalho Virtual do Azure</h3>
+              <p>Desktops e aplicativos do Windows que <strong>ficam na nuvem</strong>, acessados com segurança de vários aparelhos e lugares.</p>
+              <ul>
+                <li>Centraliza tudo no Azure e usa o Microsoft Entra ID para controlar quem entra.</li>
+                <li>Os dados ficam nas sessões no Azure, não no notebook de cada um.</li>
+                <li>Aceita Windows de uma sessão ou de várias sessões ao mesmo tempo.</li>
+                <li>Para muita gente, é mais fácil do que montar uma máquina virtual para cada um.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/4-virtual-desktop">Microsoft Learn, Descrever a Área de Trabalho Virtual do Azure</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o Amazon WorkSpaces (<a href="https://aws.amazon.com/workspaces/">Amazon WorkSpaces</a>, consultado em 12/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c4">
+            <div class="texto">
+              <span class="olho">C4</span>
+              <h3>Contêineres: Instâncias, Aplicativos e AKS</h3>
+              <p>Vários contêineres rodam no mesmo computador, e você <strong>não cuida do sistema operacional</strong> de cada um. São leves: sobem, crescem e param rápido. O Docker é um dos mais usados, e o Azure aceita.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Serviço</th><th>O que faz</th><th>Na frota</th></tr></thead><tbody>
+                <tr><td><strong>Instâncias de Contêiner do Azure</strong></td><td>O jeito mais rápido e simples de rodar um contêiner, sem máquina para cuidar. PaaS.</td><td>A caixa térmica avulsa do teste.</td></tr>
+                <tr><td><strong>Aplicativos de Contêiner do Azure</strong></td><td>Parecidos, mas já com balanceamento de carga e escala. PaaS.</td><td>Caixas que se multiplicam no pico.</td></tr>
+                <tr><td><strong>Serviço de Kubernetes do Azure (AKS)</strong></td><td>Orquestra uma frota de contêineres: cuida do ciclo de vida de todos.</td><td>O despachante da frota inteira.</td></tr>
+              </tbody></table></div>
+              <p><strong>Microsserviços:</strong> dividir o sistema em partes independentes (como cardápio, pedidos e pagamento), cada uma no seu contêiner, mantida e escalada separada.</p>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/5-containers">Microsoft Learn, Descrever contêineres do Azure</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o Amazon EKS (Kubernetes) e o AWS Fargate (contêiner sem servidor para cuidar) (<a href="https://aws.amazon.com/eks/">Amazon EKS</a> e <a href="https://aws.amazon.com/fargate/">AWS Fargate</a>, consultados em 12/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c5">
+            <div class="texto">
+              <span class="olho">C5</span>
+              <h3>App Service e Functions: as outras opções de hospedagem</h3>
+              <ul>
+                <li><strong>Serviço de Aplicativo (App Service):</strong> hospeda aplicativos web, APIs, trabalhos em segundo plano (WebJobs) e back-ends de aplicativos móveis, em várias linguagens, no Windows ou no Linux, sem cuidar da infraestrutura. Já vem com escala automática e alta disponibilidade, e publica direto do GitHub.</li>
+                <li><strong>Azure Functions:</strong> computação sem servidor, por evento, que você viu na aula 3. Paga só o tempo de execução.</li>
+              </ul>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/7-describe-application-hosting-options">Microsoft Learn, Descrever as opções de hospedagem de aplicativo</a> e <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/6-functions">Descrever o Azure Functions</a>, consultados em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o AWS Elastic Beanstalk e o AWS Lambda.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== LEIA O NOME DA MÁQUINA (vivo.js, parte 8) ===================== -->
+        <section class="parte" id="nome">
+          <div class="cab">
+            <span class="olho">X1 · leia o nome da máquina</span>
+            <h2>D2s_v5 não é senha de Wi-Fi</h2>
+            <p>O nome do tamanho diz a família, os vCPUs e a geração. Clique num nome ou digite outro.</p>
+          </div>
+          <div class="nv" data-nomevm>
+            <div class="nv-escolha">
+              <div class="dz-botoes" role="group" aria-label="Escolha um tamanho">
+                <button type="button" data-vmnome="B2s" aria-pressed="false">B2s</button>
+                <button type="button" data-vmnome="D2s_v5" aria-pressed="true">D2s_v5</button>
+                <button type="button" data-vmnome="E16s_v5" aria-pressed="false">E16s_v5</button>
+                <button type="button" data-vmnome="F4s_v2" aria-pressed="false">F4s_v2</button>
+                <button type="button" data-vmnome="M64" aria-pressed="false">M64</button>
+              </div>
+              <form><label class="visualmente-oculto" for="nv-entrada">Nome do tamanho</label><input id="nv-entrada" value="D2s_v5" autocomplete="off" spellcheck="false"><button type="submit" class="botao contorno">Ler</button></form>
+              <small>No portal, o nome aparece com "Standard_" na frente, como Standard_D2s_v5.</small>
+            </div>
+            <div class="nv-leitura" aria-live="polite"></div>
+          </div>
+          <p class="fonte">Como ler o nome: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/2-virtual-machines">Microsoft Learn, Descrever máquinas virtuais do Azure</a>, consultado em 12/11/2026. Só a letra "s" é explicada aqui; as outras ficam para a documentação de tamanhos.</p>
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Qual família você escolheria para o servidor do sistema antigo das marmitas? E para treinar uma inteligência artificial?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Para o sistema antigo, um servidor de aplicativo: <strong>série D</strong>, de finalidade geral. Para a inteligência artificial: <strong>série N</strong>, com GPU.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== DEMONSTRAÇÃO ===================== -->
+        <section class="parte" id="demonstracao">
+          <div class="cab">
+            <span class="olho">D1 · demonstração</span>
+            <h2>Faça junto: a primeira máquina virtual</h2>
+            <p>A máquina do sistema antigo vai dentro do rg-cerrado-pedidos, da aula 4. Abra o portal de treino noutra aba e marque cada passo aqui.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p><a class="botao" href="../portal/" target="_blank" rel="noopener">☁️ Abrir o portal de treino</a></p>
+              <div class="progresso-atividade" data-progresso="portal-aula-05">
+                <span class="contagem">0 de 6</span>
+                <span class="barra-progresso"><span></span></span>
+              </div>
+              <ol class="checklist" id="portal-aula-05">
+                <li><label><input type="checkbox"><span>Em <strong>Stela Compute</strong> (no Azure, Máquinas virtuais), cliquei em <strong>＋ Criar</strong>.</span></label></li>
+                <li><label><input type="checkbox"><span>Escolhi o grupo <code>rg-cerrado-pedidos</code> e dei o nome <code>vm-marmitas</code>.</span></label></li>
+                <li><label><input type="checkbox"><span>Escolhi Brazil South, uma zona de disponibilidade e a imagem do Windows Server.</span></label></li>
+                <li><label><input type="checkbox"><span>Escolhi o tamanho de finalidade geral e <strong>nenhuma</strong> porta aberta para a internet.</span></label></li>
+                <li><label><input type="checkbox"><span>Abri a máquina e li o nome do tamanho.</span></label></li>
+                <li><label><input type="checkbox"><span>Parei a máquina e vi o que deixou de ser cobrado (e o que continuou).</span></label></li>
+              </ol>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Tente o nome <code>vm-cerrado-marmitas</code> com Windows. O portal recusa: máquina Windows tem nome de 1 a 15 caracteres.</li>
+                  <li>Com a máquina parada, o que continua cobrando? O <strong>disco</strong>, até ser excluído.</li>
+                </ol>
+              </div>
+              <p class="dica cuidado"><strong>No Azure de verdade, máquina ligada cobra por hora.</strong> Se criar uma no Azure for Students, pare e exclua no fim.</p>
+              <p class="fonte">Regra dos nomes: <a href="https://learn.microsoft.com/pt-br/azure/azure-resource-manager/management/resource-name-rules">Microsoft Learn, Regras de nomenclatura para recursos do Azure</a>, consultado em 12/11/2026.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== PEGADINHA ===================== -->
+        <section class="parte" id="pegadinha">
+          <div class="cab">
+            <span class="olho">P1 · pegadinha de prova</span>
+            <h2>Dimensionamento não é disponibilidade</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p>Os nomes são parecidos, as respostas não.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Confusão</th><th>O certo</th><th>A pista na questão</th></tr></thead><tbody>
+                <tr><td><strong>Conjunto de dimensionamento × de disponibilidade</strong></td><td>Dimensionamento <strong>aumenta e diminui</strong> o número de máquinas iguais. Disponibilidade <strong>espalha</strong> as máquinas para não caírem juntas.</td><td>"Escalar automaticamente" é dimensionamento; "domínio de falha", "manutenção" é disponibilidade.</td></tr>
+                <tr><td><strong>Máquina virtual × contêiner</strong></td><td>Na máquina virtual, o sistema operacional é seu. No contêiner, não.</td><td>"Controle total do sistema operacional" é máquina virtual; "leve, sobe rápido" é contêiner.</td></tr>
+                <tr><td><strong>Instâncias de Contêiner × AKS</strong></td><td>Instâncias rodam um contêiner rápido e simples. O AKS orquestra uma frota.</td><td>"Mais simples e rápido" é Instâncias; "orquestrar", "Kubernetes" é AKS.</td></tr>
+              </tbody></table></div>
+              <details class="pausa-aqui">
+                <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>A empresa quer que, durante uma manutenção planejada, nem todas as máquinas reiniciem ao mesmo tempo. O que usar?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+                <div class="pausa-resposta"><p>Um <strong>conjunto de disponibilidade</strong>: os domínios de atualização separam as máquinas que reiniciam juntas. (Numa região com zonas, espalhar por zonas também ajuda.)</p></div>
+              </details>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>O site tem que passar de 2 para 20 máquinas iguais no pico, sozinho. O que usar? <strong>Conjunto de dimensionamento</strong>.</li>
+                  <li>A equipe de suporte trabalha de casa e não pode guardar dados no notebook. O que usar? <strong>Área de Trabalho Virtual do Azure</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== TREINO ===================== -->
+        <section class="parte" id="treino">
+          <div class="cab">
+            <span class="olho">T1–T2 · treino</span>
+            <h2>Classifique!</h2>
+            <p>Cada acerto de primeira vale <strong>10 XP</strong>. Errou? A dica aparece e você tenta de novo. No fim, você ganha uma insígnia.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-1">
+            <div class="texto">
+              <span class="olho">T1</span>
+              <h3>Qual serviço de computação?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="vm:Máquina virtual,aci:Instâncias de Contêiner,aks:AKS,func:Functions,app:App Service,avd:Área de Trabalho Virtual" data-dica="Pergunte: quanto controle precisa, quanto tempo roda e se é uma frota ou uma peça só.">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="vm" data-explica="Controle total do sistema operacional e software próprio: máquina virtual.">Um software antigo precisa de configurações especiais no sistema operacional.</li>
+                    <li data-resposta="aks" data-explica="Orquestrar muitos contêineres é com o Kubernetes: AKS.">Uma empresa precisa orquestrar centenas de contêineres de microsserviços.</li>
+                    <li data-resposta="aci" data-explica="O jeito mais rápido e simples de rodar um contêiner: Instâncias de Contêiner.">Rodar um contêiner uma vez, rapidinho, sem montar nada.</li>
+                    <li data-resposta="func" data-explica="Por evento, em segundos, pagando a execução: Functions.">Redimensionar a foto do produto sempre que alguém envia uma.</li>
+                    <li data-resposta="app" data-explica="Site e API em várias linguagens, publicando do GitHub, sem cuidar de servidor: App Service.">Publicar um site em Python direto do GitHub, sem cuidar de servidor.</li>
+                    <li data-resposta="avd" data-explica="Desktops Windows na nuvem para quem trabalha de qualquer lugar: Área de Trabalho Virtual.">Dar aos funcionários terceirizados um Windows na nuvem, sem dados nos aparelhos deles.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-2">
+            <div class="texto">
+              <span class="olho">T2</span>
+              <h3>Qual família de máquina?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="b:Série B,d:Série D,e:Série E,f:Série F,n:Série N" data-dica="Volte à tabela do C1: econômica, geral, memória, CPU ou GPU?">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="b" data-explica="Testes com picos de vez em quando, gastando pouco: série B.">Um ambiente de testes barato, que só de vez em quando usa muita CPU.</li>
+                    <li data-resposta="d" data-explica="Servidor de aplicativo, uso geral: série D.">O servidor de aplicativo do sistema de pedidos.</li>
+                    <li data-resposta="e" data-explica="Banco de dados em memória: série E, memória otimizada.">Um banco de dados que guarda quase tudo na memória.</li>
+                    <li data-resposta="f" data-explica="Muito cálculo, muita CPU: série F, computação otimizada.">Calcular as rotas de entrega de mil motoboys ao mesmo tempo.</li>
+                    <li data-resposta="n" data-explica="Treinar inteligência artificial pede GPU: série N.">Treinar uma inteligência artificial que reconhece fotos de pratos.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== ATIVIDADE ===================== -->
+        <section class="parte" id="atividade">
+          <div class="cab">
+            <span class="olho">A1 · checklist</span>
+            <h2>Checklist da aula</h2>
+            <p>O que você marcar fica salvo neste navegador.</p>
+          </div>
+
+          <div class="cartao">
+            <div class="progresso-atividade" data-progresso="passos-aula-05">
+              <span class="contagem">0 de 10</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="passos-aula-05">
+              <li><label><input type="checkbox"><span>Estudei esta página até o fim (ou assisti ao vídeo 5, quando ele sair). <a href="#video">Veja o roteiro da aula</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Montei a frota do Cerrado e ganhei o troféu. <a href="#simulador">Veja o SIM1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei quando usar máquina virtual e as famílias B, D, E, F, M, L e N. <a href="#c1">Veja o C1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Separo conjunto de dimensionamento de conjunto de disponibilidade. <a href="#c2">Veja o C2</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei para que serve a Área de Trabalho Virtual. <a href="#c3">Veja o C3</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Separo Instâncias de Contêiner, Aplicativos de Contêiner e AKS. <a href="#c4">Veja o C4</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que o App Service hospeda. <a href="#c5">Veja o C5</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Leio o nome de um tamanho de máquina. <a href="#nome">Veja o X1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Criei e parei a vm-marmitas no portal de treino. <a href="#demonstracao">Veja o D1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz os dois treinos e o módulo "Descrever os serviços de computação do Azure" no Microsoft Learn, e marquei no <a href="../#progresso">Meu progresso</a>.</span></label></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== CONEXÃO STEAM ===================== -->
+        <section class="parte" id="steam">
+          <div class="cab">
+            <span class="olho">S1 · conexão STEAM</span>
+            <h2>A nuvem fora da tela</h2>
+          </div>
+          <div class="steam">
+            <div class="cartao">
+              <span class="letra">M</span>
+              <h3>Matemática</h3>
+              <p>A máquina do sistema antigo fica ligada só das 8h às 18h, de segunda a sexta. São quantas horas por semana? E quantas horas ela fica parada, sem cobrar computação?</p>
+            </div>
+            <div class="cartao">
+              <span class="letra">E</span>
+              <h3>Engenharia</h3>
+              <p>Pegue uma placa de sucata e conte os núcleos do processador e os pentes de memória que ela teria. Que nome de tamanho do Azure ela ganharia? (Família, vCPUs e "s" se tiver SSD.)</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MICROSOFT LEARN ===================== -->
+        <section class="parte" id="learn">
+          <div class="cab">
+            <span class="olho">J1 · agora é no Microsoft Learn</span>
+            <h2>O revezamento: a sua vez no Learn</h2>
+            <p>Esta aula preparou o terreno. O módulo do Learn aprofunda, com a verificação de conhecimentos oficial, de graça e em português.</p>
+          </div>
+          <div class="repos">
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span>
+              <h4>Descrever os serviços de computação do Azure</h4>
+              <p>Trilha 2: máquinas virtuais, Área de Trabalho Virtual, contêineres, Functions e hospedagem, com a verificação de conhecimentos.</p>
+              <span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="../assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta">próximo passo</span></span>
+            </a>
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Guia da prova</span>
+              <h4>AZ-900, guia de estudo</h4>
+              <p>O que a Microsoft diz que cai em cada domínio. Confira antes de agendar.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:var(--d2)"><i></i>Arquitetura</span><span class="etiqueta">fonte</span></span>
+            </a>
+            <a class="repo luz" href="/Preparatorio-AWS/aulas/aula-06.html">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Preparatório AWS</span>
+              <h4>Aula 6: Computação, o EC2 e além</h4>
+              <p>EC2, contêineres e Lambda, com a central de tarefas.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:#ff9900"><i></i>AWS</span><span class="etiqueta">como é na AWS</span></span>
+            </a>
+          </div>
+        </section>
+
+        <nav class="nav-aulas" aria-label="Outras aulas">
+          <!-- EDITE AQUI: use <a href="aula-NN.html"> quando a página da aula vizinha for liberada; <span> enquanto não for -->
+          <a class="anterior" href="aula-04.html">
+            <span class="olho">← aula anterior</span>
+            <strong>Aula 4: Regiões, zonas e a hierarquia do Azure</strong>
+          </a>
+          <span class="proxima">
+            <span class="olho">próxima aula</span>
+            <strong>Aula 6: Redes no Azure (em breve)</strong>
+          </span>
+        </nav>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="envolve">
+      <div class="rodape-fim" style="margin-top:0; padding-top:0; border-top:0">
+        <span><a href="../">Preparatório AZ-900</a> · Feito com ♥ e sucata eletrônica.</span>
+        <span>az account show --output table</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ícone de repositório (Octicons, licença MIT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-repo" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></symbol>
+  </svg>
+
+  <script src="../assets/js/aulas.js"></script>
+  <script src="../assets/js/classifica.js?v=2"></script>
+  <script src="../assets/js/matrix.js?v=2"></script>
+  <script src="../js/vivo.js?v=5"></script>
+</body>
+</html>

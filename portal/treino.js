@@ -1,5 +1,5 @@
 /*
-  treino.js: o portal de treino do Preparatório AZ-900 (versão 4 · 2026-11-12 · aula 1, o tour; 2, os jeitos de gerenciar; 3, cada serviço no seu modelo; 4, o primeiro grupo de recursos).
+  treino.js: o portal de treino do Preparatório AZ-900 (versão 5 · 2026-11-12 · aulas 1 a 5: tour, gerenciar, modelos, grupo de recursos e a primeira máquina virtual).
   Nasceu do motor do simulador de Fundamentos de Computação em Nuvem (simulador/portal.js), com a cara do
   Stela Cloud: nada de logo da Microsoft, e o nome do serviço no Azure escrito ao lado.
   Aqui é só treino: sem login, sem nota, e nada vai para o banco. O estado fica no navegador (localStorage).
@@ -18,7 +18,7 @@
     { id: "criar", nome: "Criar um recurso", icone: "＋" },
     { id: "todos", nome: "Todos os recursos", icone: "▦" },
     { id: "grupos", nome: "Grupos de recursos", icone: "🗂" },
-    { id: "compute", nome: "Stela Compute", icone: "🖥", azure: "Máquinas virtuais", aula: 5, cor: "--c-compute" },
+    { id: "compute", nome: "Stela Compute", icone: "🖥", azure: "Máquinas virtuais", cor: "--c-compute" },
     { id: "storage", nome: "Stela Storage", icone: "🗄", azure: "Contas de armazenamento", aula: 7, cor: "--c-storage" },
     { id: "network", nome: "Stela Network", icone: "🛡", azure: "Redes virtuais", aula: 6, cor: "--c-network" },
     { id: "identity", nome: "Stela Identity", icone: "🪪", azure: "Microsoft Entra ID", aula: 8, cor: "--c-identity" },
@@ -79,6 +79,18 @@
       ],
       fim: "<strong>🏆 Missão cumprida!</strong> O primeiro grupo de recursos do Cerrado Delivery está no Sul do Brasil, dentro da assinatura, dentro do grupo de gerenciamento raiz.",
     },
+    {
+      id: "vm",
+      aula: 5,
+      titulo: "Aula 5 · A primeira máquina virtual",
+      pedido: "O sistema antigo das marmitas só roda no Windows Server. A Lia pediu uma máquina para ele, dentro do rg-cerrado-pedidos:",
+      passos: [
+        { id: "vm-criada", texto: "🖥 Crie a vm-marmitas: Windows Server, Sul do Brasil, finalidade geral, numa zona de disponibilidade e sem porta aberta para a internet." },
+        { id: "vm-detalhe", texto: "🔎 Abra a máquina e leia o tamanho dela." },
+        { id: "vm-parada", texto: "■ Fim do expediente: pare a máquina e veja o que deixa de ser cobrado." },
+      ],
+      fim: "<strong>🏆 Missão cumprida!</strong> A máquina do sistema antigo está no Sul do Brasil, numa zona, sem porta aberta, e parada fora do expediente. Máquina parada não cobra computação; o disco continua cobrando.",
+    },
   ];
 
   // os serviços em destaque da aula 3: o que cada um entrega pronto e o modelo certo
@@ -106,15 +118,28 @@
   const regiao = (id) => REGIOES.find((r) => r.id === id) || REGIOES[0];
   const NOME_GRUPO = /^[\w.\-()]{1,90}$/;
 
+  // aula 5: a máquina virtual (só alguns tamanhos, das famílias que o Learn mostra)
+  const TAMANHOS = [
+    { id: "Standard_B2s", familia: "B", uso: "intermitente e econômico (testes)", vcpu: 2, memoria: 4, custo: "$" },
+    { id: "Standard_D2s_v5", familia: "D", uso: "finalidade geral (servidores de aplicativo)", vcpu: 2, memoria: 8, custo: "$$" },
+    { id: "Standard_E4s_v5", familia: "E", uso: "memória otimizada (bancos em memória)", vcpu: 4, memoria: 32, custo: "$$$" },
+    { id: "Standard_F4s_v2", familia: "F", uso: "computação otimizada (muita CPU)", vcpu: 4, memoria: 8, custo: "$$" },
+  ];
+  const IMAGENS = ["Ubuntu Server 24.04 LTS", "Windows Server 2022 Datacenter"];
+  const tamanho = (id) => TAMANHOS.find((t) => t.id === id) || TAMANHOS[0];
+  // regras de nome do Azure: Windows de 1 a 15 caracteres, Linux de 1 a 64; sem pontos nem hífen no fim
+  const NOME_VM_WIN = /^[a-zA-Z0-9][a-zA-Z0-9-]{0,13}[a-zA-Z0-9]$|^[a-zA-Z0-9]$/;
+  const NOME_VM_LINUX = /^[a-zA-Z0-9][a-zA-Z0-9-]{0,62}[a-zA-Z0-9]$|^[a-zA-Z0-9]$/;
+
   // ---------- estado ----------
   function estadoInicial() {
-    return { feitos: {}, grupos: [] };
+    return { feitos: {}, grupos: [], vms: [] };
   }
 
   function carregar() {
     try {
       const salvo = JSON.parse(localStorage.getItem(CHAVE));
-      if (salvo && salvo.feitos) return Object.assign({ grupos: [] }, salvo);
+      if (salvo && salvo.feitos) return Object.assign({ grupos: [], vms: [] }, salvo);
     } catch (erro) { /* sem localStorage: começa do zero */ }
     return estadoInicial();
   }
@@ -312,7 +337,60 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
         <h3 class="sim-sub">Serviços</h3>
         <div class="sim-servicos">${SERVICOS.filter((s) => s.id !== "inicio").map(botaoServico).join("")}</div>
         <h3 class="sim-sub">Recursos recentes</h3>
-        ${tabelaGrupos() || '<p class="sim-vazio">Nenhum recurso ainda.</p>'}`;
+        ${tabelaRecursos() || '<p class="sim-vazio">Nenhum recurso ainda.</p>'}`;
+    },
+
+    compute() {
+      const linhas = estado.vms.map((v) => `<tr><td><button type="button" class="sim-link" data-vm="${esc(v.nome)}">${esc(v.nome)}</button></td><td>${esc(v.grupo)}</td><td>${esc(regiao(v.regiao).nome)}</td><td>${esc(v.tamanho)}</td><td>${esc(v.estado)}</td></tr>`).join("");
+      return `${cabecalho("Stela Compute", [["inicio", "Página inicial"]])}
+        <p class="sim-equivale">No Azure: <strong>Máquinas virtuais</strong></p>
+        <div class="sim-barra-acoes"><button type="button" class="sim-botao primario" data-ir="criar-vm">＋ Criar</button></div>
+        ${linhas ? `<div class="sim-tabela"><table><thead><tr><th>Nome</th><th>Grupo de recursos</th><th>Localização</th><th>Tamanho</th><th>Status</th></tr></thead><tbody>${linhas}</tbody></table></div>` : '<p class="sim-vazio">Nenhuma máquina virtual para exibir.</p>'}`;
+    },
+
+    "criar-vm"() {
+      if (!estado.grupos.length) {
+        return `${cabecalho("Criar uma máquina virtual", [["inicio", "Página inicial"], ["compute", "Stela Compute"]])}
+          <p class="sim-erro">Toda máquina virtual fica dentro de um grupo de recursos, e você ainda não tem nenhum. A missão da aula 4 cria o rg-cerrado-pedidos.</p>
+          <div class="sim-barra-acoes"><button type="button" class="sim-botao primario" data-ir="criar-grupo">Criar um grupo de recursos</button></div>`;
+      }
+      const op = (lista, sel) => lista.map((v) => `<option${v === sel ? " selected" : ""}>${esc(v)}</option>`).join("");
+      return `${cabecalho("Criar uma máquina virtual", [["inicio", "Página inicial"], ["compute", "Stela Compute"]])}
+        <form class="sim-form" data-form="vm" novalidate>
+          <fieldset><legend>Detalhes do projeto</legend>
+            <label>Assinatura <select disabled><option>Assinatura de estudo</option></select></label>
+            <label><span>Grupo de recursos <span class="sim-obrig">*</span></span><select name="grupo">${op(estado.grupos.map((g) => g.nome))}</select></label>
+          </fieldset>
+          <fieldset><legend>Detalhes da instância</legend>
+            <label><span>Nome da máquina virtual <span class="sim-obrig">*</span></span><input name="nome" autocomplete="off" required></label>
+            <label><span>Região <span class="sim-obrig">*</span></span><select name="regiao">${REGIOES.map((r) => `<option value="${r.id}"${r.id === "eastus" ? " selected" : ""}>${esc(r.nome)}</option>`).join("")}</select></label>
+            <label><span>Opções de disponibilidade</span><select name="disponibilidade">
+              <option value="nenhuma">Nenhuma redundância de infraestrutura necessária</option>
+              <option value="zona">Zona de disponibilidade</option>
+              <option value="conjunto">Conjunto de disponibilidade</option>
+            </select></label>
+            <label data-campo-zona hidden><span>Zona</span><select name="zona"><option>Zona 1</option><option>Zona 2</option><option>Zona 3</option></select></label>
+            <label><span>Imagem <span class="sim-obrig">*</span></span><select name="imagem">${op(IMAGENS, IMAGENS[0])}</select></label>
+            <label><span>Tamanho <span class="sim-obrig">*</span></span><select name="tamanho">${TAMANHOS.map((t) => `<option value="${t.id}"${t.id === "Standard_E4s_v5" ? " selected" : ""}>${t.id} · série ${t.familia}, ${t.uso} · ${t.vcpu} vCPU, ${t.memoria} GiB · custo ${t.custo}</option>`).join("")}</select></label>
+          </fieldset>
+          <fieldset><legend>Conta de administrador</legend>
+            <p class="sim-nota">No simulador, não se digita senha. No Azure de verdade, a senha do administrador tem que ser forte e só sua.</p>
+          </fieldset>
+          <fieldset><legend>Regras de porta de entrada</legend>
+            <div class="sim-radios" role="radiogroup" aria-label="Portas de entrada públicas">
+              <label><input type="radio" name="publicas" value="nenhuma"> Nenhum</label>
+              <label><input type="radio" name="publicas" value="selecionadas" checked> Permitir portas selecionadas</label>
+            </div>
+            <div class="sim-portas" data-portas>
+              <span>Selecionar portas de entrada</span>
+              <label><input type="checkbox" name="porta" value="RDP (3389)" checked> RDP (3389)</label>
+              <label><input type="checkbox" name="porta" value="HTTP (80)"> HTTP (80)</label>
+              <label><input type="checkbox" name="porta" value="HTTPS (443)"> HTTPS (443)</label>
+            </div>
+          </fieldset>
+          <p class="sim-erro" data-erro hidden></p>
+          <div class="sim-barra-acoes"><button type="submit" class="sim-botao primario">Revisar + criar</button><button type="button" class="sim-botao" data-ir="compute">Cancelar</button></div>
+        </form>`;
     },
 
     grupos() {
@@ -342,7 +420,7 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
         <p class="sim-nota">As categorias do portal. Cada uma entra numa aula.</p>
         <div class="sim-servicos sim-categorias">
           <button type="button" data-ir="criar-grupo"><span aria-hidden="true">🗂</span><span>Grupo de recursos<small>aula 4</small></span></button>
-          <button type="button" data-acao="breve" data-aula="5"><span aria-hidden="true">🖥</span><span>Computação<small>máquinas virtuais, contêineres e funções · aula 5</small></span></button>
+          <button type="button" data-ir="criar-vm"><span aria-hidden="true">🖥</span><span>Computação<small>máquina virtual · aula 5</small></span></button>
           <button type="button" data-acao="breve" data-aula="6"><span aria-hidden="true">🛡</span><span>Rede<small>redes virtuais e VPN · aula 6</small></span></button>
           <button type="button" data-acao="breve" data-aula="7"><span aria-hidden="true">🗄</span><span>Armazenamento<small>contas de armazenamento · aula 7</small></span></button>
           <button type="button" data-acao="breve" data-aula="8"><span aria-hidden="true">🪪</span><span>Identidade<small>usuários e acessos · aula 8</small></span></button>
@@ -354,7 +432,7 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
     todos() {
       if (estado.grupos.some((g) => g.nome === "rg-cerrado-pedidos")) setTimeout(() => marcar("grupo-todos"), 0);
       return `${cabecalho("Todos os recursos", [["inicio", "Página inicial"]])}
-        ${tabelaGrupos() || '<p class="sim-vazio">Nenhum recurso para exibir. Tudo o que o Cerrado Delivery criar vai aparecer aqui, de todos os tipos.</p>'}`;
+        ${tabelaRecursos() || '<p class="sim-vazio">Nenhum recurso para exibir. Tudo o que o Cerrado Delivery criar vai aparecer aqui, de todos os tipos.</p>'}`;
     },
   };
 
@@ -362,6 +440,96 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
     if (!estado.grupos.length) return "";
     const linhas = estado.grupos.map((g) => `<tr><td><button type="button" class="sim-link" data-grupo="${esc(g.nome)}">${esc(g.nome)}</button></td><td>Grupo de recursos</td><td>Assinatura de estudo</td><td>${esc(regiao(g.regiao).nome)}</td></tr>`).join("");
     return `<div class="sim-tabela"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Assinatura</th><th>Localização</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+  }
+
+  // todos os recursos: grupos e máquinas, como no portal
+  function tabelaRecursos() {
+    if (!estado.grupos.length && !estado.vms.length) return "";
+    const linhas = [
+      ...estado.grupos.map((g) => `<tr><td><button type="button" class="sim-link" data-grupo="${esc(g.nome)}">${esc(g.nome)}</button></td><td>Grupo de recursos</td><td>—</td><td>${esc(regiao(g.regiao).nome)}</td></tr>`),
+      ...estado.vms.map((v) => `<tr><td><button type="button" class="sim-link" data-vm="${esc(v.nome)}">${esc(v.nome)}</button></td><td>Máquina virtual</td><td>${esc(v.grupo)}</td><td>${esc(regiao(v.regiao).nome)}</td></tr>`),
+    ].join("");
+    return `<div class="sim-tabela"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Grupo de recursos</th><th>Localização</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+  }
+
+  function lerVm(form) {
+    const d = new FormData(form);
+    return {
+      grupo: d.get("grupo"), nome: String(d.get("nome") || "").trim(), regiao: d.get("regiao"),
+      disponibilidade: d.get("disponibilidade"), zona: d.get("zona"), imagem: d.get("imagem"), tamanho: d.get("tamanho"),
+      portas: d.get("publicas") === "nenhuma" ? [] : d.getAll("porta"),
+    };
+  }
+
+  function criarVm(form) {
+    const v = lerVm(form);
+    const erro = form.querySelector("[data-erro]");
+    let msg = "";
+    if (!v.nome) msg = "O nome da máquina virtual é obrigatório.";
+    else if (/^Windows/.test(v.imagem) && !NOME_VM_WIN.test(v.nome)) msg = "Máquina Windows: o nome tem de 1 a 15 caracteres, só letras, números e hífen, sem terminar com hífen.";
+    else if (!/^Windows/.test(v.imagem) && !NOME_VM_LINUX.test(v.nome)) msg = "Máquina Linux: o nome tem de 1 a 64 caracteres, só letras, números e hífen, sem terminar com hífen.";
+    else if (estado.vms.some((x) => x.nome.toLowerCase() === v.nome.toLowerCase())) msg = `Já existe uma máquina virtual chamada ${v.nome}.`;
+    if (msg) { erro.textContent = msg; erro.hidden = false; return; }
+    v.estado = "Em execução";
+    estado.vms.push(v);
+    salvar();
+    avisar(`Implantação de ${v.nome} concluída.`);
+    if (!estado.feitos["vm-criada"]) {
+      const m = [];
+      if (v.nome !== "vm-marmitas") m.push("O nome combinado é vm-marmitas.");
+      if (v.grupo !== "rg-cerrado-pedidos") m.push("A máquina vai na sacola do contrato: o grupo rg-cerrado-pedidos.");
+      if (v.regiao !== "brazilsouth") m.push("O contrato pede os dados no Brasil, numa região com zonas: Brazil South.");
+      if (!/^Windows/.test(v.imagem)) m.push("O sistema antigo das marmitas só roda no Windows Server.");
+      if (v.tamanho !== "Standard_D2s_v5") m.push("Para um servidor de aplicativo, a família certa é a de finalidade geral: a série D (Standard_D2s_v5).");
+      if (v.disponibilidade !== "zona") m.push("Ponha a máquina numa zona de disponibilidade, como na aula 4.");
+      if (v.portas.length) m.push("O sistema é interno: nenhuma porta aberta para a internet. RDP aberto para o mundo é porta de entrada para ataque.");
+      if (m.length) dica(`<strong>Ainda não cumpre a missão.</strong><ul>${m.map((x) => `<li>${esc(x)}</li>`).join("")}</ul> Para tentar de novo, abra a máquina, exclua e crie outra.`);
+      else marcar("vm-criada");
+    }
+    ir("compute");
+  }
+
+  // a página da máquina: o tamanho decodificado e os botões de parar, iniciar e excluir
+  function telaVm(nome) {
+    const v = estado.vms.find((x) => x.nome === nome);
+    if (!v) return TELAS.compute();
+    const t = tamanho(v.tamanho);
+    const ligada = v.estado === "Em execução";
+    if (v.nome === "vm-marmitas") setTimeout(() => marcar("vm-detalhe"), 0);
+    const partes = t.id.replace("Standard_", "").match(/^([A-Z])(\d+)([a-z]*)(?:_v(\d+))?$/);
+    return `${cabecalho(v.nome, [["inicio", "Página inicial"], ["compute", "Stela Compute"]])}
+      <div class="sim-barra-acoes">
+        <button type="button" class="sim-botao" data-vm-acao="iniciar" data-alvo="${esc(v.nome)}"${ligada ? " disabled" : ""}>▶ Iniciar</button>
+        <button type="button" class="sim-botao" data-vm-acao="parar" data-alvo="${esc(v.nome)}"${ligada ? "" : " disabled"}>■ Parar</button>
+        <button type="button" class="sim-botao perigo" data-vm-acao="excluir" data-alvo="${esc(v.nome)}">🗑 Excluir</button>
+      </div>
+      <dl class="sim-detalhes">
+        <dt>Status</dt><dd>${esc(v.estado)}</dd>
+        <dt>Grupo de recursos</dt><dd>${esc(v.grupo)}</dd>
+        <dt>Localização</dt><dd>${esc(regiao(v.regiao).nome)}${v.disponibilidade === "zona" ? ` · ${esc(v.zona)}` : v.disponibilidade === "conjunto" ? " · conjunto de disponibilidade" : ""}</dd>
+        <dt>Sistema operacional</dt><dd>${esc(v.imagem)}</dd>
+        <dt>Tamanho</dt><dd>${esc(t.id)}: ${t.vcpu} vCPU, ${t.memoria} GiB${partes ? ` · lendo o nome: série <strong>${partes[1]}</strong> (${esc(t.uso)}), <strong>${partes[2]}</strong> vCPUs${partes[3].includes("s") ? ", <strong>s</strong> = aceita SSD Premium" : ""}${partes[4] ? `, <strong>v${partes[4]}</strong> = geração` : ""}` : ""}</dd>
+        <dt>Portas abertas para a internet</dt><dd>${v.portas.length ? esc(v.portas.join(", ")) : "nenhuma"}</dd>
+        <dt>Computação por hora</dt><dd>${ligada ? `cobra (custo ${t.custo})` : "não cobra (parada e desalocada)"}</dd>
+        <dt>Disco</dt><dd>cobra enquanto existir, mesmo com a máquina parada</dd>
+      </dl>`;
+  }
+
+  function acaoVm(acao, nome) {
+    const v = estado.vms.find((x) => x.nome === nome);
+    if (!v) return;
+    if (acao === "excluir") {
+      if (!window.confirm(`Excluir ${nome}? No Azure de verdade, não tem volta.`)) return;
+      estado.vms = estado.vms.filter((x) => x.nome !== nome);
+      salvar();
+      avisar(`${nome} excluída.`);
+      return ir("compute");
+    }
+    v.estado = acao === "parar" ? "Parada (desalocada)" : "Em execução";
+    salvar();
+    avisar(acao === "parar" ? `${nome} parada. A computação deixa de ser cobrada; o disco continua.` : `${nome} em execução.`);
+    if (acao === "parar" && nome === "vm-marmitas" && estado.feitos["vm-criada"]) marcar("vm-parada");
+    tela.innerHTML = telaVm(nome);
   }
 
   // a página do grupo: o caminho da hierarquia, como as migalhas do portal
@@ -377,7 +545,7 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
         <dt>Assinatura</dt><dd>Assinatura de estudo</dd>
         <dt>Grupo de gerenciamento</dt><dd>Grupo de gerenciamento raiz (do diretório Cerrado Delivery)</dd>
         <dt>Localização</dt><dd>${esc(r.nome)}: ${esc(r.onde)}</dd>
-        <dt>Recursos</dt><dd>nenhum, por enquanto (a máquina virtual entra na aula 5)</dd>
+        <dt>Recursos</dt><dd>${(() => { const vs = estado.vms.filter((v) => v.grupo === g.nome); return vs.length ? vs.map((v) => `<button type="button" class="sim-link" data-vm="${esc(v.nome)}">${esc(v.nome)}</button>`).join(", ") : "nenhum, por enquanto"; })()}</dd>
       </dl>
       <p class="sim-nota">Excluir o grupo exclui tudo o que está dentro dele. No Azure de verdade, não tem volta.</p>`;
   }
@@ -445,13 +613,16 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
 
   // ---------- eventos ----------
   document.addEventListener("click", (evento) => {
-    const alvo = evento.target.closest("[data-ir], [data-acao], [data-painel-topo], [data-servico], [data-grupo], [data-excluir-grupo]");
+    const alvo = evento.target.closest("[data-ir], [data-acao], [data-painel-topo], [data-servico], [data-grupo], [data-excluir-grupo], [data-vm], [data-vm-acao]");
     if (!alvo || !alvo.closest(".sim-portal")) return;
+    if (alvo.dataset.vmAcao) return acaoVm(alvo.dataset.vmAcao, alvo.dataset.alvo);
+    if (alvo.dataset.vm) { tela.innerHTML = telaVm(alvo.dataset.vm); tela.focus({ preventScroll: true }); return; }
     if (alvo.dataset.grupo) { tela.innerHTML = telaGrupo(alvo.dataset.grupo); tela.focus({ preventScroll: true }); return; }
     if (alvo.dataset.excluirGrupo) {
       const nome = alvo.dataset.excluirGrupo;
       if (!window.confirm(`Excluir ${nome} e tudo o que está dentro dele? No Azure de verdade, não tem volta.`)) return;
       estado.grupos = estado.grupos.filter((g) => g.nome !== nome);
+      estado.vms = estado.vms.filter((v) => v.grupo !== nome);
       salvar();
       avisar(`${nome} excluído.`);
       return ir("grupos");
@@ -477,9 +648,18 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
   });
 
   tela.addEventListener("submit", (evento) => {
-    if (evento.target.dataset.form !== "grupo") return;
+    const f = evento.target.dataset.form;
+    if (f !== "grupo" && f !== "vm") return;
     evento.preventDefault();
-    criarGrupo(evento.target);
+    if (f === "grupo") criarGrupo(evento.target); else criarVm(evento.target);
+  });
+
+  // no formulário da máquina: o campo da zona e as portas aparecem conforme a escolha
+  tela.addEventListener("change", (evento) => {
+    const form = evento.target.closest('[data-form="vm"]');
+    if (!form) return;
+    form.querySelector("[data-campo-zona]").hidden = form.disponibilidade.value !== "zona";
+    form.querySelector("[data-portas]").hidden = form.querySelector('input[name="publicas"]:checked').value === "nenhuma";
   });
 
   hamburguer.addEventListener("click", () => {

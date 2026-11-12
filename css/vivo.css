@@ -2026,3 +2026,26 @@
 [data-tema="claro"] .hier-itens { --cx: #2e7d5b; }
 [data-tema="claro"] .hier-caixa > button[aria-pressed="true"], [data-tema="claro"] .hier-itens button[aria-pressed="true"] { color: #fff; }
 @media (max-width: 720px) { .hier-nuvem { grid-template-columns: minmax(0, 1fr); } }
+
+/* ===================== AZ-900 · aula 5 · X1 leia o nome da máquina ===================== */
+.nv { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 1rem; align-items: start; padding: clamp(1rem, 3vw, 1.5rem); border-radius: 18px; background: var(--chip); color: #f2efe6; }
+.nv-escolha { display: grid; gap: .6rem; }
+.nv-escolha .dz-botoes button { font-family: var(--f-mono); }
+.nv-escolha form { display: flex; gap: .4rem; }
+.nv-escolha input { flex: 1; min-width: 0; padding: .45rem .7rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .25); background: rgba(0, 0, 0, .3); color: #f2efe6; font: .95rem var(--f-mono); }
+.nv-escolha input:focus-visible { outline: 2px solid #3ea8ff; outline-offset: 2px; }
+.nv-escolha small { color: #a3b0a8; font-size: .8rem; }
+.nv-leitura { padding: .9rem 1rem; border-radius: 14px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(62, 168, 255, .35); }
+.nv-leitura.troca { animation: surge .35s ease-out; }
+.nv-nome { margin: 0 0 .7rem; font: 900 clamp(1.6rem, 5vw, 2.3rem) var(--f-mono); letter-spacing: .02em; }
+.nv-lista { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; font-size: .92rem; }
+.nv-peca { display: inline-block; min-width: 1.6rem; padding: 0 .35rem; border-radius: 6px; text-align: center; font-weight: 800; font-family: var(--f-mono); color: #111; }
+.nv-nome .nv-peca { padding: 0 .2rem; border-radius: 8px; }
+.nv-peca.f { background: #3ea8ff; }
+.nv-peca.n { background: #ecc874; }
+.nv-peca.l { background: #9fd0b7; }
+.nv-peca.g { background: #b892f2; }
+.pausado .nv-leitura.troca { animation: none; }
+@media (max-width: 720px) { .nv { grid-template-columns: minmax(0, 1fr); } }
+.nv-escolha form .botao { color: #f2efe6; border-color: rgba(62, 168, 255, .6); background: transparent; }
+.nv-escolha form .botao:hover { background: rgba(62, 168, 255, .18); }
