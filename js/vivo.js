@@ -1,15 +1,16 @@
 /*
   vivo.js: as peças interativas das aulas "vivas" do Preparatório AZ-900. Só deste site.
-  versão 3 · 2026-11-12 · aulas 1 (o que é nuvem e quem cuida do quê), 2 (benefícios) e 3 (IaaS, PaaS, SaaS e serverless)
+  versão 4 · 2026-11-12 · aulas 1 (nuvem e responsabilidade), 2 (benefícios), 3 (IaaS, PaaS, SaaS e serverless) e 4 (regiões e hierarquia)
   Nasceu do vivo.js do Preparatório AWS (versão 13): o plantão, a central e a placa são os mesmos,
   com os textos do Azure. Cada aula nova ganha as suas configurações aqui.
 
   1. [data-plantao] gancho com palpites (as respostas ficam nos botões, em data-explica)
   2. [data-central] cada tarefa na sua coluna; data-central escolhe o conjunto (aula 1: "shopping"; aula 3: "pedidos")
   3. [data-camadas] quem cuida de cada camada em local, IaaS, PaaS e SaaS (aula 1: a responsabilidade; aula 3: data-camadas="pizza")
-  4. [data-placa]   desmonte: as peças de uma placa (aula 1) ou as camadas de uma pizza (aula 3, data-placa="pizza")
+  4. [data-placa]   desmonte: as peças de uma placa (aula 1), as camadas de uma pizza (aula 3, "pizza") ou a hierarquia (aula 4, "hierarquia")
   5. [data-domingo] o domingo da pizza: fornos, forno gigante, segunda cozinha, alarme e porteiro, das 18h às 23h (aula 2)
   6. [data-noves]   a régua dos noves: quantos minutos por mês cabem fora do ar em cada SLA (aula 2)
+  7. [data-derruba] derrube um datacenter: uma zona, três zonas, o par ou a cópia no Rio, contra três desastres (aula 4)
 
   Com as animações pausadas (botão do topo ou "reduzir movimento"), tudo mostra o resultado direto.
 */
@@ -219,6 +220,14 @@
     _unidade: "camadas",
     _rotulo: "Na nuvem:"
   };
+  PECAS.hierarquia = {
+    franquia: { nome: "🏢 A rede de franquias", azure: "Grupo de gerenciamento", texto: "Junta várias lojas, e a regra da rede vale para todas: \"só entrega no Brasil\". No Azure, junta assinaturas, e as políticas e os acessos do grupo passam para todas elas. Pode ter até seis níveis, abaixo do grupo raiz." },
+    conta: { nome: "💳 A conta da loja no app", azure: "Assinatura", texto: "É ela que recebe a fatura e diz quem pode mexer. No Azure, a assinatura é a unidade de cobrança e de controle de acesso. Dá para ter uma para produção e outra para testes, cada uma com a sua conta." },
+    sacola: { nome: "🛍️ A sacola da entrega", azure: "Grupo de recursos", texto: "Junta os potes de um mesmo pedido. Jogou a sacola fora, foi tudo junto. No Azure, excluir o grupo exclui tudo dentro, e o acesso dado ao grupo vale para todos os recursos. Não dá para pôr uma sacola dentro de outra." },
+    pote: { nome: "🍱 O pote de comida", azure: "Recurso", texto: "A peça básica: tudo o que você cria. No Azure, uma máquina virtual, uma rede, um banco de dados. Cada recurso fica em um grupo de recursos, e só em um de cada vez." },
+    _fim: "<strong>🛵 Pedido montado!</strong> Recurso dentro do grupo de recursos, dentro da assinatura, dentro do grupo de gerenciamento.",
+    _unidade: "níveis"
+  };
   document.querySelectorAll("[data-placa]").forEach(function (placa) {
     const conjunto = PECAS[placa.dataset.placa || "placa"];
     const ficha = placa.querySelector(".placa-ficha");
@@ -357,6 +366,80 @@
       fornos.textContent = "🔥🔥";
       Object.values(campos).forEach(el => (el.textContent = "—"));
     });
+  });
+
+  // ===================== 7. derrube um datacenter =====================
+  // onde o sistema fica: em quais zonas de São Paulo (1, 2, 3) e se tem cópia em outra região
+  const LUGARES = {
+    uma: { zonas: [1], copia: null, custo: "$", nome: "uma zona em São Paulo" },
+    tres: { zonas: [1, 2, 3], copia: null, custo: "$$", nome: "três zonas em São Paulo" },
+    par: { zonas: [1, 2, 3], copia: "eua", custo: "$$$", nome: "três zonas em São Paulo e cópia no par (Centro-Sul dos EUA)" },
+    rio: { zonas: [1, 2, 3], copia: "rio", custo: "$$$", nome: "três zonas em São Paulo e cópia no Rio" }
+  };
+  const GOLPES = {
+    predio: "🔥 Pegou fogo num datacenter da zona 1, em São Paulo.",
+    zona: "⚡ A zona 1 inteira ficou sem energia.",
+    regiao: "🌊 Um desastre parou a região de São Paulo inteira."
+  };
+  document.querySelectorAll("[data-derruba]").forEach(function (box) {
+    const ondes = box.querySelectorAll("[data-onde]");
+    const golpes = box.querySelectorAll("[data-golpe]");
+    const fala = box.querySelector(".casa-fala");
+    const custo = box.querySelector("[data-custo]");
+    const missoes = {};
+    box.querySelectorAll("[data-missao]").forEach(el => (missoes[el.dataset.missao] = el));
+    let onde = "uma";
+
+    // desenha os potes (o sistema) nos lugares escolhidos e apaga os estragos
+    function monta() {
+      const L = LUGARES[onde];
+      box.querySelectorAll("[data-zona], [data-regiao-copia]").forEach(function (el) {
+        const tem = el.dataset.zona ? L.zonas.includes(+el.dataset.zona) : L.copia === el.dataset.regiaoCopia;
+        el.classList.remove("caiu", "assumiu");
+        el.classList.toggle("tem", tem);
+        el.querySelector(".dr-app").textContent = tem ? "🍱 sistema" : "";
+      });
+      box.querySelector(".dr-sp").classList.remove("caiu");
+      custo.textContent = L.custo;
+      box.classList.toggle("fora-do-brasil", L.copia === "eua");
+    }
+
+    function derruba(g) {
+      monta();
+      const L = LUGARES[onde];
+      const caidas = g === "regiao" ? [1, 2, 3] : [1];
+      caidas.forEach(z => box.querySelector(`[data-zona="${z}"]`).classList.add("caiu"));
+      if (g === "regiao") box.querySelector(".dr-sp").classList.add("caiu");
+      const vivas = L.zonas.filter(z => !caidas.includes(z));
+      let noAr = vivas.length > 0;
+      let txt = GOLPES[g] + " ";
+      if (vivas.length) txt += `O sistema continua no ar nas zonas ${vivas.join(" e ")}: <strong>alta disponibilidade</strong>.`;
+      else if (L.copia) {
+        noAr = true;
+        box.querySelector(`[data-regiao-copia="${L.copia}"]`).classList.add("assumiu");
+        txt += L.copia === "eua"
+          ? "O sistema voltou no par, no Centro-Sul dos EUA. Ficou no ar, mas <strong>os dados estão fora do Brasil</strong>: o contrato do órgão não aceita."
+          : "O sistema voltou pela cópia no Rio. No ar, e com os dados no Brasil: <strong>recuperação de desastre</strong> sem quebrar o contrato.";
+      } else txt += `💥 O sistema caiu: ele estava só em ${L.nome}.`;
+      if (L.copia === "eua" && vivas.length) txt += " Mas repare: a cópia de segurança fica nos EUA, fora do Brasil.";
+      fala.innerHTML = txt;
+      // as missões: aguentar cada desastre sem tirar os dados do Brasil
+      if (noAr && L.copia !== "eua") {
+        if (g === "predio") missoes.predio.classList.add("feita");
+        if (g === "zona") missoes.zona.classList.add("feita");
+        if (g === "regiao") missoes.regiao.classList.add("feita");
+      }
+      if (Object.values(missoes).every(m => m.classList.contains("feita"))) fala.innerHTML += " 🏆 <strong>As três missões cumpridas!</strong> Zonas para o prédio e para a zona; uma cópia no Rio para a região inteira.";
+    }
+
+    ondes.forEach(b => b.addEventListener("click", function () {
+      onde = b.dataset.onde;
+      ondes.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      monta();
+      fala.innerHTML = `Sistema em ${LUGARES[onde].nome}. Agora derrube alguma coisa.` + (onde === "par" ? " ⚠️ O par do Sul do Brasil fica nos EUA." : "");
+    }));
+    golpes.forEach(b => b.addEventListener("click", () => derruba(b.dataset.golpe)));
+    monta();
   });
 
   // ===================== 6. a régua dos noves =====================

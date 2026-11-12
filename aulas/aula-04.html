@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- EDITE AQUI: número e tema da aula -->
+  <title>Aula 4: Regiões, zonas e a hierarquia do Azure · Preparatório AZ-900 · Stela</title>
+  <meta name="description" content="Aula 4 do Preparatório AZ-900: onde ficam os dados de um órgão de Brasília, o simulador derrube um datacenter, regiões, zonas de disponibilidade, pares (e a exceção do Sul do Brasil), regiões soberanas, a hierarquia do Azure e o primeiro grupo de recursos no portal de treino.">
+
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <script src="../assets/js/placa.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,400..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+  <link rel="stylesheet" href="../assets/css/disciplina.css">
+  <link rel="stylesheet" href="../assets/css/aula.css">
+  <link rel="stylesheet" href="../assets/css/neon.css?v=3">
+  <link rel="stylesheet" href="../css/interativos.css?v=1">
+  <link rel="stylesheet" href="../css/aula-az.css?v=1">
+  <link rel="stylesheet" href="../css/vivo.css?v=4">
+</head>
+<body>
+
+  <!-- ===================== BARRA DO TOPO (igual em todos os sites) ===================== -->
+  <header class="barra">
+    <div class="envolve">
+      <div class="marcas">
+        <a class="marca-disc marca-logo" href="../" title="Página inicial do preparatório"><img src="../assets/img/tec/azure.svg" alt="Preparatório AZ-900: página inicial" width="32" height="32"></a>
+      </div>
+      <button type="button" class="btn-menu" id="btn-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="nav" id="menu" aria-label="Partes da aula">
+        <a href="../#videos">← Preparatório</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#conceitos">Conceitos</a>
+        <a href="#demonstracao">Portal</a>
+        <a href="#pegadinha">Pegadinha</a>
+        <a href="#treino">Treino</a>
+        <a href="#atividade">Checklist</a>
+      </nav>
+      <div class="ajustes">
+        <button type="button" id="btn-tema" aria-label="Mudar para o tema claro">
+          <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        </button>
+        <button type="button" id="btn-fonte" aria-label="Aumentar o tamanho do texto">A+</button>
+        <button type="button" id="btn-movimento" aria-pressed="false">
+          <svg class="pausar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tocar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <span class="rotulo">Pausar animações</span>
+        </button>
+        <a class="marca" href="/" title="Portal da Stela">
+          <img src="../assets/img/estrela.webp" alt="" width="26" height="24">
+          <span class="marca-texto">Stela</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== CABEÇALHO DA AULA ===================== -->
+    <section class="aula-cab">
+      <canvas class="chuva-matrix" aria-hidden="true"></canvas>
+      <div class="envolve">
+        <p class="trilha-migalhas">
+          <a href="/">Stela</a> <span aria-hidden="true">/</span>
+          <a href="../">Preparatório AZ-900</a> <span aria-hidden="true">/</span>
+          <a href="../#videos">Aulas</a> <span aria-hidden="true">/</span>
+          <span>Aula 4</span>
+        </p>
+
+        <!-- EDITE AQUI: número, vídeo, domínio da prova e título -->
+        <div class="aula-etiquetas">
+          <span class="etiqueta senac">Fac Senac DF</span>
+          <span class="etiqueta ouro">Aula 4</span>
+          <span class="etiqueta">Vídeo 4</span>
+          <span class="etiqueta dominio" style="--cor:var(--d2)">Domínio 2 · Arquitetura e serviços</span>
+        </div>
+        <h1>Regiões, zonas e a <span class="neon">hierarquia</span></h1>
+        <p class="subtitulo">Onde a nuvem mora de verdade, como ela aguenta um prédio, um bairro ou uma cidade parados, e como organizar tudo, do recurso à rede de franquias.</p>
+      </div>
+    </section>
+
+        <!-- ===================== RESUMO ===================== -->
+    <section class="bloco faixa alt" aria-label="Resumo da aula">
+      <div class="envolve">
+        <div class="resumo">
+          <div class="cartao">
+            <span class="olho">Objetivo</span>
+            <p>Explicar região, zona de disponibilidade e par de regiões, e organizar recursos na hierarquia do Azure.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Revezamento</span>
+            <p>Primeiro esta página (e o vídeo 4, quando sair). Depois, o módulo <strong>Descrever os principais componentes arquitetônicos do Azure</strong>, no Microsoft Learn.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Na prova</span>
+            <p>Domínio 2, Arquitetura e serviços do Azure: <strong>35 a 40%</strong> das questões, o maior domínio.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bloco">
+      <div class="envolve aula-corpo">
+
+        <!-- ===================== ROTEIRO DA AULA ===================== -->
+        <section class="parte" id="video">
+          <div class="cab">
+            <span class="olho">V4 · roteiro da aula</span>
+            <h2>O que você vai aprender</h2>
+            <p>Os assuntos da aula, na ordem da página. Clique para ir direto a um deles. Viu o <strong>⏸ Pausa aqui</strong>? Pare e tente responder antes de abrir a resposta.</p>
+          </div>
+          <div class="cartao">
+            <ol class="roteiro-video sem-tempo">
+              <li><a href="#gancho">G1 · Onde ficam fisicamente os dados de um órgão público de Brasília?</a></li>
+              <li><a href="#simulador">SIM1 · Derrube um datacenter</a></li>
+              <li><a href="#c1">C1 · Datacenters e regiões</a></li>
+              <li><a href="#c2">C2 · Zonas de disponibilidade</a></li>
+              <li><a href="#c3">C3 · Pares de regiões e regiões soberanas</a></li>
+              <li><a href="#c4">C4 · A hierarquia: do recurso ao grupo de gerenciamento</a></li>
+              <li><a href="#hierarquia">X1 · A hierarquia na entrega</a></li>
+              <li><a href="#demonstracao">D1 · Faça junto: o primeiro grupo de recursos, no portal de treino</a></li>
+              <li><a href="#pegadinha">P1 · A pegadinha: o par de São Paulo fica nos EUA</a></li>
+              <li><a href="#learn">Agora é no Microsoft Learn</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== GANCHO (vivo.js, parte 1) ===================== -->
+        <section class="parte" id="gancho">
+          <div class="cab">
+            <span class="olho">G1 · gancho</span>
+            <h2>O contrato do órgão</h2>
+          </div>
+          <div class="gancho plantao" data-plantao data-link="#simulador" data-link-texto="Teste onde pôr o sistema, logo abaixo">
+            <p class="gancho-evento">🛵 Cerrado Delivery · contrato novo</p>
+            <span class="tarja">🏛️ Órgão público do DF</span>
+            <p class="manchete">O Cerrado Delivery vai entregar as marmitas de um órgão público de Brasília. O contrato pede: "os dados ficam no Brasil".</p>
+            <div class="letreiro" aria-hidden="true"><span>Nomes dos servidores · endereços de entrega · cardápios com restrição alimentar · a Lia vai criar tudo no Azure · e o Rafa quer saber onde os dados vão morar…</span></div>
+            <button type="button" class="botao" data-abrir>▶ Onde ficam os dados?</button>
+            <div class="gancho-voto" data-revela hidden>
+              <p class="gancho-pergunta" tabindex="-1">Onde ficam fisicamente os dados de um órgão público de Brasília?</p>
+              <div class="gancho-botoes">
+                <button type="button" aria-pressed="false" data-explica="Seria bom, mas o Azure não tem região em Brasília. As regiões do Brasil ficam no estado de São Paulo (Sul do Brasil) e no Rio (Sudeste do Brasil).">🏛️ Em Brasília</button>
+                <button type="button" aria-pressed="false" data-explica="Isso! No Azure, a região Sul do Brasil fica no estado de São Paulo, e a Sudeste do Brasil, no Rio. São prédios de verdade, com servidores de verdade.">🏙️ Em São Paulo ou no Rio</button>
+                <button type="button" aria-pressed="false" data-explica="A nuvem é feita de prédios de verdade, os datacenters, em lugares de verdade. Quem cria o recurso escolhe a região, e é por ela que se sabe onde os dados moram.">☁️ Em lugar nenhum: está na nuvem</button>
+              </div>
+              <p class="gancho-resposta" aria-live="polite"></p>
+            </div>
+          </div>
+          <p class="fonte">História e contrato fictícios, criados para a aula. As regiões do Brasil estão na <a href="https://learn.microsoft.com/pt-br/azure/reliability/regions-list">lista de regiões do Azure</a>, consultada em 12/11/2026.</p>
+        </section>
+
+        <!-- ===================== ESTUDO DE CASO ===================== -->
+        <section class="parte" id="caso">
+          <div class="cab">
+            <span class="olho">EC1 · estudo de caso</span>
+            <h2>As três perguntas do Rafa</h2>
+          </div>
+          <div class="cartao caso">
+            <p>A Lia vai montar o sistema das marmitas do órgão no Azure. Antes, o Rafa quer três respostas:</p>
+            <ol>
+              <li>E se pegar fogo num prédio?</li>
+              <li>E se faltar luz num bairro inteiro?</li>
+              <li>E se acontecer um desastre na cidade toda?</li>
+            </ol>
+            <p>E, em todos os casos, os dados não podem sair do Brasil.</p>
+            <h3>Para pensar</h3>
+            <ol>
+              <li>Basta um prédio para guardar o sistema?</li>
+              <li>Se São Paulo inteira parar, para onde o sistema vai?</li>
+              <li>Como organizar os recursos do contrato para não misturar com os do aplicativo?</li>
+            </ol>
+            <p class="fonte">Empresa e contrato fictícios, criados para o preparatório.</p>
+          </div>
+        </section>
+
+        <!-- ===================== SIMULADOR (vivo.js, parte 7) ===================== -->
+        <section class="parte" id="simulador">
+          <div class="cab">
+            <span class="olho">SIM1 · simulador</span>
+            <h2>Derrube um datacenter</h2>
+            <p>Escolha onde o sistema das marmitas fica e derrube alguma coisa. Cumpra as três missões sem tirar os dados do Brasil.</p>
+          </div>
+          <div class="sim" data-derruba>
+            <div class="dr-escolha">
+              <span>1. Onde fica o sistema?</span>
+              <div class="dz-botoes" role="group" aria-label="Onde fica o sistema">
+                <button type="button" data-onde="uma" aria-pressed="true">🏢 Uma zona em São Paulo</button>
+                <button type="button" data-onde="tres" aria-pressed="false">🏢🏢🏢 Três zonas em São Paulo</button>
+                <button type="button" data-onde="par" aria-pressed="false">🇺🇸 Três zonas + o par</button>
+                <button type="button" data-onde="rio" aria-pressed="false">🏖️ Três zonas + cópia no Rio</button>
+              </div>
+            </div>
+            <div class="dr-mapa">
+              <div class="dr-regiao dr-sp">
+                <h4>Sul do Brasil <small>região · estado de São Paulo · 3 zonas</small></h4>
+                <div class="dr-zonas">
+                  <div class="dr-zona" data-zona="1"><b>zona 1</b><span class="predios" aria-hidden="true">🏢🏢</span><span class="dr-app"></span></div>
+                  <div class="dr-zona" data-zona="2"><b>zona 2</b><span class="predios" aria-hidden="true">🏢</span><span class="dr-app"></span></div>
+                  <div class="dr-zona" data-zona="3"><b>zona 3</b><span class="predios" aria-hidden="true">🏢🏢</span><span class="dr-app"></span></div>
+                </div>
+              </div>
+              <div class="dr-outras">
+                <div class="dr-copia rio" data-regiao-copia="rio"><b>Sudeste do Brasil</b><small>região · Rio · sem zonas</small><span class="dr-app"></span></div>
+                <div class="dr-copia eua" data-regiao-copia="eua"><b>Centro-Sul dos EUA</b><small>o par do Sul do Brasil · fora do Brasil</small><span class="dr-app"></span></div>
+              </div>
+            </div>
+            <div class="dr-golpes">
+              <span>2. Derrube:</span>
+              <div class="dz-botoes" role="group" aria-label="O que derrubar">
+                <button type="button" data-golpe="predio">🔥 Um prédio</button>
+                <button type="button" data-golpe="zona">⚡ Uma zona inteira</button>
+                <button type="button" data-golpe="regiao">🌊 A região de São Paulo</button>
+              </div>
+            </div>
+            <p class="dr-custo">custo: <strong data-custo>$</strong> (duplicar o sistema custa mais)</p>
+            <ul class="dr-placar">
+              <li data-missao="predio">Aguentar um prédio pegando fogo</li>
+              <li data-missao="zona">Aguentar uma zona sem luz</li>
+              <li data-missao="regiao">Aguentar a região inteira parada, com os dados no Brasil</li>
+            </ul>
+            <p class="casa-fala" aria-live="polite"></p>
+          </div>
+          <p class="fonte">Simulação para a aula: na opção de uma zona, o sistema fica num prédio só. As zonas, o par do Sul do Brasil e as cidades vêm da <a href="https://learn.microsoft.com/pt-br/azure/reliability/regions-list">lista de regiões do Azure</a>, consultada em 12/11/2026. A cópia no Rio é configurada pela equipe.</p>
+
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Com o par automático, o sistema aguentou a região inteira parada. Por que não serve para o contrato?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Porque o par do Sul do Brasil é o <strong>Centro-Sul dos EUA</strong>: a cópia fica fora do Brasil. Para manter os dados no país, a equipe configura a cópia no Sudeste do Brasil, no Rio.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== CONCEITOS ===================== -->
+        <section class="parte" id="conceitos">
+          <div class="cab">
+            <span class="olho">C1–C4 · conceitos</span>
+            <h2>O que a prova quer que você saiba</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c1">
+            <div class="texto">
+              <span class="olho">C1</span>
+              <h3>Datacenters e regiões</h3>
+              <ul>
+                <li><strong>Datacenter:</strong> o prédio, com servidores em racks, energia, refrigeração e rede próprias. Você não escolhe o prédio.</li>
+                <li><strong>Região:</strong> uma área geográfica com pelo menos um datacenter, ligados por uma rede rápida. É a região que você escolhe ao criar quase todo recurso.</li>
+                <li>Alguns tamanhos de máquina e tipos de armazenamento só existem em certas regiões.</li>
+                <li><strong>Serviços globais</strong> não pedem região: Microsoft Entra ID, Gerenciador de Tráfego e DNS do Azure.</li>
+              </ul>
+              <p>No Brasil, o Azure tem duas regiões: <strong>Sul do Brasil</strong> (estado de São Paulo) e <strong>Sudeste do Brasil</strong> (Rio).</p>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-core-architectural-components-of-azure/5-describe-azure-physical-infrastructure">Microsoft Learn, Descrever a infraestrutura física do Azure</a> e <a href="https://learn.microsoft.com/pt-br/azure/reliability/regions-list">Lista de regiões do Azure</a>, consultados em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o mesmo nome, região, e a de São Paulo também existe (<a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/">AWS, Regions and Availability Zones</a>, consultado em 12/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c2">
+            <div class="texto">
+              <span class="olho">C2</span>
+              <h3>Zonas de disponibilidade</h3>
+              <p>Datacenters <strong>separados fisicamente dentro da mesma região</strong>, cada zona com energia, refrigeração e rede próprias, ligadas por fibra. Se uma zona cai, as outras continuam.</p>
+              <ul>
+                <li>Toda região com zonas tem <strong>pelo menos três</strong>. Mas nem toda região tem zonas: o Sudeste do Brasil, por exemplo, não tem.</li>
+                <li><strong>Serviços em zonas:</strong> você fixa o recurso numa zona (máquina virtual, disco, IP).</li>
+                <li><strong>Serviços com redundância de zona:</strong> a plataforma copia sozinha entre as zonas (armazenamento com redundância de zona, Banco de Dados SQL).</li>
+                <li><strong>Serviços não regionais:</strong> sempre disponíveis, resistem até à queda de uma região.</li>
+                <li>Duplicar o sistema e passar dados entre zonas pode custar mais.</li>
+              </ul>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-core-architectural-components-of-azure/5-describe-azure-physical-infrastructure">Microsoft Learn, Descrever a infraestrutura física do Azure</a> e <a href="https://learn.microsoft.com/pt-br/azure/reliability/regions-list">Lista de regiões do Azure</a>, consultados em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> zonas de disponibilidade também, com a mesma ideia. Você viu na aula 3 da AWS.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c3">
+            <div class="texto">
+              <span class="olho">C3</span>
+              <h3>Pares de regiões e regiões soberanas</h3>
+              <ul>
+                <li><strong>Par de regiões:</strong> a maioria das regiões tem uma parceira na mesma geografia, a pelo menos 480 km. Num desastre grande, um lado do par socorre o outro, e as atualizações planejadas passam por uma região de cada vez.</li>
+                <li><strong>Nem tudo é automático:</strong> alguns serviços não copiam nem trocam de região sozinhos. Aí, a cópia é configurada pelo cliente.</li>
+                <li><strong>A exceção do Brasil:</strong> o Sul do Brasil faz par com o Centro-Sul dos EUA, fora da geografia brasileira, e só num sentido: o Centro-Sul dos EUA não faz par com o Sul do Brasil. O Sudeste do Brasil faz par com o Sul do Brasil.</li>
+                <li><strong>Regiões soberanas:</strong> instâncias do Azure isoladas da principal, para exigências legais. Exemplos: as regiões do governo dos EUA e as da China, operadas pela parceira 21Vianet.</li>
+              </ul>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-core-architectural-components-of-azure/5-describe-azure-physical-infrastructure">Microsoft Learn, Descrever a infraestrutura física do Azure</a> e <a href="https://learn.microsoft.com/pt-br/azure/reliability/cross-region-replication-azure">Pares de regiões do Azure</a>, consultados em 12/11/2026.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c4">
+            <div class="texto">
+              <span class="olho">C4</span>
+              <h3>A hierarquia: do recurso ao grupo de gerenciamento</h3>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Nível</th><th>O que é</th><th>Regras que caem na prova</th></tr></thead><tbody>
+                <tr><td><strong>Recurso</strong></td><td>Tudo o que você cria: máquina virtual, rede, banco de dados.</td><td>Fica em um grupo de recursos, e só em um de cada vez.</td></tr>
+                <tr><td><strong>Grupo de recursos</strong></td><td>Agrupa recursos.</td><td>Não fica dentro de outro grupo e não muda de nome. Excluir o grupo exclui tudo dentro. O acesso dado ao grupo vale para tudo dentro.</td></tr>
+                <tr><td><strong>Assinatura</strong></td><td>A unidade de gerenciamento, de cobrança e de escala.</td><td>Dois limites: de cobrança (uma fatura por assinatura) e de controle de acesso. Uma conta pode ter várias.</td></tr>
+                <tr><td><strong>Grupo de gerenciamento</strong></td><td>Agrupa assinaturas.</td><td>As políticas e os acessos passam para todas as assinaturas de dentro. Até seis níveis, abaixo de um grupo raiz por diretório.</td></tr>
+              </tbody></table></div>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-core-architectural-components-of-azure/6-describe-azure-management-infrastructure">Microsoft Learn, Descrever a infraestrutura de gerenciamento do Azure</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> a assinatura lembra a conta da AWS, e os grupos de gerenciamento lembram as unidades organizacionais do AWS Organizations (<a href="https://aws.amazon.com/organizations/">AWS Organizations</a>, consultado em 12/11/2026). A AWS não tem um "grupo de recursos" igual.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== A HIERARQUIA NA ENTREGA (vivo.js, parte 4) ===================== -->
+        <section class="parte" id="hierarquia">
+          <div class="cab">
+            <span class="olho">X1 · a hierarquia na entrega</span>
+            <h2>Do pote à rede de franquias</h2>
+            <p>Clique em cada nível, de fora para dentro. Em casa, pegue um pote, uma sacola e uma caixa e monte a hierarquia na mesa.</p>
+          </div>
+          <div class="hier-nuvem placa-nuvem" data-placa="hierarquia">
+            <div class="hier-caixa n4">
+              <button type="button" data-peca="franquia" aria-pressed="false"><span aria-hidden="true">🏢</span>Rede de franquias</button>
+              <div class="hier-caixa n3">
+                <button type="button" data-peca="conta" aria-pressed="false"><span aria-hidden="true">💳</span>Conta da loja no app</button>
+                <div class="hier-caixa n2">
+                  <button type="button" data-peca="sacola" aria-pressed="false"><span aria-hidden="true">🛍️</span>Sacola da entrega</button>
+                  <div class="hier-itens">
+                    <button type="button" data-peca="pote" aria-pressed="false"><span aria-hidden="true">🍱</span>Pote</button>
+                    <span aria-hidden="true">🍱 pote</span>
+                    <span aria-hidden="true">🥤 suco</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="placa-ficha" aria-live="polite">
+              <span class="olho">a hierarquia do Azure</span>
+              <h4>Clique num nível</h4>
+              <p>Cada nível da entrega é um nível do Azure. Descubra qual é qual.</p>
+              <p class="placa-contagem">0 de 4 níveis</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== DEMONSTRAÇÃO ===================== -->
+        <section class="parte" id="demonstracao">
+          <div class="cab">
+            <span class="olho">D1 · demonstração</span>
+            <h2>Faça junto: o primeiro grupo de recursos</h2>
+            <p>Agora você cria de verdade, no portal de treino. Abra noutra aba e marque cada passo aqui.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p><a class="botao" href="../portal/" target="_blank" rel="noopener">☁️ Abrir o portal de treino</a></p>
+              <div class="progresso-atividade" data-progresso="portal-aula-04">
+                <span class="contagem">0 de 5</span>
+                <span class="barra-progresso"><span></span></span>
+              </div>
+              <ol class="checklist" id="portal-aula-04">
+                <li><label><input type="checkbox"><span>Abri <strong>Grupos de recursos</strong> e cliquei em <strong>＋ Criar</strong>.</span></label></li>
+                <li><label><input type="checkbox"><span>Dei o nome <code>rg-cerrado-pedidos</code>.</span></label></li>
+                <li><label><input type="checkbox"><span>Escolhi a região do Brasil com zonas de disponibilidade e cliquei em <strong>Revisar + criar</strong>.</span></label></li>
+                <li><label><input type="checkbox"><span>Achei o grupo em <strong>Todos os recursos</strong>.</span></label></li>
+                <li><label><input type="checkbox"><span>Abri o grupo e li o caminho: grupo de gerenciamento, assinatura, grupo de recursos.</span></label></li>
+              </ol>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Qual região você escolheu, e por quê? O <strong>Sul do Brasil</strong>: fica no Brasil e tem três zonas.</li>
+                  <li>Errou o nome? Abra o grupo, use <strong>🗑 Excluir grupo de recursos</strong> e crie de novo. Repare no aviso: excluir o grupo exclui tudo dentro.</li>
+                </ol>
+              </div>
+              <p class="dica"><strong>No Azure de verdade:</strong> o caminho é o mesmo. Tem o Azure for Students? Pode criar lá também, e excluir no fim.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== PEGADINHA ===================== -->
+        <section class="parte" id="pegadinha">
+          <div class="cab">
+            <span class="olho">P1 · pegadinha de prova</span>
+            <h2>O par de São Paulo fica nos EUA</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p>Três confusões clássicas desta aula.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Confusão</th><th>O certo</th><th>A pista na questão</th></tr></thead><tbody>
+                <tr><td><strong>"O par fica sempre no mesmo país"</strong></td><td>A regra é a mesma geografia, mas o Sul do Brasil é a exceção: o par dele é o Centro-Sul dos EUA.</td><td>"Brasil Sul", "residência de dados", "par de regiões".</td></tr>
+                <tr><td><strong>Zona × região</strong></td><td>A zona é um ou mais datacenters <strong>dentro</strong> da região. O par é <strong>outra</strong> região.</td><td>"Falha num datacenter" pede zonas; "desastre na região inteira" pede outra região.</td></tr>
+                <tr><td><strong>Grupo dentro de grupo</strong></td><td>Grupo de recursos não fica dentro de outro. Quem forma árvore são os grupos de gerenciamento.</td><td>"Aninhar", "hierarquia de vários níveis" aponta para grupos de gerenciamento.</td></tr>
+              </tbody></table></div>
+              <details class="pausa-aqui">
+                <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>A empresa quer que uma regra (só criar recursos no Brasil) valha para as dez assinaturas dela. Onde aplicar?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+                <div class="pausa-resposta"><p>Num <strong>grupo de gerenciamento</strong> com as dez assinaturas dentro: a regra passa para todas elas, e o dono de cada assinatura não consegue desfazer.</p></div>
+              </details>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Uma equipe quer apagar todo o ambiente de testes de uma vez só, no fim do projeto. Como organizar? Num <strong>grupo de recursos</strong> só para os testes.</li>
+                  <li>O financeiro quer uma fatura separada para produção e para testes. O que criar? <strong>Duas assinaturas</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== TREINO ===================== -->
+        <section class="parte" id="treino">
+          <div class="cab">
+            <span class="olho">T1–T2 · treino</span>
+            <h2>Classifique!</h2>
+            <p>Cada acerto de primeira vale <strong>10 XP</strong>. Errou? A dica aparece e você tenta de novo. No fim, você ganha uma insígnia.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-1">
+            <div class="texto">
+              <span class="olho">T1</span>
+              <h3>Qual nível da hierarquia?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="recurso:Recurso,grupo:Grupo de recursos,assinatura:Assinatura,gerenciamento:Grupo de gerenciamento" data-dica="Volte à tabela do C4: o que é peça, o que é sacola, o que é conta e o que é rede de franquias?">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="recurso" data-explica="Uma máquina virtual é um recurso: a peça básica.">Uma máquina virtual com o sistema das marmitas.</li>
+                    <li data-resposta="grupo" data-explica="Juntar os recursos de um projeto para apagar de uma vez: grupo de recursos.">Juntar tudo do ambiente de testes para apagar de uma vez no fim.</li>
+                    <li data-resposta="assinatura" data-explica="Fatura separada é limite de cobrança: assinatura.">Ter uma fatura separada para produção e outra para testes.</li>
+                    <li data-resposta="gerenciamento" data-explica="Uma regra para várias assinaturas: grupo de gerenciamento.">Aplicar a mesma política em todas as assinaturas da empresa.</li>
+                    <li data-resposta="grupo" data-explica="Dar acesso a todos os recursos de um projeto de uma vez: no grupo de recursos.">Dar à equipe do contrato acesso a todos os recursos do contrato, e só a eles.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-2">
+            <div class="texto">
+              <span class="olho">T2</span>
+              <h3>Zona, região ou par?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="zona:Zonas de disponibilidade,regiao:Região,par:Par de regiões,soberana:Região soberana" data-dica="Do menor para o maior: um prédio, a área geográfica, duas áreas parceiras, e uma nuvem separada.">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="zona" data-explica="Datacenters separados dentro da mesma região: zonas de disponibilidade.">Espalhar as máquinas por datacenters separados na mesma região.</li>
+                    <li data-resposta="regiao" data-explica="A área geográfica que você escolhe ao criar o recurso: região.">Escolher, ao criar a máquina, que ela fique perto dos clientes de São Paulo.</li>
+                    <li data-resposta="par" data-explica="Duas regiões parceiras, longe uma da outra, para socorrer num desastre: par de regiões.">Ter uma região parceira a mais de 480 km para o caso de um desastre regional.</li>
+                    <li data-resposta="soberana" data-explica="Uma instância isolada do Azure, por exigência legal: região soberana.">Uma agência do governo dos EUA precisa de uma instância do Azure isolada da principal.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== ATIVIDADE ===================== -->
+        <section class="parte" id="atividade">
+          <div class="cab">
+            <span class="olho">A1 · checklist</span>
+            <h2>Checklist da aula</h2>
+            <p>O que você marcar fica salvo neste navegador.</p>
+          </div>
+
+          <div class="cartao">
+            <div class="progresso-atividade" data-progresso="passos-aula-04">
+              <span class="contagem">0 de 10</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="passos-aula-04">
+              <li><label><input type="checkbox"><span>Estudei esta página até o fim (ou assisti ao vídeo 4, quando ele sair). <a href="#video">Veja o roteiro da aula</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Cumpri as três missões do simulador. <a href="#simulador">Veja o SIM1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que é região e cito as duas do Brasil. <a href="#c1">Veja o C1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que é zona de disponibilidade e quantas tem uma região com zonas. <a href="#c2">Veja o C2</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que é par de regiões, a exceção do Sul do Brasil e o que é região soberana. <a href="#c3">Veja o C3</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei os quatro níveis da hierarquia e as regras de cada um. <a href="#c4">Veja o C4</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Montei a hierarquia da entrega. <a href="#hierarquia">Veja o X1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Criei o rg-cerrado-pedidos no portal de treino. <a href="#demonstracao">Veja o D1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz os dois treinos Classifique! e ganhei as insígnias. <a href="#treino">Veja o treino</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz o módulo "Descrever os principais componentes arquitetônicos do Azure" no Microsoft Learn e marquei no <a href="../#progresso">Meu progresso</a>.</span></label></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== CONEXÃO STEAM ===================== -->
+        <section class="parte" id="steam">
+          <div class="cab">
+            <span class="olho">S1 · conexão STEAM</span>
+            <h2>A nuvem fora da tela</h2>
+          </div>
+          <div class="steam">
+            <div class="cartao">
+              <span class="letra">M</span>
+              <h3>Matemática</h3>
+              <p>Um par de regiões fica a pelo menos 480 km. Num mapa, meça em linha reta: de São Paulo ao Rio e de São Paulo a Brasília. Qual das duas cidades daria um par pela regra dos 480 km?</p>
+            </div>
+            <div class="cartao">
+              <span class="letra">E</span>
+              <h3>Engenharia</h3>
+              <p>Com três LEDs de sucata (as zonas) e um ESP32, monte o "sistema que não cai": o LED aceso é a zona com o sistema. Tire um LED: os outros continuam? Isso é alta disponibilidade com zonas.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MICROSOFT LEARN ===================== -->
+        <section class="parte" id="learn">
+          <div class="cab">
+            <span class="olho">J1 · agora é no Microsoft Learn</span>
+            <h2>O revezamento: a sua vez no Learn</h2>
+            <p>Esta aula abriu a trilha 2. O módulo do Learn aprofunda, com a verificação de conhecimentos oficial, de graça e em português.</p>
+          </div>
+          <div class="repos">
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/modules/describe-core-architectural-components-of-azure/">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span>
+              <h4>Descrever os principais componentes arquitetônicos do Azure</h4>
+              <p>Trilha 2, módulo 1: regiões, zonas, pares, contas e a hierarquia, com a verificação de conhecimentos.</p>
+              <span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="../assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta">próximo passo</span></span>
+            </a>
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/azure/reliability/regions-list">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span>
+              <h4>Lista de regiões do Azure</h4>
+              <p>Todas as regiões, quantas zonas cada uma tem e o par de cada uma.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:var(--d2)"><i></i>Arquitetura</span><span class="etiqueta">fonte</span></span>
+            </a>
+            <a class="repo luz" href="/Preparatorio-AWS/aulas/aula-03.html">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Preparatório AWS</span>
+              <h4>Aula 3: Infraestrutura global</h4>
+              <p>Regiões, zonas e o incêndio no datacenter, pelo lado da AWS.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:#ff9900"><i></i>AWS</span><span class="etiqueta">como é na AWS</span></span>
+            </a>
+          </div>
+        </section>
+
+        <nav class="nav-aulas" aria-label="Outras aulas">
+          <!-- EDITE AQUI: use <a href="aula-NN.html"> quando a página da aula vizinha for liberada; <span> enquanto não for -->
+          <a class="anterior" href="aula-03.html">
+            <span class="olho">← aula anterior</span>
+            <strong>Aula 3: IaaS, PaaS, SaaS e serverless</strong>
+          </a>
+          <span class="proxima">
+            <span class="olho">próxima aula</span>
+            <strong>Aula 5: Computação no Azure (em breve)</strong>
+          </span>
+        </nav>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="envolve">
+      <div class="rodape-fim" style="margin-top:0; padding-top:0; border-top:0">
+        <span><a href="../">Preparatório AZ-900</a> · Feito com ♥ e sucata eletrônica.</span>
+        <span>az account show --output table</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ícone de repositório (Octicons, licença MIT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-repo" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></symbol>
+  </svg>
+
+  <script src="../assets/js/aulas.js"></script>
+  <script src="../assets/js/classifica.js?v=2"></script>
+  <script src="../assets/js/matrix.js?v=2"></script>
+  <script src="../js/vivo.js?v=4"></script>
+</body>
+</html>

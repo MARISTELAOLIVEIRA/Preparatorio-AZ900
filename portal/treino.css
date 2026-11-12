@@ -116,3 +116,8 @@
 .sim-lista-missoes details summary::after { content: " · ver os passos"; font-size: .78rem; color: var(--texto-3); }
 .sim-lista-missoes details[open] summary::after { content: " · esconder"; }
 .sim-lista-missoes details > span { display: block; margin-top: .3rem; }
+
+/* aula 4: o caminho da hierarquia na página do grupo */
+.sim-hierarquia { display: flex; flex-wrap: wrap; gap: .3rem .5rem; align-items: center; margin: 0 0 .8rem; padding: .5rem .8rem; border-radius: 10px;
+  border: 1px dashed var(--borda-forte); font-size: .86rem; color: var(--texto-2); }
+.sim-hierarquia strong { color: var(--texto); }

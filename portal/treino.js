@@ -1,5 +1,5 @@
 /*
-  treino.js: o portal de treino do Preparatório AZ-900 (versão 3 · 2026-11-12 · aula 1, o tour; aula 2, os jeitos de gerenciar; aula 3, cada serviço no seu modelo).
+  treino.js: o portal de treino do Preparatório AZ-900 (versão 4 · 2026-11-12 · aula 1, o tour; 2, os jeitos de gerenciar; 3, cada serviço no seu modelo; 4, o primeiro grupo de recursos).
   Nasceu do motor do simulador de Fundamentos de Computação em Nuvem (simulador/portal.js), com a cara do
   Stela Cloud: nada de logo da Microsoft, e o nome do serviço no Azure escrito ao lado.
   Aqui é só treino: sem login, sem nota, e nada vai para o banco. O estado fica no navegador (localStorage).
@@ -17,7 +17,7 @@
     { id: "inicio", nome: "Página inicial", icone: "🏠" },
     { id: "criar", nome: "Criar um recurso", icone: "＋" },
     { id: "todos", nome: "Todos os recursos", icone: "▦" },
-    { id: "grupos", nome: "Grupos de recursos", icone: "🗂", azure: "Grupos de recursos", aula: 4 },
+    { id: "grupos", nome: "Grupos de recursos", icone: "🗂" },
     { id: "compute", nome: "Stela Compute", icone: "🖥", azure: "Máquinas virtuais", aula: 5, cor: "--c-compute" },
     { id: "storage", nome: "Stela Storage", icone: "🗄", azure: "Contas de armazenamento", aula: 7, cor: "--c-storage" },
     { id: "network", nome: "Stela Network", icone: "🛡", azure: "Redes virtuais", aula: 6, cor: "--c-network" },
@@ -67,6 +67,18 @@
       ],
       fim: "<strong>🏆 Missão cumprida!</strong> Máquina virtual é IaaS, aplicativo web é PaaS e aplicativo de funções é serverless. Quanto mais pronto o serviço, menos você cuida.",
     },
+    {
+      id: "grupo",
+      aula: 4,
+      titulo: "Aula 4 · O primeiro grupo de recursos",
+      pedido: "O contrato com o órgão do DF pede os dados no Brasil. Crie a \"sacola\" dos recursos dos pedidos:",
+      passos: [
+        { id: "grupo-criado", texto: "🗂 Crie o grupo rg-cerrado-pedidos na região do Brasil que tem zonas de disponibilidade." },
+        { id: "grupo-todos", texto: "▦ Ache o grupo em \"Todos os recursos\"." },
+        { id: "grupo-hierarquia", texto: "🧭 Abra o grupo e veja em qual assinatura e em qual grupo de gerenciamento ele está." },
+      ],
+      fim: "<strong>🏆 Missão cumprida!</strong> O primeiro grupo de recursos do Cerrado Delivery está no Sul do Brasil, dentro da assinatura, dentro do grupo de gerenciamento raiz.",
+    },
   ];
 
   // os serviços em destaque da aula 3: o que cada um entrega pronto e o modelo certo
@@ -83,15 +95,26 @@
   };
   const NOMES_MODELO = { iaas: "IaaS", paas: "PaaS", saas: "SaaS", serverless: "Serverless" };
 
+  // aula 4: as regiões do formulário, com o nome que o portal do Azure mostra
+  const REGIOES = [
+    { id: "brazilsouth", nome: "(América do Sul) Brazil South", onde: "Sul do Brasil · Estado de São Paulo" },
+    { id: "brazilsoutheast", nome: "(América do Sul) Brazil Southeast", onde: "Sudeste do Brasil · Rio" },
+    { id: "southcentralus", nome: "(EUA) South Central US", onde: "Centro-Sul dos EUA · Texas" },
+    { id: "eastus", nome: "(EUA) East US", onde: "Leste dos EUA · Virgínia" },
+    { id: "westeurope", nome: "(Europa) West Europe", onde: "Oeste da Europa · Países Baixos" },
+  ];
+  const regiao = (id) => REGIOES.find((r) => r.id === id) || REGIOES[0];
+  const NOME_GRUPO = /^[\w.\-()]{1,90}$/;
+
   // ---------- estado ----------
   function estadoInicial() {
-    return { feitos: {} };
+    return { feitos: {}, grupos: [] };
   }
 
   function carregar() {
     try {
       const salvo = JSON.parse(localStorage.getItem(CHAVE));
-      if (salvo && salvo.feitos) return salvo;
+      if (salvo && salvo.feitos) return Object.assign({ grupos: [] }, salvo);
     } catch (erro) { /* sem localStorage: começa do zero */ }
     return estadoInicial();
   }
@@ -289,14 +312,36 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
         <h3 class="sim-sub">Serviços</h3>
         <div class="sim-servicos">${SERVICOS.filter((s) => s.id !== "inicio").map(botaoServico).join("")}</div>
         <h3 class="sim-sub">Recursos recentes</h3>
-        <p class="sim-vazio">Nenhum recurso ainda.</p>`;
+        ${tabelaGrupos() || '<p class="sim-vazio">Nenhum recurso ainda.</p>'}`;
+    },
+
+    grupos() {
+      return `${cabecalho("Grupos de recursos", [["inicio", "Página inicial"]])}
+        <div class="sim-barra-acoes"><button type="button" class="sim-botao primario" data-ir="criar-grupo">＋ Criar</button></div>
+        ${tabelaGrupos() || '<p class="sim-vazio">Nenhum grupo de recursos para exibir.</p>'}`;
+    },
+
+    "criar-grupo"() {
+      return `${cabecalho("Criar um grupo de recursos", [["inicio", "Página inicial"], ["grupos", "Grupos de recursos"]])}
+        <form class="sim-form" data-form="grupo" novalidate>
+          <fieldset><legend>Detalhes do projeto</legend>
+            <label>Assinatura <select disabled><option>Assinatura de estudo</option></select></label>
+            <label><span>Grupo de recursos <span class="sim-obrig">*</span></span><input name="nome" autocomplete="off" required></label>
+          </fieldset>
+          <fieldset><legend>Detalhes do recurso</legend>
+            <label><span>Região <span class="sim-obrig">*</span></span><select name="regiao">${REGIOES.map((r) => `<option value="${r.id}"${r.id === "eastus" ? " selected" : ""}>${esc(r.nome)}</option>`).join("")}</select></label>
+            <p class="sim-nota">A região do grupo guarda as informações sobre os recursos dele. Os recursos de dentro podem ficar em outras regiões.</p>
+          </fieldset>
+          <p class="sim-erro" data-erro hidden></p>
+          <div class="sim-barra-acoes"><button type="submit" class="sim-botao primario">Revisar + criar</button><button type="button" class="sim-botao" data-ir="grupos">Cancelar</button></div>
+        </form>`;
     },
 
     criar() {
       return `${cabecalho("Criar um recurso", [["inicio", "Página inicial"]])}
         <p class="sim-nota">As categorias do portal. Cada uma entra numa aula.</p>
         <div class="sim-servicos sim-categorias">
-          <button type="button" data-acao="breve" data-aula="4"><span aria-hidden="true">🗂</span><span>Grupo de recursos<small>aula 4</small></span></button>
+          <button type="button" data-ir="criar-grupo"><span aria-hidden="true">🗂</span><span>Grupo de recursos<small>aula 4</small></span></button>
           <button type="button" data-acao="breve" data-aula="5"><span aria-hidden="true">🖥</span><span>Computação<small>máquinas virtuais, contêineres e funções · aula 5</small></span></button>
           <button type="button" data-acao="breve" data-aula="6"><span aria-hidden="true">🛡</span><span>Rede<small>redes virtuais e VPN · aula 6</small></span></button>
           <button type="button" data-acao="breve" data-aula="7"><span aria-hidden="true">🗄</span><span>Armazenamento<small>contas de armazenamento · aula 7</small></span></button>
@@ -307,11 +352,58 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
     },
 
     todos() {
+      if (estado.grupos.some((g) => g.nome === "rg-cerrado-pedidos")) setTimeout(() => marcar("grupo-todos"), 0);
       return `${cabecalho("Todos os recursos", [["inicio", "Página inicial"]])}
-        <div class="sim-tabela"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Grupo de recursos</th><th>Localização</th></tr></thead><tbody></tbody></table></div>
-        <p class="sim-vazio">Nenhum recurso para exibir. Tudo o que o Cerrado Delivery criar vai aparecer aqui, de todos os tipos.</p>`;
+        ${tabelaGrupos() || '<p class="sim-vazio">Nenhum recurso para exibir. Tudo o que o Cerrado Delivery criar vai aparecer aqui, de todos os tipos.</p>'}`;
     },
   };
+
+  function tabelaGrupos() {
+    if (!estado.grupos.length) return "";
+    const linhas = estado.grupos.map((g) => `<tr><td><button type="button" class="sim-link" data-grupo="${esc(g.nome)}">${esc(g.nome)}</button></td><td>Grupo de recursos</td><td>Assinatura de estudo</td><td>${esc(regiao(g.regiao).nome)}</td></tr>`).join("");
+    return `<div class="sim-tabela"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Assinatura</th><th>Localização</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+  }
+
+  // a página do grupo: o caminho da hierarquia, como as migalhas do portal
+  function telaGrupo(nome) {
+    const g = estado.grupos.find((x) => x.nome === nome);
+    if (!g) return TELAS.grupos();
+    if (g.nome === "rg-cerrado-pedidos") setTimeout(() => marcar("grupo-hierarquia"), 0);
+    const r = regiao(g.regiao);
+    return `${cabecalho(g.nome, [["inicio", "Página inicial"], ["grupos", "Grupos de recursos"]])}
+      <p class="sim-hierarquia" aria-label="Hierarquia"><span>🏢 Grupo de gerenciamento raiz</span> › <span>💳 Assinatura de estudo</span> › <strong>🛍️ ${esc(g.nome)}</strong> › <span>🍱 recursos</span></p>
+      <div class="sim-barra-acoes"><button type="button" class="sim-botao perigo" data-excluir-grupo="${esc(g.nome)}">🗑 Excluir grupo de recursos</button></div>
+      <dl class="sim-detalhes">
+        <dt>Assinatura</dt><dd>Assinatura de estudo</dd>
+        <dt>Grupo de gerenciamento</dt><dd>Grupo de gerenciamento raiz (do diretório Cerrado Delivery)</dd>
+        <dt>Localização</dt><dd>${esc(r.nome)}: ${esc(r.onde)}</dd>
+        <dt>Recursos</dt><dd>nenhum, por enquanto (a máquina virtual entra na aula 5)</dd>
+      </dl>
+      <p class="sim-nota">Excluir o grupo exclui tudo o que está dentro dele. No Azure de verdade, não tem volta.</p>`;
+  }
+
+  function criarGrupo(form) {
+    const nome = String(form.nome.value || "").trim();
+    const reg = form.regiao.value;
+    const erro = form.querySelector("[data-erro]");
+    let msg = "";
+    if (!nome) msg = "O nome do grupo de recursos é obrigatório.";
+    else if (!NOME_GRUPO.test(nome) || nome.endsWith(".")) msg = "O nome só aceita letras, números, sublinhado, hífen, ponto e parênteses, sem terminar em ponto.";
+    else if (estado.grupos.some((g) => g.nome.toLowerCase() === nome.toLowerCase())) msg = `Já existe um grupo de recursos chamado ${nome}.`;
+    if (msg) { erro.textContent = msg; erro.hidden = false; return; }
+    estado.grupos.push({ nome: nome, regiao: reg });
+    salvar();
+    avisar(`Grupo de recursos ${nome} criado.`);
+    if (!estado.feitos["grupo-criado"]) {
+      const motivos = [];
+      if (nome !== "rg-cerrado-pedidos") motivos.push("O nome combinado é rg-cerrado-pedidos.");
+      if (!reg.startsWith("brazil")) motivos.push("O contrato pede os dados no Brasil: escolha uma região brasileira.");
+      else if (reg === "brazilsoutheast") motivos.push("O Sudeste do Brasil (Rio) não tem zonas de disponibilidade. O pedido é a região do Brasil com zonas: o Sul do Brasil.");
+      if (motivos.length) dica(`<strong>Ainda não cumpre a missão.</strong><ul>${motivos.map((m) => `<li>${esc(m)}</li>`).join("")}</ul> Para tentar de novo, abra o grupo, exclua e crie outro.`);
+      else marcar("grupo-criado");
+    }
+    ir("grupos");
+  }
 
   function telaDestaque(id) {
     const d = DESTAQUES[id];
@@ -353,8 +445,17 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
 
   // ---------- eventos ----------
   document.addEventListener("click", (evento) => {
-    const alvo = evento.target.closest("[data-ir], [data-acao], [data-painel-topo], [data-servico]");
+    const alvo = evento.target.closest("[data-ir], [data-acao], [data-painel-topo], [data-servico], [data-grupo], [data-excluir-grupo]");
     if (!alvo || !alvo.closest(".sim-portal")) return;
+    if (alvo.dataset.grupo) { tela.innerHTML = telaGrupo(alvo.dataset.grupo); tela.focus({ preventScroll: true }); return; }
+    if (alvo.dataset.excluirGrupo) {
+      const nome = alvo.dataset.excluirGrupo;
+      if (!window.confirm(`Excluir ${nome} e tudo o que está dentro dele? No Azure de verdade, não tem volta.`)) return;
+      estado.grupos = estado.grupos.filter((g) => g.nome !== nome);
+      salvar();
+      avisar(`${nome} excluído.`);
+      return ir("grupos");
+    }
     if (alvo.dataset.modeloResp) return responderModelo(alvo.dataset.servico, alvo.dataset.modeloResp);
     if (alvo.dataset.servico) {
       tela.innerHTML = telaDestaque(alvo.dataset.servico);
@@ -375,6 +476,12 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
     }
   });
 
+  tela.addEventListener("submit", (evento) => {
+    if (evento.target.dataset.form !== "grupo") return;
+    evento.preventDefault();
+    criarGrupo(evento.target);
+  });
+
   hamburguer.addEventListener("click", () => {
     const aberto = menu.classList.toggle("aberto");
     hamburguer.setAttribute("aria-expanded", String(aberto));
@@ -389,7 +496,7 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
       <h3 class="sim-sub">Serviços</h3>
       ${achados.length ? `<div class="sim-servicos">${achados.map(botaoServico).join("")}</div>` : `<p class="sim-vazio">Nenhum serviço encontrado. Tente "máquinas", "armazenamento" ou "custos".</p>`}
       <h3 class="sim-sub">Recursos</h3>
-      <p class="sim-vazio">Nenhum recurso encontrado.</p>`;
+      ${(() => { const r = estado.grupos.filter((g) => g.nome.toLowerCase().includes(termo)); return r.length ? `<ul>${r.map((g) => `<li><button type="button" class="sim-link" data-grupo="${esc(g.nome)}">${esc(g.nome)}</button></li>`).join("")}</ul>` : '<p class="sim-vazio">Nenhum recurso encontrado.</p>'; })()}`;
     if (achados.length && termo.length >= 3) marcar("busca");
   });
 

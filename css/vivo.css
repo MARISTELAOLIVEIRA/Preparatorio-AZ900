@@ -1968,3 +1968,61 @@
 .pizza-nuvem .placa-ficha { min-height: 12rem; }
 .pausado .pizza-pilha button { transition: none; }
 @media (max-width: 720px) { .pizza-nuvem { grid-template-columns: minmax(0, 1fr); } }
+
+/* ===================== AZ-900 · aula 4 · SIM1 derrube um datacenter ===================== */
+.dr-escolha { display: grid; gap: .5rem; margin-bottom: 1rem; }
+.dr-escolha > span, .dr-golpes > span { font: 600 .82rem var(--f-mono); color: var(--texto-2); }
+.dr-mapa { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: .8rem; padding: 1rem; border-radius: 18px; background: var(--chip); color: #f2efe6; }
+.dr-regiao { border: 1px dashed rgba(242, 239, 230, .35); border-radius: 14px; padding: .7rem; display: grid; gap: .5rem; align-content: start; transition: background .4s, border-color .4s; }
+.dr-regiao h4 { margin: 0; font: 800 .95rem var(--f-titulo); color: #f2efe6; }
+.dr-regiao h4 small { display: block; font: 500 .72rem var(--f-mono); color: #a3b0a8; }
+.dr-zonas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; }
+.dr-zona, .dr-copia { position: relative; min-height: 5.2rem; padding: .5rem; border-radius: 10px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12);
+  display: grid; align-content: space-between; gap: .3rem; transition: background .4s, border-color .4s, opacity .4s; }
+.dr-zona b, .dr-copia b { font: 700 .76rem var(--f-mono); color: #a3b0a8; }
+.dr-zona .predios { font-size: 1.05rem; letter-spacing: .05em; }
+.dr-app { min-height: 1.4rem; font: 700 .8rem var(--f-titulo); color: #9fd0b7; }
+.dr-zona.tem, .dr-copia.tem { border-color: #3ea8ff; box-shadow: 0 0 14px -6px #3ea8ff; }
+.dr-zona.caiu { background: rgba(255, 92, 122, .16); border-color: #ff5c7a; }
+.dr-zona.caiu .dr-app { color: #ff5c7a; text-decoration: line-through; }
+.dr-zona.caiu::after { content: "fora do ar"; position: absolute; top: .4rem; right: .4rem; font: 700 .62rem var(--f-mono); color: #ff5c7a; }
+.dr-sp.caiu { border-color: #ff5c7a; background: rgba(255, 92, 122, .07); }
+.dr-copia.assumiu { background: rgba(159, 208, 183, .16); border-color: #9fd0b7; }
+.dr-copia.assumiu::after { content: "assumiu"; position: absolute; top: .4rem; right: .4rem; font: 700 .62rem var(--f-mono); color: #9fd0b7; }
+.dr-outras { display: grid; gap: .6rem; align-content: start; }
+.dr-copia.eua small { color: #ecc874; }
+.fora-do-brasil .dr-copia.eua.tem { border-color: #ecc874; box-shadow: 0 0 14px -4px #ecc874; }
+.dr-golpes { display: grid; gap: .5rem; margin: 1rem 0 .4rem; }
+.dr-golpes .dz-botoes button { font-size: .9rem; }
+.dr-placar { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin: .6rem 0 0; padding: 0; list-style: none; font-size: .86rem; color: var(--texto-2); }
+.dr-placar li::before { content: "⬜ "; }
+.dr-placar li.feita { color: var(--texto); }
+.dr-placar li.feita::before { content: "✅ "; }
+.dr-custo { font: 700 .85rem var(--f-mono); color: var(--texto-2); }
+.dr-custo strong { color: var(--ouro-forte); }
+.pausado .dr-zona, .pausado .dr-copia, .pausado .dr-regiao { transition: none; }
+@media (max-width: 720px) {
+  .dr-mapa { grid-template-columns: minmax(0, 1fr); }
+  .dr-zona .predios { font-size: .9rem; }
+  .dr-zona.caiu::after, .dr-copia.assumiu::after { position: static; order: 5; }
+}
+
+/* ===================== AZ-900 · aula 4 · X1 a hierarquia na entrega ===================== */
+.hier-nuvem { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.2rem; align-items: center; }
+.hier-caixa { display: grid; gap: .5rem; padding: .6rem; border-radius: 16px; border: 2px dashed var(--cx); background: color-mix(in srgb, var(--cx) 8%, transparent); }
+.hier-caixa > button, .hier-itens button {
+  justify-self: start; display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .8rem; border-radius: 999px; cursor: pointer;
+  font: 700 .88rem var(--f-titulo); color: var(--texto); background: var(--superficie); border: 2px solid var(--cx);
+}
+.hier-caixa > button[aria-pressed="true"], .hier-itens button[aria-pressed="true"] { background: var(--cx); color: #111; }
+.hier-caixa.n4 { --cx: #b892f2; }
+.hier-caixa.n3 { --cx: #ecc874; }
+.hier-caixa.n2 { --cx: #3ea8ff; }
+.hier-itens { display: flex; flex-wrap: wrap; gap: .4rem; padding: .4rem; --cx: #9fd0b7; }
+.hier-itens span { display: inline-flex; align-items: center; padding: .3rem .6rem; border-radius: 10px; background: var(--superficie-2); border: 1px solid var(--borda-forte); font-size: .82rem; }
+[data-tema="claro"] .hier-caixa.n4 { --cx: #6b3fb0; }
+[data-tema="claro"] .hier-caixa.n3 { --cx: #8a6614; }
+[data-tema="claro"] .hier-caixa.n2 { --cx: #1f5fbf; }
+[data-tema="claro"] .hier-itens { --cx: #2e7d5b; }
+[data-tema="claro"] .hier-caixa > button[aria-pressed="true"], [data-tema="claro"] .hier-itens button[aria-pressed="true"] { color: #fff; }
+@media (max-width: 720px) { .hier-nuvem { grid-template-columns: minmax(0, 1fr); } }
