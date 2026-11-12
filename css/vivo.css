@@ -1880,3 +1880,69 @@
 }
 [data-tema="claro"] .camada-az.voce .quem,
 [data-tema="claro"] .camada-az.junto .quem { color: #fff; }
+
+/* ===================== AZ-900 · aula 2 · SIM1 o domingo da pizza ===================== */
+.dom-pecas { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .5rem; margin-bottom: 1rem; }
+.dom-pecas button {
+  display: grid; gap: .15rem; justify-items: center; text-align: center;
+  padding: .7rem .5rem; border-radius: 14px; cursor: pointer;
+  border: 1px solid var(--borda-forte); background: var(--superficie-2); color: var(--texto); font: inherit;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.dom-pecas button:hover { transform: translateY(-2px); }
+.dom-pecas .ico { font-size: 1.7rem; }
+.dom-pecas strong { font: 700 .9rem/1.15 var(--f-titulo); }
+.dom-pecas small { font: 500 .74rem var(--f-mono); color: var(--neon); }
+.dom-pecas button[aria-pressed="true"] { border-color: var(--vivo-ok); box-shadow: 0 0 0 1px var(--vivo-ok), 0 0 18px -6px var(--vivo-ok); }
+.dom-pecas button[aria-pressed="true"]::after { content: "ligado"; font: 700 .7rem var(--f-mono); color: var(--vivo-ok); }
+
+.dom-palco { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1rem; align-items: stretch; }
+.dom-cozinha { display: grid; gap: .6rem; padding: 1rem; border-radius: 16px; background: var(--chip); color: #f2efe6; }
+.dom-fornos { min-height: 2rem; font-size: 1.5rem; letter-spacing: .1em; }
+.dom-grafico { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: .3rem; height: 11rem; align-items: end; }
+.dom-col { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+.dom-col small { position: absolute; bottom: -1.3rem; font: .62rem var(--f-mono); color: #a3b0a8; white-space: nowrap; }
+.dom-procura, .dom-feito { position: absolute; bottom: 0; left: 12%; right: 12%; border-radius: 6px 6px 0 0; transition: height .5s var(--suave); }
+.dom-procura { height: calc(var(--p, 0) * 100%); border: 2px dashed rgba(242, 239, 230, .45); border-bottom: 0; }
+.dom-feito { height: calc(var(--f, 0) * 100%); background: var(--vivo-ok); box-shadow: 0 0 12px -2px var(--vivo-ok); }
+.dom-col.perdeu .dom-procura { border-color: var(--vivo-ruim); background: color-mix(in srgb, var(--vivo-ruim) 18%, transparent); }
+.dom-col.robos .dom-procura { border-color: #b892f2; background: repeating-linear-gradient(135deg, rgba(184, 146, 242, .25) 0 6px, transparent 6px 12px); }
+.dom-col.fora .dom-feito { background: transparent; box-shadow: none; }
+.dom-col.fora::before { content: "⚡"; position: absolute; bottom: .3rem; font-size: 1rem; }
+.dom-cozinha .sim-legenda { margin-top: 1.4rem; }
+.dom-feed { list-style: none; margin: 0; padding: .8rem 1rem; display: grid; gap: .4rem; align-content: start; max-height: 15.5rem; overflow: auto;
+  border-radius: 16px; border: 1px solid var(--borda-forte); background: var(--superficie-2); font-size: .88rem; }
+.dom-feed:empty::before { content: "O relato da noite aparece aqui."; color: var(--texto-3); }
+.dom-feed li { animation: surge .35s ease-out; }
+.dom-numeros { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; margin: 1rem 0; }
+.dom-numeros div { padding: .6rem; border-radius: 12px; border: 1px solid var(--borda-forte); text-align: center; }
+.dom-numeros strong { display: block; font: 900 1.5rem var(--f-titulo); }
+.dom-numeros span { font-size: .78rem; color: var(--texto-2); }
+.dom-numeros .bom strong { color: var(--vivo-ok); }
+.dom-numeros .ruim strong { color: var(--vivo-ruim); }
+.dom-veredito:empty { display: none; }
+.dom-veredito { margin-top: .8rem; padding: .8rem 1rem; border-radius: 12px; border-left: 4px solid var(--neon); background: var(--superficie-2); }
+.pausado .dom-procura, .pausado .dom-feito, .pausado .dom-feed li, .pausado .dom-pecas button { transition: none; animation: none; }
+@media (prefers-reduced-motion: reduce) { .dom-procura, .dom-feito, .dom-feed li { transition: none; animation: none; } }
+@media (max-width: 720px) {
+  .dom-palco { grid-template-columns: minmax(0, 1fr); }
+  .dom-numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dom-col small { font-size: .55rem; transform: rotate(-50deg); transform-origin: top center; bottom: -1.5rem; }
+  .dom-grafico { height: 9rem; }
+}
+
+/* ===================== AZ-900 · aula 2 · X1 a régua dos noves ===================== */
+.noves { display: grid; gap: .9rem; padding: clamp(1rem, 3vw, 1.6rem); border-radius: 18px; background: var(--chip); color: #f2efe6; }
+.noves-botoes { display: flex; flex-wrap: wrap; gap: .5rem; }
+.noves-botoes button {
+  padding: .5rem 1rem; border-radius: 999px; cursor: pointer; font: 800 1.05rem var(--f-mono);
+  color: #f2efe6; background: rgba(255, 255, 255, .06); border: 1px solid rgba(62, 168, 255, .45);
+}
+.noves-botoes button[aria-pressed="true"] { background: #3ea8ff; color: #04121a; box-shadow: 0 0 18px -4px #3ea8ff; }
+.noves-contas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.noves-contas div { padding: .7rem .9rem; border-radius: 12px; background: rgba(255, 255, 255, .05); }
+.noves-contas strong { display: block; font: 900 clamp(1.4rem, 4vw, 2rem)/1.1 var(--f-titulo); color: #ecc874; }
+.noves-contas span { font-size: .82rem; color: #a3b0a8; }
+.noves-pizzas { min-height: 1.6rem; font-size: 1.25rem; line-height: 1.5; word-break: break-all; }
+.noves-pizzas small { font: .85rem var(--f-mono); color: #a3b0a8; }
+.noves .casa-fala { color: var(--texto); }

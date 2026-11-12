@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- EDITE AQUI: número e tema da aula -->
+  <title>Aula 2: Benefícios da nuvem · Preparatório AZ-900 · Stela</title>
+  <meta name="description" content="Aula 2 do Preparatório AZ-900: o domingo da pizza no simulador, alta disponibilidade e SLA, escala vertical e horizontal, confiabilidade e previsibilidade, segurança e governança, gerenciamento da nuvem e na nuvem, a régua dos noves e o Cloud Shell no portal de treino.">
+
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <script src="../assets/js/placa.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,400..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+  <link rel="stylesheet" href="../assets/css/disciplina.css">
+  <link rel="stylesheet" href="../assets/css/aula.css">
+  <link rel="stylesheet" href="../assets/css/neon.css?v=3">
+  <link rel="stylesheet" href="../css/interativos.css?v=1">
+  <link rel="stylesheet" href="../css/aula-az.css?v=1">
+  <link rel="stylesheet" href="../css/vivo.css?v=2">
+</head>
+<body>
+
+  <!-- ===================== BARRA DO TOPO (igual em todos os sites) ===================== -->
+  <header class="barra">
+    <div class="envolve">
+      <div class="marcas">
+        <a class="marca-disc marca-logo" href="../" title="Página inicial do preparatório"><img src="../assets/img/tec/azure.svg" alt="Preparatório AZ-900: página inicial" width="32" height="32"></a>
+      </div>
+      <button type="button" class="btn-menu" id="btn-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="nav" id="menu" aria-label="Partes da aula">
+        <a href="../#videos">← Preparatório</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#conceitos">Conceitos</a>
+        <a href="#demonstracao">Portal</a>
+        <a href="#pegadinha">Pegadinha</a>
+        <a href="#treino">Treino</a>
+        <a href="#atividade">Checklist</a>
+      </nav>
+      <div class="ajustes">
+        <button type="button" id="btn-tema" aria-label="Mudar para o tema claro">
+          <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        </button>
+        <button type="button" id="btn-fonte" aria-label="Aumentar o tamanho do texto">A+</button>
+        <button type="button" id="btn-movimento" aria-pressed="false">
+          <svg class="pausar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tocar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <span class="rotulo">Pausar animações</span>
+        </button>
+        <a class="marca" href="/" title="Portal da Stela">
+          <img src="../assets/img/estrela.webp" alt="" width="26" height="24">
+          <span class="marca-texto">Stela</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== CABEÇALHO DA AULA ===================== -->
+    <section class="aula-cab">
+      <canvas class="chuva-matrix" aria-hidden="true"></canvas>
+      <div class="envolve">
+        <p class="trilha-migalhas">
+          <a href="/">Stela</a> <span aria-hidden="true">/</span>
+          <a href="../">Preparatório AZ-900</a> <span aria-hidden="true">/</span>
+          <a href="../#videos">Aulas</a> <span aria-hidden="true">/</span>
+          <span>Aula 2</span>
+        </p>
+
+        <!-- EDITE AQUI: número, vídeo, domínio da prova e título -->
+        <div class="aula-etiquetas">
+          <span class="etiqueta senac">Fac Senac DF</span>
+          <span class="etiqueta ouro">Aula 2</span>
+          <span class="etiqueta">Vídeo 2</span>
+          <span class="etiqueta dominio" style="--cor:var(--d1)">Domínio 1 · Conceitos de nuvem</span>
+        </div>
+        <h1>Por que trocar o datacenter pela <span class="neon">nuvem</span></h1>
+        <p class="subtitulo">Alta disponibilidade, escalabilidade, confiabilidade, previsibilidade, segurança, governança e gerenciamento: os benefícios que a prova cobra, um por um.</p>
+      </div>
+    </section>
+
+        <!-- ===================== RESUMO ===================== -->
+    <section class="bloco faixa alt" aria-label="Resumo da aula">
+      <div class="envolve">
+        <div class="resumo">
+          <div class="cartao">
+            <span class="olho">Objetivo</span>
+            <p>Reconhecer numa questão qual benefício da nuvem ela descreve, e separar escala vertical de horizontal.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Revezamento</span>
+            <p>Primeiro esta página (e o vídeo 2, quando sair). Depois, o módulo <strong>Descrever os benefícios do uso de serviços de nuvem</strong>, no Microsoft Learn.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Na prova</span>
+            <p>Domínio 1, Conceitos de nuvem: <strong>25 a 30%</strong> das questões.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bloco">
+      <div class="envolve aula-corpo">
+
+        <!-- ===================== ROTEIRO DA AULA ===================== -->
+        <section class="parte" id="video">
+          <div class="cab">
+            <span class="olho">V2 · roteiro da aula</span>
+            <h2>O que você vai aprender</h2>
+            <p>Os assuntos da aula, na ordem da página. Clique para ir direto a um deles. Viu o <strong>⏸ Pausa aqui</strong>? Pare e tente responder antes de abrir a resposta.</p>
+          </div>
+          <div class="cartao">
+            <ol class="roteiro-video sem-tempo">
+              <li><a href="#gancho">G1 · Por que trocar o próprio datacenter pela nuvem?</a></li>
+              <li><a href="#simulador">SIM1 · O domingo da pizza, no simulador</a></li>
+              <li><a href="#c1">C1 · Alta disponibilidade e SLA</a></li>
+              <li><a href="#c2">C2 · Escalabilidade: vertical e horizontal</a></li>
+              <li><a href="#c3">C3 · Confiabilidade e previsibilidade</a></li>
+              <li><a href="#c4">C4 · Segurança e governança</a></li>
+              <li><a href="#c5">C5 · Gerenciamento da nuvem e na nuvem</a></li>
+              <li><a href="#noves">X1 · A régua dos noves</a></li>
+              <li><a href="#demonstracao">D1 · Faça junto: os jeitos de gerenciar, no portal de treino</a></li>
+              <li><a href="#pegadinha">P1 · A pegadinha: DA nuvem não é NA nuvem</a></li>
+              <li><a href="#learn">Agora é no Microsoft Learn</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== GANCHO (vivo.js, parte 1) ===================== -->
+        <section class="parte" id="gancho">
+          <div class="cab">
+            <span class="olho">G1 · gancho</span>
+            <h2>O pior domingo do ano</h2>
+          </div>
+          <div class="gancho plantao" data-plantao data-link="#simulador" data-link-texto="Teste no domingo da pizza, logo abaixo">
+            <p class="gancho-evento">🛵 Cerrado Delivery · domingo, 20h04</p>
+            <span class="tarja">🔴 Fora do ar</span>
+            <p class="manchete">Noite de pizza: o aplicativo travou. Meia hora depois, caiu a luz da quadra.</p>
+            <div class="letreiro" aria-hidden="true"><span>312 pedidos na fila · o servidor do fundo da cozinha esquentou · o gerador não ligou · os clientes foram pedir no concorrente · às 22h, uma enxurrada de pedidos falsos…</span></div>
+            <button type="button" class="botao" data-abrir>▶ E na segunda-feira de manhã?</button>
+            <div class="gancho-voto" data-revela hidden>
+              <p class="gancho-pergunta" tabindex="-1">Por que uma empresa trocaria o próprio datacenter pela nuvem?</p>
+              <div class="gancho-botoes">
+                <button type="button" aria-pressed="false" data-explica="Também, mas não só. Pagar pelo uso ajuda, como você viu na aula 1. O domingo do Cerrado Delivery mostra outros motivos: aguentar o pico e não parar quando cai a luz.">💸 Para gastar menos</button>
+                <button type="button" aria-pressed="false" data-explica="Também, mas não só. A nuvem ainda cresce no pico, encolhe depois, ajuda a proteger e a gerenciar.">🛡️ Para não cair</button>
+                <button type="button" aria-pressed="false" data-explica="Isso! A Microsoft junta os benefícios em quatro pares: alta disponibilidade e escalabilidade, confiabilidade e previsibilidade, segurança e governança, e gerenciamento.">🧰 Por vários motivos</button>
+              </div>
+              <p class="gancho-resposta" aria-live="polite"></p>
+            </div>
+          </div>
+          <p class="fonte">História fictícia, criada para a aula.</p>
+        </section>
+
+        <!-- ===================== ESTUDO DE CASO ===================== -->
+        <section class="parte" id="caso">
+          <div class="cab">
+            <span class="olho">EC1 · estudo de caso</span>
+            <h2>A lista da Lia</h2>
+          </div>
+          <div class="cartao caso">
+            <p>Na segunda de manhã, o Rafa conta o domingo: o pico às 20h, a luz que caiu às 20h30 e, às 22h, cem pedidos falsos de uma vez, feitos por robôs, travando o que restava.</p>
+            <p>A Lia, que cuida da tecnologia, anota o que o sistema do <strong>Cerrado Delivery</strong> precisa:</p>
+            <ol>
+              <li>Aguentar o pico e encolher depois.</li>
+              <li>Não parar quando um prédio parar.</li>
+              <li>Barrar os pedidos falsos.</li>
+              <li>Avisar na hora quando algo der errado.</li>
+            </ol>
+            <h3>Para pensar</h3>
+            <ol>
+              <li>Comprar um servidor gigante resolve o pico? E a queda de luz?</li>
+              <li>Quem fica de olho no sistema às 20h de um domingo?</li>
+              <li>Quanto tempo por mês o aplicativo pode ficar fora sem perder cliente?</li>
+            </ol>
+            <p class="fonte">Empresa fictícia, criada para o preparatório.</p>
+          </div>
+        </section>
+
+        <!-- ===================== SIMULADOR (vivo.js, parte 5) ===================== -->
+        <section class="parte" id="simulador">
+          <div class="cab">
+            <span class="olho">SIM1 · simulador</span>
+            <h2>O domingo da pizza</h2>
+            <p>Escolha as peças da cozinha (pode ligar várias) e aperte <strong>Abrir os pedidos</strong>. A noite vai das 18h às 22h30, com o pico, a queda de luz e os robôs. Cada peça é um benefício da nuvem.</p>
+          </div>
+          <div class="sim" data-domingo>
+            <div class="dom-pecas" role="group" aria-label="Peças da cozinha">
+              <button type="button" data-peca-sim="mais" aria-pressed="false"><span class="ico" aria-hidden="true">🔥</span><strong>Mais fornos</strong><small>escala horizontal</small></button>
+              <button type="button" data-peca-sim="gigante" aria-pressed="false"><span class="ico" aria-hidden="true">🍕</span><strong>Forno gigante</strong><small>escala vertical</small></button>
+              <button type="button" data-peca-sim="cozinha" aria-pressed="false"><span class="ico" aria-hidden="true">🏠</span><strong>Segunda cozinha</strong><small>alta disponibilidade</small></button>
+              <button type="button" data-peca-sim="alarme" aria-pressed="false"><span class="ico" aria-hidden="true">🚨</span><strong>Alarme do gerente</strong><small>gerenciamento</small></button>
+              <button type="button" data-peca-sim="porteiro" aria-pressed="false"><span class="ico" aria-hidden="true">🛡️</span><strong>Porteiro</strong><small>segurança</small></button>
+            </div>
+            <div class="dom-palco">
+              <div class="dom-cozinha">
+                <div class="dom-fornos" aria-hidden="true">🔥🔥</div>
+                <div class="dom-grafico" aria-hidden="true"></div>
+                <ul class="sim-legenda">
+                  <li><i class="listrado"></i>pedidos (tracejado)</li>
+                  <li><i style="--c:var(--vivo-ok)"></i>pizzas que saíram</li>
+                  <li><i style="--c:var(--vivo-ruim)"></i>pedidos perdidos</li>
+                  <li><i style="--c:#b892f2"></i>robôs</li>
+                </ul>
+              </div>
+              <ol class="dom-feed" aria-live="polite"></ol>
+            </div>
+            <div class="dom-numeros">
+              <div class="bom"><strong data-n="entregues">—</strong><span>pizzas entregues</span></div>
+              <div class="ruim"><strong data-n="perdidos">—</strong><span>pedidos perdidos</span></div>
+              <div><strong data-n="custo">—</strong><span>fornos pagos (por meia hora)</span></div>
+              <div><strong data-n="robos">—</strong><span>pizzas para robôs</span></div>
+            </div>
+            <div class="sim-acoes">
+              <button type="button" class="vai">▶ Abrir os pedidos</button>
+              <button type="button" class="de-novo">↺ Recomeçar</button>
+            </div>
+            <div class="dom-veredito" aria-live="polite"></div>
+          </div>
+          <p class="fonte">Simulação com números redondos, para a aula: cada forno assa 20 pedidos por meia hora; o forno gigante assa 40 e custa o dobro; a segunda cozinha custa um forno a mais a noite toda.</p>
+
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Só com o forno gigante, o pico de 120 pedidos foi atendido? E a queda de luz?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Não e não. Os dois fornos gigantes assam 80 pedidos por meia hora: no pico de 120, faltou forno. E sem luz, forno nenhum assa. Máquina maior (<strong>escala vertical</strong>) tem teto. Para o pico, mais máquinas (<strong>escala horizontal</strong>). Para a queda, uma segunda cozinha (<strong>alta disponibilidade</strong>).</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== CONCEITOS ===================== -->
+        <section class="parte" id="conceitos">
+          <div class="cab">
+            <span class="olho">C1–C5 · conceitos</span>
+            <h2>O que a prova quer que você saiba</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c1">
+            <div class="texto">
+              <span class="olho">C1</span>
+              <h3>Alta disponibilidade e SLA</h3>
+              <p><strong>Alta disponibilidade</strong> é deixar o serviço no ar o máximo possível, aconteça o que acontecer: queda de luz, máquina queimada, prédio parado.</p>
+              <ul>
+                <li><strong>No simulador:</strong> a segunda cozinha. Caiu a luz numa, a outra continua assando.</li>
+                <li><strong>O SLA</strong> (contrato de nível de serviço) é a promessa escrita de quanto tempo cada serviço do Azure fica no ar. Cada serviço tem o seu.</li>
+                <li>Ao montar a solução, confira o SLA de cada serviço que você vai usar.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-benefits-use-cloud-services/2-high-availability-scalability-cloud">Microsoft Learn, Descrever a alta disponibilidade e a escalabilidade na nuvem</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Na prova:</strong> "continuar funcionando mesmo com uma falha" ou "garantia de tempo no ar" apontam para alta disponibilidade e SLA.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> a AWS também publica um SLA para cada serviço (<a href="https://aws.amazon.com/legal/service-level-agreements/">AWS, Service Level Agreements</a>, consultado em 12/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c2">
+            <div class="texto">
+              <span class="olho">C2</span>
+              <h3>Escalabilidade: vertical e horizontal</h3>
+              <p><strong>Escalabilidade</strong> é ajustar os recursos à procura: mais no pico, menos quando a procura cai. E, como a nuvem cobra pelo uso, diminuir também diminui a conta.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Jeito</th><th>O que muda</th><th>No simulador</th></tr></thead><tbody>
+                <tr><td><strong>Vertical</strong><span class="termo-en">scale up / down</span></td><td>A <strong>capacidade</strong> de um recurso: mais (ou menos) CPU e RAM na mesma máquina virtual.</td><td>O forno gigante: um forno maior.</td></tr>
+                <tr><td><strong>Horizontal</strong><span class="termo-en">scale out / in</span></td><td>A <strong>quantidade</strong> de recursos: mais (ou menos) máquinas virtuais ou contêineres.</td><td>Mais fornos no pico, menos no fim da noite.</td></tr>
+              </tbody></table></div>
+              <p>Os dois podem ser feitos à mão ou automaticamente.</p>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-benefits-use-cloud-services/2-high-availability-scalability-cloud">Microsoft Learn, Descrever a alta disponibilidade e a escalabilidade na nuvem</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> os mesmos nomes, vertical e horizontal. Na AWS, quem soma e tira máquinas sozinho é o Auto Scaling; no Azure, os conjuntos de dimensionamento de máquinas virtuais, assunto da aula 5.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c3">
+            <div class="texto">
+              <span class="olho">C3</span>
+              <h3>Confiabilidade e previsibilidade</h3>
+              <ul>
+                <li><strong>Confiabilidade:</strong> o sistema se recupera de falhas e continua funcionando. Como a nuvem tem regiões no mundo todo, mesmo um desastre numa região deixa as outras funcionando.</li>
+                <li><strong>Previsibilidade de desempenho:</strong> saber que o cliente vai ser bem atendido. Quem ajuda: dimensionamento automático, balanceamento de carga e alta disponibilidade.</li>
+                <li><strong>Previsibilidade de custo:</strong> saber quanto vai gastar. Na nuvem, você acompanha o uso em tempo real e prevê os custos do mês.</li>
+              </ul>
+              <p>No Cerrado Delivery: a cozinha em outro bairro é confiabilidade; saber na sexta quanto o domingo vai custar é previsibilidade de custo.</p>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-benefits-use-cloud-services/3-reliability-predictability-cloud">Microsoft Learn, Descrever a confiabilidade e a previsibilidade na nuvem</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> confiabilidade também é um dos pilares do AWS Well-Architected, que você viu na aula 9 da AWS. A Microsoft tem o dela: o Azure Well-Architected Framework.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c4">
+            <div class="texto">
+              <span class="olho">C4</span>
+              <h3>Segurança e governança</h3>
+              <ul>
+                <li><strong>Modelos</strong> garantem que todo recurso novo siga os padrões da empresa e as regras da lei. Mudou a regra? Dá para atualizar tudo de uma vez.</li>
+                <li><strong>Auditoria</strong> na nuvem aponta o recurso que saiu da linha e sugere como corrigir.</li>
+                <li><strong>Atualizações automáticas</strong>, dependendo do serviço: num serviço pronto (PaaS ou SaaS), a Microsoft aplica. Numa máquina virtual (IaaS), você controla mais, e cuida mais.</li>
+                <li><strong>Ataques de DDoS</strong> (enxurrada de acessos falsos para derrubar o serviço): o provedor de nuvem tem como segurar.</li>
+              </ul>
+              <p>No simulador: o porteiro que barra os robôs.</p>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-benefits-use-cloud-services/4-security-governance-cloud">Microsoft Learn, Descrever a segurança e a governança na nuvem</a> e <a href="https://learn.microsoft.com/pt-br/azure/ddos-protection/ddos-protection-overview">Visão geral da Proteção contra DDoS do Azure</a>, consultados em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> o porteiro contra DDoS da AWS se chama AWS Shield (<a href="https://aws.amazon.com/shield/">AWS Shield</a>, consultado em 12/11/2026). No Azure, Proteção contra DDoS do Azure.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c5">
+            <div class="texto">
+              <span class="olho">C5</span>
+              <h3>Gerenciamento da nuvem e na nuvem</h3>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Tipo</th><th>O que é</th><th>Exemplos</th></tr></thead><tbody>
+                <tr><td><strong>Gerenciamento DA nuvem</strong></td><td>O que a nuvem faz pelos seus recursos.</td><td>Escalar sozinha; criar recursos a partir de um modelo; trocar sozinha o recurso que falhou; mandar alertas automáticos.</td></tr>
+                <tr><td><strong>Gerenciamento NA nuvem</strong></td><td>Por onde você gerencia.</td><td>O portal na web, a linha de comando (CLI), as APIs e o PowerShell.</td></tr>
+              </tbody></table></div>
+              <p>No simulador, o alarme do gerente é gerenciamento <strong>da</strong> nuvem. No D1, você vai testar o gerenciamento <strong>na</strong> nuvem, pelo terminal.</p>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-benefits-use-cloud-services/5-manageability-cloud">Microsoft Learn, Descrever a capacidade de gerenciamento da nuvem</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Como é na AWS:</strong> console, AWS CLI e SDKs, como na aula 11 da AWS. O Cloud Shell do Azure equivale ao AWS CloudShell.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== A RÉGUA DOS NOVES (vivo.js, parte 6) ===================== -->
+        <section class="parte" id="noves">
+          <div class="cab">
+            <span class="olho">X1 · a régua dos noves</span>
+            <h2>99,9% parece tudo. Será?</h2>
+            <p>Escolha um SLA e veja quanto tempo ele deixa o serviço fora do ar. Uma pizza leva uns 10 minutos no forno: conte quantas deixariam de sair.</p>
+          </div>
+          <div class="noves" data-noves>
+            <div class="noves-botoes" role="group" aria-label="Escolha o SLA">
+              <button type="button" data-sla="99" aria-pressed="false">99%</button>
+              <button type="button" data-sla="99.9" aria-pressed="false">99,9%</button>
+              <button type="button" data-sla="99.95" aria-pressed="false">99,95%</button>
+              <button type="button" data-sla="99.99" aria-pressed="false">99,99%</button>
+              <button type="button" data-sla="99.999" aria-pressed="false">99,999%</button>
+            </div>
+            <div class="noves-contas">
+              <div><strong data-min-mes>—</strong><span>fora do ar por mês</span></div>
+              <div><strong data-min-ano>—</strong><span>fora do ar por ano</span></div>
+            </div>
+            <div class="noves-pizzas" aria-hidden="true"></div>
+            <p class="casa-fala" aria-live="polite"></p>
+          </div>
+          <p class="fonte">Conta da professora: um mês de 30 dias tem 43.200 minutos; um ano, 525.600.</p>
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Um serviço passa de 99,9% para 99,99%. O tempo fora do ar por mês cai quanto?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>De uns 43 minutos para uns 4 minutos: <strong>dez vezes menos</strong>. Cada nove a mais divide o tempo fora do ar por dez.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== DEMONSTRAÇÃO ===================== -->
+        <section class="parte" id="demonstracao">
+          <div class="cab">
+            <span class="olho">D1 · demonstração</span>
+            <h2>Faça junto: os jeitos de gerenciar</h2>
+            <p>O portal de treino ganhou uma missão nova e um terminal no topo, como o Cloud Shell do Azure. Abra noutra aba e marque cada passo aqui.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p><a class="botao" href="../portal/" target="_blank" rel="noopener">☁️ Abrir o portal de treino</a></p>
+              <div class="progresso-atividade" data-progresso="portal-aula-02">
+                <span class="contagem">0 de 5</span>
+                <span class="barra-progresso"><span></span></span>
+              </div>
+              <ol class="checklist" id="portal-aula-02">
+                <li><label><input type="checkbox"><span>Abri o <strong>Cloud Shell</strong>, no botão ⌨️ do topo do portal.</span></label></li>
+                <li><label><input type="checkbox"><span>No Bash, rodei <code>az account show</code> e achei o nome da assinatura.</span></label></li>
+                <li><label><input type="checkbox"><span>Troquei para o PowerShell e rodei <code>Get-AzSubscription</code>.</span></label></li>
+                <li><label><input type="checkbox"><span>Digitei <strong>ajuda</strong> e vi os comandos que o simulador entende.</span></label></li>
+                <li><label><input type="checkbox"><span>No ❓ da ajuda, abri <strong>Contratos de nível de serviço (SLA)</strong>.</span></label></li>
+              </ol>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>O portal, a CLI e o PowerShell são gerenciamento <strong>da</strong> nuvem ou <strong>na</strong> nuvem? <strong>Na</strong> nuvem: são os jeitos de você gerenciar.</li>
+                  <li>Os dois comandos mostraram a mesma informação? Sim: a assinatura. Mudou só o jeito de pedir.</li>
+                </ol>
+              </div>
+              <p class="dica"><strong>No Azure de verdade:</strong> o Cloud Shell abre no ícone do terminal, no topo do portal, ou em shell.azure.com, com Bash ou PowerShell. Hoje, fique no simulador.</p>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/azure/cloud-shell/overview">Microsoft Learn, O que é o Azure Cloud Shell?</a>, <a href="https://learn.microsoft.com/pt-br/cli/azure/account?view=azure-cli-latest">az account</a> e <a href="https://learn.microsoft.com/pt-br/powershell/module/az.accounts/get-azsubscription">Get-AzSubscription</a>, consultados em 12/11/2026.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== PEGADINHA ===================== -->
+        <section class="parte" id="pegadinha">
+          <div class="cab">
+            <span class="olho">P1 · pegadinha de prova</span>
+            <h2>DA nuvem não é NA nuvem</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p>Uma letra muda a resposta. E a máquina maior engana muita gente.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Confusão</th><th>O certo</th><th>A pista na questão</th></tr></thead><tbody>
+                <tr><td><strong>Da × na</strong></td><td>DA nuvem: o que a nuvem faz sozinha pelos recursos. NA nuvem: as ferramentas que você usa.</td><td>"Automaticamente", "alerta", "substitui" é DA. "Portal", "CLI", "PowerShell", "API" é NA.</td></tr>
+                <tr><td><strong>Máquina maior</strong></td><td>Mais CPU ou RAM na mesma máquina é escala <strong>vertical</strong>.</td><td>"Mais máquinas", "mais instâncias" é horizontal; "máquina maior" é vertical.</td></tr>
+              </tbody></table></div>
+              <details class="pausa-aqui">
+                <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>O Cerrado Delivery recebe um alerta automático quando o processador passa de 80%. Gerenciamento da nuvem ou na nuvem?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+                <div class="pausa-resposta"><p><strong>Da nuvem:</strong> é a nuvem monitorando os recursos e avisando sozinha. Se a Lia abrisse o portal para olhar o gráfico, aí seria gerenciamento <strong>na</strong> nuvem.</p></div>
+              </details>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Um script de PowerShell desliga as máquinas de teste toda sexta. Da ou na? <strong>Na</strong> nuvem: é uma ferramenta que você usa.</li>
+                  <li>Trocar a máquina de 4 para 16 GB de memória é escala o quê? <strong>Vertical</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== TREINO ===================== -->
+        <section class="parte" id="treino">
+          <div class="cab">
+            <span class="olho">T1–T2 · treino</span>
+            <h2>Classifique!</h2>
+            <p>Cada acerto de primeira vale <strong>10 XP</strong>. Errou? A dica aparece e você tenta de novo. No fim, você ganha uma insígnia.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-1">
+            <div class="texto">
+              <span class="olho">T1</span>
+              <h3>Qual benefício?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="ha:Alta disponibilidade,escala:Escalabilidade,confia:Confiabilidade,preve:Previsibilidade,seg:Segurança e governança,ger:Gerenciamento" data-dica="Procure a palavra-chave: no ar, crescer, recuperar, prever, regras ou ferramenta.">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="ha" data-explica="Promessa escrita de tempo no ar: alta disponibilidade e SLA.">O serviço promete, em contrato, ficar no ar 99,95% do mês.</li>
+                    <li data-resposta="escala" data-explica="Ajustar os recursos à procura, para cima e para baixo: escalabilidade.">No Natal, o site ganha mais máquinas; em janeiro, perde.</li>
+                    <li data-resposta="confia" data-explica="Recuperar-se de um desastre e continuar funcionando: confiabilidade.">Uma região inteira tem um desastre, e o sistema continua funcionando em outra.</li>
+                    <li data-resposta="preve" data-explica="Acompanhar o uso em tempo real e prever o gasto: previsibilidade de custo.">A equipe acompanha o gasto em tempo real e sabe quanto vai pagar no fim do mês.</li>
+                    <li data-resposta="seg" data-explica="Modelos que garantem padrões e regras da lei: segurança e governança.">Um modelo garante que todo recurso novo siga as regras da empresa e da LGPD.</li>
+                    <li data-resposta="ger" data-explica="Uma ferramenta para gerenciar os recursos: gerenciamento (na nuvem).">Um script de PowerShell desliga as máquinas de teste toda sexta.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-2">
+            <div class="texto">
+              <span class="olho">T2</span>
+              <h3>Vertical ou horizontal?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="vertical:Vertical,horizontal:Horizontal" data-dica="Mudou o tamanho de uma máquina ou a quantidade de máquinas?">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="vertical" data-explica="Mais CPU e mais RAM na mesma máquina: vertical.">Trocar a máquina virtual por uma com mais CPU e mais RAM.</li>
+                    <li data-resposta="horizontal" data-explica="Mais máquinas: horizontal.">Passar de 2 para 10 máquinas virtuais na Black Friday.</li>
+                    <li data-resposta="horizontal" data-explica="Mais contêineres: horizontal.">Somar contêineres quando a fila de pedidos cresce.</li>
+                    <li data-resposta="vertical" data-explica="Menos memória na mesma máquina: vertical, para baixo.">Diminuir a memória de uma máquina que estava sobrando.</li>
+                    <li data-resposta="horizontal" data-explica="Menos máquinas: horizontal, para dentro.">Desligar 8 das 10 máquinas quando a promoção acaba.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== ATIVIDADE ===================== -->
+        <section class="parte" id="atividade">
+          <div class="cab">
+            <span class="olho">A1 · checklist</span>
+            <h2>Checklist da aula</h2>
+            <p>O que você marcar fica salvo neste navegador.</p>
+          </div>
+
+          <div class="cartao">
+            <div class="progresso-atividade" data-progresso="passos-aula-02">
+              <span class="contagem">0 de 10</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="passos-aula-02">
+              <li><label><input type="checkbox"><span>Estudei esta página até o fim (ou assisti ao vídeo 2, quando ele sair). <a href="#video">Veja o roteiro da aula</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz um domingo perfeito no simulador e sei explicar o que cada peça fez. <a href="#simulador">Veja o SIM1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que é alta disponibilidade e o que é um SLA. <a href="#c1">Veja o C1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Separo escala vertical de horizontal. <a href="#c2">Veja o C2</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei a diferença entre confiabilidade e previsibilidade. <a href="#c3">Veja o C3</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei como a nuvem ajuda na segurança e na governança. <a href="#c4">Veja o C4</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Separo gerenciamento da nuvem e na nuvem. <a href="#c5">Veja o C5</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Rodei os comandos no portal de treino. <a href="#demonstracao">Veja o D1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz os dois treinos Classifique! e ganhei as insígnias. <a href="#treino">Veja o treino</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz o módulo "Descrever os benefícios do uso de serviços de nuvem" no Microsoft Learn e marquei no <a href="../#progresso">Meu progresso</a>.</span></label></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== CONEXÃO STEAM ===================== -->
+        <section class="parte" id="steam">
+          <div class="cab">
+            <span class="olho">S1 · conexão STEAM</span>
+            <h2>A nuvem fora da tela</h2>
+          </div>
+          <div class="steam">
+            <div class="cartao">
+              <span class="letra">M</span>
+              <h3>Matemática</h3>
+              <p>SLA de 99,9%: 43.200 minutos × 0,001 = 43,2 minutos fora do ar por mês. Faça a conta para 99,95%. E quantas pizzas de 10 minutos cabem nesse tempo?</p>
+            </div>
+            <div class="cartao">
+              <span class="letra">E</span>
+              <h3>Engenharia</h3>
+              <p>Com LEDs de sucata e um potenciômetro (ou papel e caneta), monte o painel dos fornos: girar o potenciômetro é a procura; cada LED que acende é um forno a mais. Isso é escala horizontal. Com um ESP32, o código decide quantos LEDs acender.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MICROSOFT LEARN ===================== -->
+        <section class="parte" id="learn">
+          <div class="cab">
+            <span class="olho">J1 · agora é no Microsoft Learn</span>
+            <h2>O revezamento: a sua vez no Learn</h2>
+            <p>Esta aula preparou o terreno. O módulo do Learn aprofunda, com a verificação de conhecimentos oficial, de graça e em português.</p>
+          </div>
+          <div class="repos">
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/modules/describe-benefits-use-cloud-services/">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span>
+              <h4>Descrever os benefícios do uso de serviços de nuvem</h4>
+              <p>Trilha 1, módulo 2: os quatro pares de benefícios, com a verificação de conhecimentos.</p>
+              <span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="../assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta">próximo passo</span></span>
+            </a>
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Guia da prova</span>
+              <h4>AZ-900, guia de estudo</h4>
+              <p>O que a Microsoft diz que cai em cada domínio. Confira antes de agendar.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:var(--d1)"><i></i>Conceitos</span><span class="etiqueta">fonte</span></span>
+            </a>
+            <a class="repo luz" href="/Preparatorio-AWS/aulas/aula-01.html#c4">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Preparatório AWS</span>
+              <h4>As seis vantagens da nuvem</h4>
+              <p>O mesmo assunto pelo lado da AWS, para quem faz os dois preparatórios.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:#ff9900"><i></i>AWS</span><span class="etiqueta">como é na AWS</span></span>
+            </a>
+          </div>
+        </section>
+
+        <nav class="nav-aulas" aria-label="Outras aulas">
+          <!-- EDITE AQUI: use <a href="aula-NN.html"> quando a página da aula vizinha for liberada; <span> enquanto não for -->
+          <a class="anterior" href="aula-01.html">
+            <span class="olho">← aula anterior</span>
+            <strong>Aula 1: O que é nuvem e quem cuida do quê</strong>
+          </a>
+          <span class="proxima">
+            <span class="olho">próxima aula</span>
+            <strong>Aula 3: IaaS, PaaS, SaaS e serverless (em breve)</strong>
+          </span>
+        </nav>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="envolve">
+      <div class="rodape-fim" style="margin-top:0; padding-top:0; border-top:0">
+        <span><a href="../">Preparatório AZ-900</a> · Feito com ♥ e sucata eletrônica.</span>
+        <span>az account show --output table</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ícone de repositório (Octicons, licença MIT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-repo" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></symbol>
+  </svg>
+
+  <script src="../assets/js/aulas.js"></script>
+  <script src="../assets/js/classifica.js?v=2"></script>
+  <script src="../assets/js/matrix.js?v=2"></script>
+  <script src="../js/vivo.js?v=2"></script>
+</body>
+</html>

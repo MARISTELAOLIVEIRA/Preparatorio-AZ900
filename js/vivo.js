@@ -1,6 +1,6 @@
 /*
   vivo.js: as peças interativas das aulas "vivas" do Preparatório AZ-900. Só deste site.
-  versão 1 · 2026-11-11 · aula 1 (o que é nuvem e quem cuida do quê)
+  versão 2 · 2026-11-12 · aulas 1 (o que é nuvem e quem cuida do quê) e 2 (benefícios da nuvem)
   Nasceu do vivo.js do Preparatório AWS (versão 13): o plantão, a central e a placa são os mesmos,
   com os textos do Azure. Cada aula nova ganha as suas configurações aqui.
 
@@ -8,6 +8,8 @@
   2. [data-central] cada tarefa na sua coluna; data-central escolhe o conjunto (aula 1: "shopping", quem cuida do quê)
   3. [data-camadas] a responsabilidade compartilhada em camadas: local, IaaS, PaaS e SaaS (aula 1)
   4. [data-placa]   desmonte: as peças de uma placa e o nome de cada uma no Azure (aula 1)
+  5. [data-domingo] o domingo da pizza: fornos, forno gigante, segunda cozinha, alarme e porteiro, das 18h às 23h (aula 2)
+  6. [data-noves]   a régua dos noves: quantos minutos por mês cabem fora do ar em cada SLA (aula 2)
 
   Com as animações pausadas (botão do topo ou "reduzir movimento"), tudo mostra o resultado direto.
 */
@@ -16,6 +18,7 @@
 
   const raiz = document.documentElement;
   const pausado = () => raiz.classList.contains("pausado");
+  const num = n => Math.round(n).toLocaleString("pt-BR");
 
   // ===================== 1. o plantão (gancho com palpites) =====================
   document.querySelectorAll("[data-plantao]").forEach(function (box) {
@@ -181,5 +184,149 @@
         ficha.classList.add("troca");
       });
     });
+  });
+
+  // ===================== 5. o domingo da pizza =====================
+  // dez meias horas, das 18h às 22h30. Cada forno normal assa 20 pedidos por meia hora.
+  const HORAS = ["18h", "18h30", "19h", "19h30", "20h", "20h30", "21h", "21h30", "22h", "22h30"];
+  const PEDIDOS = [20, 35, 60, 90, 120, 100, 70, 50, 30, 15];
+  const QUEDA = 5;      // às 20h30 cai a luz da cozinha principal
+  const ROBOS = 8;      // às 22h chegam 100 pedidos falsos de uma vez
+  document.querySelectorAll("[data-domingo]").forEach(function (box) {
+    const pecas = box.querySelectorAll("[data-peca-sim]");
+    const grafico = box.querySelector(".dom-grafico");
+    const fornos = box.querySelector(".dom-fornos");
+    const feed = box.querySelector(".dom-feed");
+    const veredito = box.querySelector(".dom-veredito");
+    const campos = {};
+    box.querySelectorAll("[data-n]").forEach(el => (campos[el.dataset.n] = el));
+    let espera = [];
+
+    // as colunas do gráfico: a procura (contorno) e o que saiu do forno (cheio)
+    grafico.innerHTML = HORAS.map(h => `<div class="dom-col"><span class="dom-procura"></span><span class="dom-feito"></span><small>${h}</small></div>`).join("");
+    const cols = grafico.querySelectorAll(".dom-col");
+
+    pecas.forEach(b => b.addEventListener("click", () => b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"))));
+    const ligado = id => box.querySelector(`[data-peca-sim="${id}"]`).getAttribute("aria-pressed") === "true";
+
+    function noite() {
+      const op = { mais: ligado("mais"), gigante: ligado("gigante"), cozinha: ligado("cozinha"), alarme: ligado("alarme"), porteiro: ligado("porteiro") };
+      const unidade = op.gigante ? 40 : 20;   // o forno gigante assa o dobro…
+      const preco = op.gigante ? 2 : 1;       // …e custa o dobro por meia hora
+      const passos = [];
+      let anterior = PEDIDOS[0];
+      HORAS.forEach(function (h, i) {
+        const falsos = i === ROBOS && !op.porteiro ? 100 : 0;
+        const total = PEDIDOS[i] + falsos;
+        // sem o alarme, ninguém vê o movimento: os fornos novos chegam meia hora atrasados
+        const visto = op.alarme ? total : anterior;
+        const n = op.mais ? Math.max(2, Math.ceil(visto / unidade)) : 2;
+        // sem a segunda cozinha, a queda de luz para tudo; sem o alarme, ninguém percebe e dura mais
+        const fora = !op.cozinha && (i === QUEDA || i === QUEDA + 1 || (!op.alarme && i === QUEDA + 2));
+        const capacidade = fora ? 0 : n * unidade;
+        const feitos = Math.min(PEDIDOS[i], Math.round(capacidade * PEDIDOS[i] / total));
+        const custo = n * preco + (op.cozinha ? 1 : 0);
+        const robos = falsos ? Math.min(capacidade, total) - feitos : 0;
+        let fala = "";
+        if (i === 0) fala = `🍕 ${h}: abrem os pedidos. ${n} forno${n > 1 ? "s" : ""}${op.gigante ? " gigantes" : ""} ligado${n > 1 ? "s" : ""}.`;
+        else if (i === 4) fala = feitos < PEDIDOS[i] ? `🔥 ${h}: pico de ${PEDIDOS[i]} pedidos! ${op.gigante && !op.mais ? "O forno gigante tem teto: " : ""}${PEDIDOS[i] - feitos} ficaram sem pizza.` : `🔥 ${h}: pico de ${PEDIDOS[i]} pedidos, e ${n} fornos dando conta. ${op.mais ? "Escala horizontal: mais fornos." : ""}`;
+        else if (i === QUEDA) fala = fora ? `⚡ ${h}: caiu a luz da cozinha principal. Tudo parado!` : `⚡ ${h}: caiu a luz da cozinha principal, e a segunda cozinha assumiu sem ninguém perceber. Alta disponibilidade.`;
+        else if (i === QUEDA + 2 && fora) fala = `😴 ${h}: sem o alarme, o gerente só descobriu a queda agora.`;
+        else if (i === ROBOS) fala = falsos ? `🤖 ${h}: chegaram 100 pedidos falsos de uma vez.${op.mais ? ` E ${n} fornos foram ligados para assar pizza para robôs!` : ` Eles tomaram o lugar dos pedidos de verdade.`}` : `🤖 ${h}: chegaram 100 pedidos falsos, e o porteiro barrou todos na porta.`;
+        else if (i === 9) fala = `🌙 ${h}: últimos pedidos. ${op.mais ? `Sobraram ${n} fornos ligados: a escala também diminui.` : "Os mesmos fornos de sempre, quase parados."}`;
+        passos.push({ i, total, feitos, n, custo, robos, fora, fala });
+        anterior = total;
+      });
+      return { op, passos };
+    }
+
+    function mostraPasso(p, soma) {
+      const c = cols[p.i];
+      c.style.setProperty("--p", p.total / 220);
+      c.style.setProperty("--f", p.feitos / 220);
+      c.classList.toggle("fora", p.fora);
+      c.classList.toggle("perdeu", p.feitos < PEDIDOS[p.i]);
+      c.classList.toggle("robos", p.i === ROBOS && p.total > PEDIDOS[p.i]);
+      fornos.textContent = p.fora ? "⚡ sem luz" : "🔥".repeat(Math.min(p.n, 8)) + (p.n > 8 ? ` +${p.n - 8}` : "");
+      if (p.fala) feed.insertAdjacentHTML("beforeend", `<li>${p.fala}</li>`);
+      campos.entregues.textContent = num(soma.entregues);
+      campos.perdidos.textContent = num(soma.perdidos);
+      campos.custo.textContent = num(soma.custo);
+      campos.robos.textContent = num(soma.robos);
+    }
+
+    function fim(r, soma) {
+      const op = r.op;
+      let txt;
+      if (!soma.perdidos && !soma.robos && op.mais && !op.gigante) txt = "🏆 <strong>Domingo perfeito!</strong> Nenhum pedido perdido, e você pagou só os fornos de cada meia hora. Escala horizontal, alta disponibilidade, gerenciamento e segurança: os quatro benefícios trabalhando juntos.";
+      else if (!soma.perdidos && !soma.robos) txt = `✅ <strong>Ninguém ficou sem pizza</strong>, mas a conta deu ${soma.custo} fornos pagos. Dá para gastar menos: ${op.gigante ? "o forno gigante custa o dobro a noite inteira, até as 22h30, com quase nenhum pedido." : "tente de novo."}`;
+      else {
+        const dicas = [];
+        if (!op.mais) dicas.push(op.gigante ? "o forno gigante tem teto: no pico, ainda faltou forno" : "dois fornos não dão conta do pico");
+        if (!op.cozinha) dicas.push("a queda de luz parou a cozinha");
+        if (!op.porteiro) dicas.push("os pedidos falsos atrapalharam");
+        if (!op.alarme && op.mais) dicas.push("sem o alarme, os fornos novos chegaram atrasados");
+        const cabeca = soma.perdidos ? `${num(soma.perdidos)} pedidos perdidos` : "Ninguém ficou sem pizza";
+        const robos = soma.robos ? `${soma.perdidos ? " e" : ", mas"} ${num(soma.robos)} pizzas foram para robôs` : "";
+        txt = `<strong>${cabeca}${robos}.</strong> O que deu errado: ${dicas.join("; ")}. Ligue outras peças e abra os pedidos de novo.`;
+      }
+      veredito.innerHTML = txt;
+    }
+
+    box.querySelector(".vai").addEventListener("click", function () {
+      espera.forEach(clearTimeout);
+      espera = [];
+      feed.innerHTML = "";
+      veredito.innerHTML = "";
+      const r = noite();
+      const soma = { entregues: 0, perdidos: 0, custo: 0, robos: 0 };
+      r.passos.forEach(function (p, k) {
+        const anda = function () {
+          soma.entregues += p.feitos;
+          soma.perdidos += PEDIDOS[p.i] - p.feitos;
+          soma.custo += p.custo;
+          soma.robos += p.robos;
+          mostraPasso(p, soma);
+          if (k === r.passos.length - 1) fim(r, soma);
+        };
+        if (pausado()) anda(); else espera.push(setTimeout(anda, 200 + k * 650));
+      });
+    });
+
+    box.querySelector(".de-novo").addEventListener("click", function () {
+      espera.forEach(clearTimeout);
+      espera = [];
+      pecas.forEach(b => b.setAttribute("aria-pressed", "false"));
+      cols.forEach(c => { c.style.removeProperty("--p"); c.style.removeProperty("--f"); c.className = "dom-col"; });
+      feed.innerHTML = "";
+      veredito.innerHTML = "";
+      fornos.textContent = "🔥🔥";
+      Object.values(campos).forEach(el => (el.textContent = "—"));
+    });
+  });
+
+  // ===================== 6. a régua dos noves =====================
+  document.querySelectorAll("[data-noves]").forEach(function (box) {
+    const botoes = box.querySelectorAll("[data-sla]");
+    const minMes = box.querySelector("[data-min-mes]");
+    const minAno = box.querySelector("[data-min-ano]");
+    const pizzas = box.querySelector(".noves-pizzas");
+    const fala = box.querySelector(".casa-fala");
+    function escolhe(b) {
+      botoes.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      const sla = parseFloat(b.dataset.sla);
+      const fora = 1 - sla / 100;
+      const mes = 30 * 24 * 60 * fora;     // um mês de 30 dias
+      const ano = 365 * 24 * 60 * fora;
+      const formata = m => m >= 120 ? `${(m / 60).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} horas` : `${m.toLocaleString("pt-BR", { maximumFractionDigits: 1 })} minutos`;
+      minMes.textContent = formata(mes);
+      minAno.textContent = formata(ano);
+      // uma pizza leva uns 10 minutos no forno: quantas deixariam de sair por mês
+      const n = Math.round(mes / 10);
+      pizzas.innerHTML = n ? "🍕".repeat(Math.min(n, 44)) + (n > 44 ? ` <small>+${n - 44}</small>` : "") : "<small>menos de uma pizza</small>";
+      fala.innerHTML = `Com <strong>${b.textContent}</strong>, o serviço pode ficar fora uns <strong>${formata(mes)} por mês</strong>: ${n ? `umas ${n} pizzas que não saem do forno` : "menos tempo do que assar uma pizza"}. Cada nove a mais divide esse tempo por dez.`;
+    }
+    botoes.forEach(b => b.addEventListener("click", () => escolhe(b)));
+    escolhe(botoes[1]);
   });
 })();

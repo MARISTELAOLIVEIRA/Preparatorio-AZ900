@@ -1,5 +1,5 @@
 /*
-  treino.js: o portal de treino do Preparatório AZ-900 (versão 1 · 2026-11-11 · aula 1, o tour).
+  treino.js: o portal de treino do Preparatório AZ-900 (versão 2 · 2026-11-12 · aula 1, o tour; aula 2, os jeitos de gerenciar).
   Nasceu do motor do simulador de Fundamentos de Computação em Nuvem (simulador/portal.js), com a cara do
   Stela Cloud: nada de logo da Microsoft, e o nome do serviço no Azure escrito ao lado.
   Aqui é só treino: sem login, sem nota, e nada vai para o banco. O estado fica no navegador (localStorage).
@@ -41,6 +41,19 @@
         { id: "sino", texto: "🔔 Abra as notificações (o sino)." },
         { id: "ajuda", texto: "❓ Abra \"Ajuda + suporte\" e veja a integridade do serviço." },
       ],
+      fim: "<strong>🏆 Tour completo!</strong> Você já sabe onde ficam a pesquisa, os recursos, a assinatura, as notificações e a ajuda.",
+    },
+    {
+      id: "gerenciar",
+      aula: 2,
+      titulo: "Aula 2 · Os jeitos de gerenciar",
+      pedido: "A Lia quer saber se dá para cuidar do Cerrado Delivery sem clicar em tudo. Além do portal, teste o terminal e ache o SLA:",
+      passos: [
+        { id: "shell", texto: "⌨️ Abra o Cloud Shell, o terminal do topo do portal." },
+        { id: "comando", texto: "💻 Rode um comando: az account show (no Bash) ou Get-AzSubscription (no PowerShell)." },
+        { id: "sla", texto: "📜 Na ajuda, abra \"Contratos de nível de serviço (SLA)\"." },
+      ],
+      fim: "<strong>🏆 Missão cumprida!</strong> Portal, linha de comando e PowerShell: os jeitos de gerenciar na nuvem. E o SLA diz quanto tempo o serviço promete ficar no ar.",
     },
   ];
 
@@ -92,7 +105,7 @@
     const faltam = m.passos.filter((x) => !estado.feitos[x.id]).length;
     dica(faltam
       ? `<strong>✔ Passo feito!</strong> ${faltam === 1 ? "Falta 1." : `Faltam ${faltam}.`}`
-      : `<strong>🏆 Tour completo!</strong> Você já sabe onde ficam a pesquisa, os recursos, a assinatura, as notificações e a ajuda. Na aula 4, o Cerrado Delivery cria o primeiro grupo de recursos.`);
+      : m.fim);
     desenharMissoes();
   }
 
@@ -126,8 +139,86 @@
       </ul>`,
     ajuda: `<h3>Ajuda + suporte</h3>
       <p><span class="sim-bolinha" aria-hidden="true"></span><strong>Integridade do serviço:</strong> tudo funcionando nas regiões que você usa (simulado).</p>
-      <p class="sim-nota">No Azure, a <strong>integridade do serviço</strong> diz se o problema é da Microsoft ou seu. Ela volta na aula 12. Para abrir um chamado, existe "Criar uma solicitação de suporte".</p>`,
+      <p class="sim-nota">No Azure, a <strong>integridade do serviço</strong> diz se o problema é da Microsoft ou seu. Ela volta na aula 12. Para abrir um chamado, existe "Criar uma solicitação de suporte".</p>
+      <details class="sim-sla" data-sla><summary>📜 Contratos de nível de serviço (SLA)</summary>
+        <p>O <strong>SLA</strong> é a promessa escrita de quanto tempo cada serviço fica no ar, em porcentagem do mês, como 99,9%. Cada serviço tem o seu. Se a Microsoft não cumprir, o cliente recebe crédito na fatura.</p>
+        <p class="sim-nota">No simulador, o SLA é só de mentirinha. No Azure de verdade, a Microsoft publica os SLAs de todos os serviços.</p>
+      </details>`,
   };
+
+  // o Cloud Shell simulado: Bash com a CLI do Azure ou PowerShell, só com alguns comandos
+  PAINEIS.shell = `<h3>Cloud Shell <small>(simulado)</small></h3>
+      <div class="sim-shell-abas" role="group" aria-label="Escolha o shell">
+        <button type="button" data-shell="bash" aria-pressed="true">Bash</button>
+        <button type="button" data-shell="ps" aria-pressed="false">PowerShell</button>
+      </div>
+      <pre class="sim-shell-saida" aria-live="polite"></pre>
+      <form class="sim-shell-linha" data-shell-form><label><span class="sim-shell-prompt">equipe@Azure:~$</span>
+        <span class="visualmente-oculto">Comando</span><input name="cmd" autocomplete="off" spellcheck="false"></label></form>
+      <p class="sim-nota">Digite <strong>ajuda</strong> para ver os comandos que este terminal entende.</p>`;
+  const SHELL = {
+    bash: {
+      prompt: "equipe@Azure:~$",
+      boas: "Bem-vindo ao Cloud Shell (simulado). Shell: Bash, com a CLI do Azure (az).",
+      cmds: {
+        "az account show": `{
+  "environmentName": "AzureCloud",
+  "isDefault": true,
+  "name": "Assinatura de estudo",
+  "state": "Enabled",
+  "tenantDisplayName": "Cerrado Delivery",
+  "user": { "name": "equipe@cerradodelivery", "type": "user" }
+}`,
+        "az version": `{ "azure-cli": "simulado" }`,
+      },
+      dica: "Tente: az account show",
+    },
+    ps: {
+      prompt: "PS /home/equipe>",
+      boas: "Bem-vindo ao Cloud Shell (simulado). Shell: PowerShell, com o módulo Az.",
+      cmds: {
+        "get-azsubscription": `Name                  State
+----                  -----
+Assinatura de estudo  Enabled`,
+        "get-azcontext": `Name                  Account                  Tenant
+----                  -------                  ------
+Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
+      },
+      dica: "Tente: Get-AzSubscription",
+    },
+  };
+  let shellAtual = "bash";
+
+  function prepararShell(caixa) {
+    const saida = caixa.querySelector(".sim-shell-saida");
+    const prompt = caixa.querySelector(".sim-shell-prompt");
+    const entrada = caixa.querySelector('input[name="cmd"]');
+    function escreve(t) { saida.textContent += t + "\n"; saida.scrollTop = saida.scrollHeight; }
+    function troca(qual) {
+      shellAtual = qual;
+      caixa.querySelectorAll("[data-shell]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.shell === qual)));
+      prompt.textContent = SHELL[qual].prompt;
+      saida.textContent = "";
+      escreve(SHELL[qual].boas);
+      escreve(SHELL[qual].dica);
+    }
+    caixa.querySelectorAll("[data-shell]").forEach((b) => b.addEventListener("click", () => troca(b.dataset.shell)));
+    caixa.querySelector("[data-shell-form]").addEventListener("submit", (evento) => {
+      evento.preventDefault();
+      const texto = entrada.value.trim();
+      entrada.value = "";
+      if (!texto) return;
+      const sh = SHELL[shellAtual];
+      escreve(`${sh.prompt} ${texto}`);
+      const chave = shellAtual === "ps" ? texto.toLowerCase() : texto.replace(/\s+/g, " ");
+      if (["ajuda", "help"].includes(texto.toLowerCase())) return escreve("Comandos deste simulador: " + Object.keys(sh.cmds).join(", ") + ", clear.");
+      if (["clear", "cls"].includes(texto.toLowerCase())) { saida.textContent = ""; return; }
+      if (sh.cmds[chave]) { escreve(sh.cmds[chave]); return marcar("comando"); }
+      escreve(`Este simulador não conhece "${texto}". ${sh.dica}`);
+    });
+    troca(shellAtual);
+    entrada.focus();
+  }
 
   function abrirPainel(qual, botao) {
     const caixa = document.getElementById("sim-painel-topo");
@@ -139,6 +230,9 @@
     caixa.hidden = false;
     botao.setAttribute("aria-expanded", "true");
     marcar(qual);
+    if (qual === "shell") prepararShell(caixa);
+    const sla = caixa.querySelector("[data-sla]");
+    if (sla) sla.addEventListener("toggle", () => { if (sla.open) marcar("sla"); });
   }
 
   // ---------- as telas ----------
