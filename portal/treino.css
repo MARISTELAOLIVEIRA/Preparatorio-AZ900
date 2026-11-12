@@ -107,3 +107,12 @@
 .sim-painel-topo h3 small { font-weight: 400; color: var(--texto-3); }
 .sim-sla { margin-top: .6rem; padding: .5rem .8rem; border-radius: 10px; border: 1px solid var(--borda-forte); }
 .sim-sla summary { cursor: pointer; font-weight: 700; }
+
+/* aula 3: os botões do modelo de cada serviço em destaque */
+.sim-modelos { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+.sim-modelos [aria-pressed="true"] { border-color: var(--menta); box-shadow: 0 0 0 2px var(--menta); }
+.sim-lista-missoes details summary { cursor: pointer; list-style: none; }
+.sim-lista-missoes details summary::-webkit-details-marker { display: none; }
+.sim-lista-missoes details summary::after { content: " · ver os passos"; font-size: .78rem; color: var(--texto-3); }
+.sim-lista-missoes details[open] summary::after { content: " · esconder"; }
+.sim-lista-missoes details > span { display: block; margin-top: .3rem; }

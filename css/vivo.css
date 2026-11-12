@@ -1946,3 +1946,25 @@
 .noves-pizzas { min-height: 1.6rem; font-size: 1.25rem; line-height: 1.5; word-break: break-all; }
 .noves-pizzas small { font: .85rem var(--f-mono); color: #a3b0a8; }
 .noves .casa-fala { color: var(--texto); }
+
+/* ===================== AZ-900 · aula 3 · X1 desmonte a pizza ===================== */
+.pizza-nuvem { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.2rem; align-items: center; }
+.pizza-pilha { display: grid; justify-items: center; gap: .35rem; padding: 1.2rem .8rem; border-radius: 22px; background: var(--chip); }
+.pizza-pilha button {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  height: 2.9rem; border-radius: 999px; cursor: pointer; font: 700 .92rem var(--f-titulo); color: #1a120a;
+  border: 2px solid rgba(0, 0, 0, .25); box-shadow: inset 0 -5px 0 rgba(0, 0, 0, .18);
+  transition: transform .2s, box-shadow .2s, filter .2s;
+}
+.pizza-pilha button:hover { transform: translateY(-2px) scale(1.02); }
+.pizza-pilha button[aria-pressed="true"] { box-shadow: inset 0 -5px 0 rgba(0, 0, 0, .18), 0 0 0 3px #3ea8ff, 0 0 22px -4px #3ea8ff; }
+.pizza-pilha button:focus-visible { outline: 3px solid #ecc874; outline-offset: 3px; }
+.pizza-pilha .p-cobertura { width: 62%; background: #f3c94b; }
+.pizza-pilha .p-molho { width: 70%; background: #e0563b; color: #fff; }
+.pizza-pilha .p-massa { width: 78%; background: #e9c08a; }
+.pizza-pilha .p-forno { width: 88%; background: #5b4d48; color: #fff; }
+.pizza-pilha .p-gas { width: 94%; background: #3a7bd5; color: #fff; }
+.pizza-pilha .p-prato { width: 100%; background: #f2efe6; }
+.pizza-nuvem .placa-ficha { min-height: 12rem; }
+.pausado .pizza-pilha button { transition: none; }
+@media (max-width: 720px) { .pizza-nuvem { grid-template-columns: minmax(0, 1fr); } }

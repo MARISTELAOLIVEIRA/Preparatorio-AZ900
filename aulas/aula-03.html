@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- EDITE AQUI: número e tema da aula -->
+  <title>Aula 3: IaaS, PaaS, SaaS e serverless · Preparatório AZ-900 · Stela</title>
+  <meta name="description" content="Aula 3 do Preparatório AZ-900: a pizza em camadas, cada pedido no seu modelo, IaaS, PaaS, SaaS e serverless com os serviços do Azure, a pizza desmontável e a missão dos modelos no portal de treino.">
+
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <script src="../assets/js/placa.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,400..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+  <link rel="stylesheet" href="../assets/css/disciplina.css">
+  <link rel="stylesheet" href="../assets/css/aula.css">
+  <link rel="stylesheet" href="../assets/css/neon.css?v=3">
+  <link rel="stylesheet" href="../css/interativos.css?v=1">
+  <link rel="stylesheet" href="../css/aula-az.css?v=1">
+  <link rel="stylesheet" href="../css/vivo.css?v=3">
+</head>
+<body>
+
+  <!-- ===================== BARRA DO TOPO (igual em todos os sites) ===================== -->
+  <header class="barra">
+    <div class="envolve">
+      <div class="marcas">
+        <a class="marca-disc marca-logo" href="../" title="Página inicial do preparatório"><img src="../assets/img/tec/azure.svg" alt="Preparatório AZ-900: página inicial" width="32" height="32"></a>
+      </div>
+      <button type="button" class="btn-menu" id="btn-menu" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="nav" id="menu" aria-label="Partes da aula">
+        <a href="../#videos">← Preparatório</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#c1">Conceitos</a>
+        <a href="#demonstracao">Portal</a>
+        <a href="#pegadinha">Pegadinha</a>
+        <a href="#treino">Treino</a>
+        <a href="#atividade">Checklist</a>
+      </nav>
+      <div class="ajustes">
+        <button type="button" id="btn-tema" aria-label="Mudar para o tema claro">
+          <svg class="sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        </button>
+        <button type="button" id="btn-fonte" aria-label="Aumentar o tamanho do texto">A+</button>
+        <button type="button" id="btn-movimento" aria-pressed="false">
+          <svg class="pausar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tocar" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <span class="rotulo">Pausar animações</span>
+        </button>
+        <a class="marca" href="/" title="Portal da Stela">
+          <img src="../assets/img/estrela.webp" alt="" width="26" height="24">
+          <span class="marca-texto">Stela</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== CABEÇALHO DA AULA ===================== -->
+    <section class="aula-cab">
+      <canvas class="chuva-matrix" aria-hidden="true"></canvas>
+      <div class="envolve">
+        <p class="trilha-migalhas">
+          <a href="/">Stela</a> <span aria-hidden="true">/</span>
+          <a href="../">Preparatório AZ-900</a> <span aria-hidden="true">/</span>
+          <a href="../#videos">Aulas</a> <span aria-hidden="true">/</span>
+          <span>Aula 3</span>
+        </p>
+
+        <!-- EDITE AQUI: número, vídeo, domínio da prova e título -->
+        <div class="aula-etiquetas">
+          <span class="etiqueta senac">Fac Senac DF</span>
+          <span class="etiqueta ouro">Aula 3</span>
+          <span class="etiqueta">Vídeo 3</span>
+          <span class="etiqueta dominio" style="--cor:var(--d1)">Domínio 1 · Conceitos de nuvem</span>
+        </div>
+        <h1>IaaS, PaaS, SaaS e <span class="neon">serverless</span></h1>
+        <p class="subtitulo">Pizza em casa, delivery ou restaurante: os modelos de serviço da nuvem, quem cuida de quê em cada um e quando escolher cada um.</p>
+      </div>
+    </section>
+
+        <!-- ===================== RESUMO ===================== -->
+    <section class="bloco faixa alt" aria-label="Resumo da aula">
+      <div class="envolve">
+        <div class="resumo">
+          <div class="cartao">
+            <span class="olho">Objetivo</span>
+            <p>Separar IaaS, PaaS, SaaS e serverless pela pergunta "quem cuida de quê" e escolher o modelo certo para cada caso.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Revezamento</span>
+            <p>Primeiro esta página (e o vídeo 3, quando sair). Depois, o módulo <strong>Descrever tipos de serviço de nuvem</strong>, no Microsoft Learn.</p>
+          </div>
+          <div class="cartao">
+            <span class="olho">Na prova</span>
+            <p>Domínio 1, Conceitos de nuvem: <strong>25 a 30%</strong> das questões.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bloco">
+      <div class="envolve aula-corpo">
+
+        <!-- ===================== ROTEIRO DA AULA ===================== -->
+        <section class="parte" id="video">
+          <div class="cab">
+            <span class="olho">V3 · roteiro da aula</span>
+            <h2>O que você vai aprender</h2>
+            <p>Os assuntos da aula, na ordem da página. Clique para ir direto a um deles. Viu o <strong>⏸ Pausa aqui</strong>? Pare e tente responder antes de abrir a resposta.</p>
+          </div>
+          <div class="cartao">
+            <ol class="roteiro-video sem-tempo">
+              <li><a href="#gancho">G1 · Pizza em casa, delivery ou restaurante: qual é qual na nuvem?</a></li>
+              <li><a href="#c1">C1 · A pizza em camadas: quem cuida de quê</a></li>
+              <li><a href="#simulador">SIM1 · Cada pedido no seu modelo</a></li>
+              <li><a href="#c2">C2 · IaaS: infraestrutura como serviço</a></li>
+              <li><a href="#c3">C3 · PaaS: plataforma como serviço</a></li>
+              <li><a href="#c4">C4 · SaaS: software como serviço</a></li>
+              <li><a href="#c5">C5 · Serverless: a computação sem servidor</a></li>
+              <li><a href="#pizza">X1 · Desmonte a pizza</a></li>
+              <li><a href="#demonstracao">D1 · Faça junto: cada serviço no seu modelo, no portal de treino</a></li>
+              <li><a href="#pegadinha">P1 · A pegadinha: serverless tem servidor</a></li>
+              <li><a href="#learn">Agora é no Microsoft Learn</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== GANCHO (vivo.js, parte 1) ===================== -->
+        <section class="parte" id="gancho">
+          <div class="cab">
+            <span class="olho">G1 · gancho</span>
+            <h2>A linha de pizzas</h2>
+          </div>
+          <div class="gancho plantao" data-plantao data-link="#c1" data-link-texto="Veja as camadas da pizza, logo abaixo">
+            <p class="gancho-evento">🛵 Cerrado Delivery · reunião de segunda</p>
+            <span class="tarja">🍕 Novidade</span>
+            <p class="manchete">O Cerrado Delivery vai lançar a linha de pizzas. Como fazer?</p>
+            <div class="letreiro" aria-hidden="true"><span>Opção 1: montar a cozinha do zero · opção 2: alugar uma cozinha equipada · opção 3: mandar a receita para uma pizzaria fazer e entregar · opção 4: vender a pizza de um restaurante parceiro…</span></div>
+            <button type="button" class="botao" data-abrir>▶ E o que isso tem a ver com a nuvem?</button>
+            <div class="gancho-voto" data-revela hidden>
+              <p class="gancho-pergunta" tabindex="-1">Pizza em casa, delivery ou restaurante: qual é qual na nuvem? Clique nos três.</p>
+              <div class="gancho-botoes">
+                <button type="button" aria-pressed="false" data-explica="🏠 Em casa, você cuida de quase tudo. Se a cozinha e o forno são seus, é o datacenter local. Se a cozinha é alugada e o resto é com você, é IaaS.">🏠 Em casa</button>
+                <button type="button" aria-pressed="false" data-explica="🛵 Delivery com a sua receita é PaaS: você manda o código (a receita), e a plataforma faz a massa, assa e entrega.">🛵 Delivery</button>
+                <button type="button" aria-pressed="false" data-explica="🍽️ Restaurante é SaaS: o programa vem pronto, e você só senta e usa. Seus continuam os dados e quem senta à mesa.">🍽️ Restaurante</button>
+              </div>
+              <p class="gancho-resposta" aria-live="polite"></p>
+            </div>
+          </div>
+          <p class="fonte">História fictícia, criada para a aula. A pizza como analogia de IaaS, PaaS e SaaS é bem conhecida na área; esta versão é da aula.</p>
+        </section>
+
+        <!-- ===================== ESTUDO DE CASO ===================== -->
+        <section class="parte" id="caso">
+          <div class="cab">
+            <span class="olho">EC1 · estudo de caso</span>
+            <h2>Sete pedidos na mesa da Lia</h2>
+          </div>
+          <div class="cartao caso">
+            <p>Com a linha de pizzas, a equipe do <strong>Cerrado Delivery</strong> encheu a mesa da Lia de pedidos: levar o sistema antigo para a nuvem, criar um ambiente de testes, dar uma plataforma aos programadores, analisar os pedidos, trocar o e-mail, controlar as despesas e gerar um cupom a cada compra.</p>
+            <p>O Rafa pergunta: "Não dá para resolver tudo do mesmo jeito?"</p>
+            <h3>Para pensar</h3>
+            <ol>
+              <li>Quem quer controle total precisa de qual tipo de serviço?</li>
+              <li>E quem só quer usar um programa pronto?</li>
+              <li>Vale deixar uma máquina ligada o dia inteiro para um trabalho de segundos?</li>
+            </ol>
+            <p class="fonte">Empresa fictícia, criada para o preparatório.</p>
+          </div>
+        </section>
+
+        <!-- ===================== C1: A PIZZA EM CAMADAS (vivo.js, parte 3) ===================== -->
+        <section class="parte" id="c1">
+          <div class="cab">
+            <span class="olho">C1 · conceito</span>
+            <h2>A pizza em camadas: quem cuida de quê</h2>
+            <p>A pergunta que separa os modelos é sempre a mesma: <strong>até onde você cuida, e a partir de onde o provedor cuida?</strong> Clique em cada jeito de fazer a pizza.</p>
+          </div>
+          <div class="camadas-resp" data-camadas="pizza">
+            <div class="casa-modos" role="group" aria-label="Escolha o jeito de fazer a pizza">
+              <button type="button" data-modelo="0" aria-pressed="true"><span class="ico" aria-hidden="true">🏠</span><strong>Do zero, em casa</strong><small>local</small></button>
+              <button type="button" data-modelo="1" aria-pressed="false"><span class="ico" aria-hidden="true">🔑</span><strong>Cozinha alugada</strong><small>IaaS</small></button>
+              <button type="button" data-modelo="2" aria-pressed="false"><span class="ico" aria-hidden="true">🛵</span><strong>Delivery com a sua receita</strong><small>PaaS</small></button>
+              <button type="button" data-modelo="3" aria-pressed="false"><span class="ico" aria-hidden="true">🍽️</span><strong>Restaurante</strong><small>SaaS</small></button>
+            </div>
+            <ol class="camadas-lista">
+              <li class="camada-az" data-quem="vvvv"><span class="dia"><span aria-hidden="true">🙋</span><span>Quem senta à mesa e paga</span></span><span class="tec-nome">Dados e acessos</span><span class="quem"></span></li>
+              <li class="camada-az" data-quem="vvvm"><span class="dia"><span aria-hidden="true">📋</span><span>A receita e o sabor</span></span><span class="tec-nome">Aplicativo (o código)</span><span class="quem"></span></li>
+              <li class="camada-az" data-quem="vvmm"><span class="dia"><span aria-hidden="true">🍅</span><span>O molho e o ponto</span></span><span class="tec-nome">Runtime e middleware</span><span class="quem"></span></li>
+              <li class="camada-az" data-quem="vvmm"><span class="dia"><span aria-hidden="true">🫓</span><span>A massa</span></span><span class="tec-nome">Sistema operacional</span><span class="quem"></span></li>
+              <li class="camada-az" data-quem="vmmm"><span class="dia"><span aria-hidden="true">🔥</span><span>O forno</span></span><span class="tec-nome">Servidores e armazenamento</span><span class="quem"></span></li>
+              <li class="camada-az" data-quem="vmmm"><span class="dia"><span aria-hidden="true">⚡</span><span>O gás e a luz</span></span><span class="tec-nome">Rede e energia</span><span class="quem"></span></li>
+              <li class="camada-az" data-quem="vmmm"><span class="dia"><span aria-hidden="true">🏠</span><span>A cozinha</span></span><span class="tec-nome">Datacenter</span><span class="quem"></span></li>
+            </ol>
+            <ul class="camadas-legenda">
+              <li><i style="--c:var(--vivo-voce)"></i>você</li>
+              <li><i style="--c:var(--neon)"></i>provedor</li>
+            </ul>
+            <p class="casa-fala" aria-live="polite"></p>
+          </div>
+          <p class="fonte">Camadas simplificadas para a aula, a partir do diagrama do <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-service-types/2-describe-infrastructure-service">Microsoft Learn, Descrever a infraestrutura como serviço</a>, consultado em 12/11/2026. Os detalhes de quem divide o quê estão nas camadas da <a href="aula-01.html#c2">aula 1</a>.</p>
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Em qual dos quatro jeitos você tem mais controle? E em qual dá menos trabalho?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Mais controle, entre os modelos de nuvem: a <strong>cozinha alugada (IaaS)</strong>, porque quase tudo é com você. Menos trabalho: o <strong>restaurante (SaaS)</strong>. É uma gangorra: quanto mais controle, mais responsabilidade.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== SIMULADOR (vivo.js, parte 2) ===================== -->
+        <section class="parte" id="simulador">
+          <div class="cab">
+            <span class="olho">SIM1 · simulador</span>
+            <h2>Cada pedido no seu modelo</h2>
+            <p>Os sete pedidos da mesa da Lia. Escolha o modelo de cada um e aperte <strong>Conferir</strong>.</p>
+          </div>
+          <div class="sim" data-central="pedidos">
+            <ol class="central">
+              <li class="central-linha" data-tarefa="servidor">
+                <span class="tarefa"><strong>📦 Levar o sistema antigo</strong><small>do jeito que está, sem reescrever nada</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para levar o sistema antigo">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="testes">
+                <span class="tarefa"><strong>🧪 Ambiente de testes</strong><small>igualzinho ao de verdade, liga e desliga rápido</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para o ambiente de testes">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="devs">
+                <span class="tarefa"><strong>👩‍💻 O aplicativo das pizzas</strong><small>os programadores só querem escrever o código</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para o aplicativo das pizzas">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="bi">
+                <span class="tarefa"><strong>📊 Analisar os pedidos</strong><small>descobrir padrões e prever o movimento do domingo</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para analisar os pedidos">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="email">
+                <span class="tarefa"><strong>📧 E-mail da equipe</strong><small>pronto para usar amanhã</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para o e-mail da equipe">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="financas">
+                <span class="tarefa"><strong>💰 Controle de despesas</strong><small>sem programar nada</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para o controle de despesas">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+              <li class="central-linha" data-tarefa="cupom">
+                <span class="tarefa"><strong>🎟️ O cupom de cada compra</strong><small>uns segundos de trabalho a cada pedido</small></span>
+                <div class="dz-botoes" role="group" aria-label="Modelo para o cupom de cada compra">
+                  <button type="button" data-motor="iaas" aria-pressed="false">🔑 IaaS</button>
+                  <button type="button" data-motor="paas" aria-pressed="false">🛵 PaaS</button>
+                  <button type="button" data-motor="saas" aria-pressed="false">🍽️ SaaS</button>
+                  <button type="button" data-motor="serverless" aria-pressed="false">⚡ Serverless</button>
+                </div>
+                <p class="central-saida" aria-live="polite"></p>
+              </li>
+            </ol>
+            <div class="sim-acoes"><button type="button" class="vai">▶ Conferir</button><span>placar: <span class="central-placar" data-placar>–</span></span></div>
+            <p class="casa-fala" aria-live="polite"></p>
+          </div>
+          <p class="fonte">Os pedidos vêm dos cenários do Microsoft Learn para cada modelo (C2 a C5, logo abaixo).</p>
+
+          <details class="pausa-aqui">
+            <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Por que o cupom não vai numa máquina virtual ligada o dia todo?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+            <div class="pausa-resposta"><p>Porque ele trabalha uns segundos por pedido. A máquina ficaria quase o dia inteiro parada, e você pagaria cada hora. No <strong>serverless</strong>, um evento acorda a função, e você paga só o tempo em que ela rodou.</p></div>
+          </details>
+        </section>
+
+        <!-- ===================== CONCEITOS ===================== -->
+        <section class="parte" id="conceitos">
+          <div class="cab">
+            <span class="olho">C2–C5 · conceitos</span>
+            <h2>O que a prova quer que você saiba</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c2">
+            <div class="texto">
+              <span class="olho">C2</span>
+              <h3>IaaS: infraestrutura como serviço</h3>
+              <p>A categoria <strong>mais flexível</strong>, com o <strong>máximo de controle</strong>. Você aluga o hardware num datacenter da nuvem, e o que faz com ele é com você.</p>
+              <ul>
+                <li><strong>O provedor cuida:</strong> do hardware, da conexão com a internet e da segurança física.</li>
+                <li><strong>Você cuida:</strong> do sistema operacional (instalar, configurar, atualizar), da rede, do banco de dados e do armazenamento.</li>
+                <li><strong>Cenários:</strong> levar o sistema como está (<em>lift-and-shift</em>) e ambientes de teste e desenvolvimento.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-service-types/2-describe-infrastructure-service">Microsoft Learn, Descrever a infraestrutura como serviço</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>No Azure:</strong> as Máquinas Virtuais do Azure. <strong>Como é na AWS:</strong> o Amazon EC2.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c3">
+            <div class="texto">
+              <span class="olho">C3</span>
+              <h3>PaaS: plataforma como serviço</h3>
+              <p>O <strong>meio-termo</strong> entre alugar o datacenter (IaaS) e pagar a solução pronta (SaaS).</p>
+              <ul>
+                <li><strong>O provedor cuida:</strong> da infraestrutura e também do sistema operacional, do middleware, das ferramentas de desenvolvimento e de análise. Nada de licença nem de atualização do sistema e do banco.</li>
+                <li><strong>Você cuida:</strong> do código do aplicativo, dos dados e de quem acessa.</li>
+                <li><strong>Cenários:</strong> uma estrutura pronta para os programadores criarem aplicativos, e análise de dados (<em>business intelligence</em>).</li>
+              </ul>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-service-types/3-describe-platform-service">Microsoft Learn, Descrever a plataforma como serviço</a>, <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/7-describe-application-hosting-options">Descrever as opções de hospedagem de aplicativos</a> e <a href="https://learn.microsoft.com/pt-br/azure/azure-sql/database/sql-database-paas-overview">O que é o Banco de Dados SQL do Azure?</a>, consultados em 12/11/2026.</p>
+              <p class="dica"><strong>No Azure:</strong> o Serviço de Aplicativo (App Service) e o Banco de Dados SQL do Azure. <strong>Como é na AWS:</strong> o AWS Elastic Beanstalk.</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c4">
+            <div class="texto">
+              <span class="olho">C4</span>
+              <h3>SaaS: software como serviço</h3>
+              <p>O modelo <strong>mais completo</strong>: você aluga ou usa um aplicativo pronto. É o menos flexível, mas o mais fácil de começar, e pede menos conhecimento técnico.</p>
+              <ul>
+                <li><strong>O provedor cuida:</strong> de quase tudo, da infraestrutura às atualizações do aplicativo.</li>
+                <li><strong>Você cuida:</strong> dos seus dados, das contas e de quem acessa, e dos aparelhos que entram.</li>
+                <li><strong>Cenários:</strong> e-mail e mensagens, aplicativos de produtividade, controle de finanças e despesas.</li>
+              </ul>
+              <p class="fonte">Fonte: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-service-types/4-describe-software-service">Microsoft Learn, Descrever o software como serviço</a>, consultado em 12/11/2026.</p>
+              <p class="dica"><strong>Exemplo:</strong> o Microsoft 365 (Outlook, Word, Teams). <strong>Como é na AWS:</strong> a AWS também agrupa os serviços em IaaS, PaaS e SaaS (<a href="https://aws.amazon.com/types-of-cloud-computing/">AWS, Types of cloud computing</a>, consultado em 12/11/2026).</p>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="c5">
+            <div class="texto">
+              <span class="olho">C5</span>
+              <h3>Serverless: a computação sem servidor</h3>
+              <p>O provedor cuida da infraestrutura, da escala e da manutenção. Você <strong>só escreve o código</strong>, e ele roda quando um evento acontece.</p>
+              <ul>
+                <li><strong>Um evento acorda a função:</strong> um pedido novo, um horário marcado, uma mensagem de outro serviço.</li>
+                <li><strong>Trabalho curto:</strong> o ideal é terminar em segundos. Acabou, os recursos são liberados.</li>
+                <li><strong>Paga pelo que rodou:</strong> o Azure cobra o tempo de execução, não a máquina parada esperando.</li>
+                <li><strong>Escala sozinha</strong>, conforme a procura.</li>
+              </ul>
+              <p>No Cerrado Delivery: o cupom de cada compra.</p>
+              <p class="fonte">Fontes: <a href="https://learn.microsoft.com/pt-br/training/modules/describe-azure-compute-networking-services/6-functions">Microsoft Learn, Descrever o Azure Functions</a> e <a href="https://azure.microsoft.com/pt-br/resources/cloud-computing-dictionary/what-is-serverless-computing">Microsoft Azure, O que é computação sem servidor?</a>, consultados em 12/11/2026.</p>
+              <p class="dica"><strong>No Azure:</strong> o Azure Functions. <strong>Como é na AWS:</strong> o AWS Lambda (<a href="https://aws.amazon.com/lambda/">AWS Lambda</a>, consultado em 12/11/2026).</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== DESMONTE A PIZZA (vivo.js, parte 4) ===================== -->
+        <section class="parte" id="pizza">
+          <div class="cab">
+            <span class="olho">X1 · desmonte a pizza</span>
+            <h2>Cada camada tem um nome na nuvem</h2>
+            <p>Clique em cada camada da pizza, de cima a baixo. Depois, faça uma pizza de verdade (ou de massinha) e conte para alguém de casa qual camada é o quê.</p>
+          </div>
+          <div class="pizza-nuvem placa-nuvem" data-placa="pizza">
+            <div class="pizza-pilha">
+              <button type="button" class="p-cobertura" data-peca="cobertura" aria-pressed="false"><span aria-hidden="true">🧀</span>Cobertura</button>
+              <button type="button" class="p-molho" data-peca="molho" aria-pressed="false"><span aria-hidden="true">🍅</span>Molho</button>
+              <button type="button" class="p-massa" data-peca="massa" aria-pressed="false"><span aria-hidden="true">🫓</span>Massa</button>
+              <button type="button" class="p-forno" data-peca="forno" aria-pressed="false"><span aria-hidden="true">🔥</span>Forno</button>
+              <button type="button" class="p-gas" data-peca="gas" aria-pressed="false"><span aria-hidden="true">⚡</span>Gás e luz</button>
+              <button type="button" class="p-prato" data-peca="prato" aria-pressed="false"><span aria-hidden="true">🍽️</span>Prato e quem come</button>
+            </div>
+            <div class="placa-ficha" aria-live="polite">
+              <span class="olho">pizza da nuvem</span>
+              <h4>Clique numa camada</h4>
+              <p>Cada camada desta pizza é uma camada da nuvem. Descubra qual é qual.</p>
+              <p class="placa-contagem">0 de 6 camadas</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== DEMONSTRAÇÃO ===================== -->
+        <section class="parte" id="demonstracao">
+          <div class="cab">
+            <span class="olho">D1 · demonstração</span>
+            <h2>Faça junto: cada serviço no seu modelo</h2>
+            <p>O portal de treino ganhou uma missão nova. Abra noutra aba e marque cada passo aqui.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p><a class="botao" href="../portal/" target="_blank" rel="noopener">☁️ Abrir o portal de treino</a></p>
+              <div class="progresso-atividade" data-progresso="portal-aula-03">
+                <span class="contagem">0 de 4</span>
+                <span class="barra-progresso"><span></span></span>
+              </div>
+              <ol class="checklist" id="portal-aula-03">
+                <li><label><input type="checkbox"><span>Abri <strong>Criar um recurso</strong> e achei os três serviços <strong>em destaque</strong>.</span></label></li>
+                <li><label><input type="checkbox"><span>Abri a <strong>Máquina virtual</strong>, li o que ela entrega e escolhi o modelo.</span></label></li>
+                <li><label><input type="checkbox"><span>Fiz o mesmo com o <strong>Aplicativo Web</strong>.</span></label></li>
+                <li><label><input type="checkbox"><span>E com o <strong>Aplicativo de funções</strong>. A missão da aula 3 ficou verde.</span></label></li>
+              </ol>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Em qual dos três o sistema operacional é seu? Na <strong>máquina virtual</strong> (IaaS).</li>
+                  <li>Em qual deles nada fica ligado esperando? No <strong>aplicativo de funções</strong> (serverless).</li>
+                </ol>
+              </div>
+              <p class="dica"><strong>No Azure de verdade:</strong> os três ficam em "Criar um recurso", com estes nomes. Hoje, fique no simulador.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== PEGADINHA ===================== -->
+        <section class="parte" id="pegadinha">
+          <div class="cab">
+            <span class="olho">P1 · pegadinha de prova</span>
+            <h2>Serverless tem servidor</h2>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr">
+            <div class="texto">
+              <p>Dois nomes que enganam muita gente.</p>
+              <div class="tabela-rola"><table class="metodos"><thead><tr><th>Confusão</th><th>O certo</th><th>A pista na questão</th></tr></thead><tbody>
+                <tr><td><strong>"Serverless não tem servidor"</strong></td><td>Tem, e muitos. Você é que <strong>não cuida</strong> deles: o provedor cuida da infraestrutura e da escala.</td><td>"Orientado a eventos", "paga só pela execução", "sem gerenciar servidores".</td></tr>
+                <tr><td><strong>PaaS × SaaS</strong></td><td>No PaaS, <strong>o código é seu</strong>, e a plataforma é do provedor. No SaaS, até o aplicativo é do provedor.</td><td>"Desenvolvedores", "implantar o aplicativo" é PaaS; "usar o aplicativo pronto" é SaaS.</td></tr>
+                <tr><td><strong>IaaS × PaaS</strong></td><td>No IaaS, o sistema operacional é seu. No PaaS, não.</td><td>"Mais controle", "configurar o sistema operacional" é IaaS.</td></tr>
+              </tbody></table></div>
+              <details class="pausa-aqui">
+                <summary><span class="pausa-icone" aria-hidden="true">⏸</span><span><span class="olho">Pausa aqui</span><strong>Uma equipe quer publicar o site sem cuidar de atualização do sistema operacional, mas o código é dela. Qual modelo?</strong></span><span class="pausa-ver">ver a resposta</span></summary>
+                <div class="pausa-resposta"><p><strong>PaaS</strong>, como o Serviço de Aplicativo do Azure. O código é da equipe; o sistema operacional e as atualizações ficam com o provedor.</p></div>
+              </details>
+              <div class="faca-assim">
+                <strong>Teste:</strong>
+                <ol>
+                  <li>Uma empresa usa o Outlook do Microsoft 365. Qual modelo? <strong>SaaS</strong>.</li>
+                  <li>Um código redimensiona as fotos quando alguém envia uma. Qual modelo? <strong>Serverless</strong>: roda por evento.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== TREINO ===================== -->
+        <section class="parte" id="treino">
+          <div class="cab">
+            <span class="olho">T1–T2 · treino</span>
+            <h2>Classifique!</h2>
+            <p>Cada acerto de primeira vale <strong>10 XP</strong>. Errou? A dica aparece e você tenta de novo. No fim, você ganha uma insígnia.</p>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-1">
+            <div class="texto">
+              <span class="olho">T1</span>
+              <h3>Qual modelo?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="iaas:IaaS,paas:PaaS,saas:SaaS,serverless:Serverless" data-dica="Pense em quem cuida do sistema operacional, e se o código roda o tempo todo ou só quando algo acontece.">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="iaas" data-explica="Levar as máquinas do jeito que estão é lift-and-shift: IaaS.">Uma empresa leva os servidores do escritório para a nuvem sem mudar nada.</li>
+                    <li data-resposta="saas" data-explica="Um aplicativo pronto para usar: SaaS.">Um escritório passa a usar um sistema de folha de pagamento pronto, no navegador.</li>
+                    <li data-resposta="paas" data-explica="Os programadores só cuidam do código; a plataforma é do provedor: PaaS.">Os programadores publicam a API sem cuidar do sistema operacional nem das atualizações.</li>
+                    <li data-resposta="serverless" data-explica="Um evento (a nota enviada) acorda o código, que roda e para: serverless.">Quando uma nota fiscal chega, um código lê os dados em segundos e para.</li>
+                    <li data-resposta="iaas" data-explica="Controle total do sistema operacional: IaaS.">A equipe precisa instalar um sistema antigo que só roda numa versão específica do Windows Server.</li>
+                    <li data-resposta="saas" data-explica="E-mail e mensagens prontos: SaaS.">Uma escola troca o servidor de e-mail próprio pelo Outlook do Microsoft 365.</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="conceito" style="grid-template-columns:1fr" id="treino-2">
+            <div class="texto">
+              <span class="olho">T2</span>
+              <h3>E os serviços do Azure?</h3>
+              <div class="faca-assim desafio">
+                <strong>Agora é com você:</strong>
+                <div class="classifica" data-opcoes="iaas:IaaS,paas:PaaS,saas:SaaS,serverless:Serverless" data-dica="Volte aos quadros “No Azure” do C2 ao C5.">
+                  <p class="classifica-placar" aria-live="polite"></p>
+                  <ol class="classifica-itens">
+                    <li data-resposta="iaas" data-explica="Você recebe a máquina e cuida do sistema para cima: IaaS.">Máquinas Virtuais do Azure</li>
+                    <li data-resposta="paas" data-explica="Você envia o código do site, e o Azure cuida do resto: PaaS.">Serviço de Aplicativo do Azure (App Service)</li>
+                    <li data-resposta="serverless" data-explica="Roda por evento e cobra pelo tempo de execução: serverless.">Azure Functions</li>
+                    <li data-resposta="paas" data-explica="Banco gerenciado: atualização, backup e monitoramento são do Azure. A Microsoft chama de PaaS.">Banco de Dados SQL do Azure</li>
+                    <li data-resposta="saas" data-explica="Word, Excel, Outlook e Teams prontos: SaaS.">Microsoft 365</li>
+                  </ol>
+                  <button type="button" class="botao contorno classifica-reiniciar">Jogar de novo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== ATIVIDADE ===================== -->
+        <section class="parte" id="atividade">
+          <div class="cab">
+            <span class="olho">A1 · checklist</span>
+            <h2>Checklist da aula</h2>
+            <p>O que você marcar fica salvo neste navegador.</p>
+          </div>
+
+          <div class="cartao">
+            <div class="progresso-atividade" data-progresso="passos-aula-03">
+              <span class="contagem">0 de 10</span>
+              <span class="barra-progresso"><span></span></span>
+            </div>
+            <ol class="checklist" id="passos-aula-03">
+              <li><label><input type="checkbox"><span>Estudei esta página até o fim (ou assisti ao vídeo 3, quando ele sair). <a href="#video">Veja o roteiro da aula</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Cliquei nos quatro jeitos de fazer a pizza e sei o que muda em cada um. <a href="#c1">Veja o C1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Pus os sete pedidos no modelo certo e ganhei o troféu. <a href="#simulador">Veja o SIM1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que o provedor e o cliente cuidam no IaaS. <a href="#c2">Veja o C2</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei o que muda no PaaS. <a href="#c3">Veja o C3</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei os cenários do SaaS. <a href="#c4">Veja o C4</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Sei explicar serverless e por que ele tem servidor. <a href="#c5">Veja o C5</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Cumpri a missão da aula 3 no portal de treino. <a href="#demonstracao">Veja o D1</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz os dois treinos Classifique! e ganhei as insígnias. <a href="#treino">Veja o treino</a>.</span></label></li>
+              <li><label><input type="checkbox"><span>Fiz o módulo "Descrever tipos de serviço de nuvem" no Microsoft Learn e marquei no <a href="../#progresso">Meu progresso</a>.</span></label></li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ===================== CONEXÃO STEAM ===================== -->
+        <section class="parte" id="steam">
+          <div class="cab">
+            <span class="olho">S1 · conexão STEAM</span>
+            <h2>A nuvem fora da tela</h2>
+          </div>
+          <div class="steam">
+            <div class="cartao">
+              <span class="letra">M</span>
+              <h3>Matemática</h3>
+              <p>O cupom roda 2 segundos por pedido, e o Cerrado Delivery tem 600 pedidos num domingo. São quantos minutos de trabalho? E quantas horas teria uma máquina ligada das 18h às 23h?</p>
+            </div>
+            <div class="cartao">
+              <span class="letra">A</span>
+              <h3>Artes</h3>
+              <p>Desenhe (ou monte com sucata) a sua pizza da nuvem: cada camada com o nome dela e uma cor para quem cuida, como nas camadas do C1.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MICROSOFT LEARN ===================== -->
+        <section class="parte" id="learn">
+          <div class="cab">
+            <span class="olho">J1 · agora é no Microsoft Learn</span>
+            <h2>O revezamento: a sua vez no Learn</h2>
+            <p>Esta aula preparou o terreno. O módulo do Learn aprofunda, com a verificação de conhecimentos oficial, de graça e em português.</p>
+          </div>
+          <div class="repos">
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/training/modules/describe-cloud-service-types/">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Microsoft Learn</span>
+              <h4>Descrever tipos de serviço de nuvem</h4>
+              <p>Trilha 1, módulo 3: IaaS, PaaS e SaaS, com a verificação de conhecimentos.</p>
+              <span class="repo-pe"><span class="ling"><span class="tec" style="--t:1.45rem"><img src="../assets/img/tec/azure.svg" alt="" width="20" height="20"></span>Azure</span><span class="etiqueta">próximo passo</span></span>
+            </a>
+            <a class="repo luz" href="https://learn.microsoft.com/pt-br/credentials/certifications/resources/study-guides/az-900">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Guia da prova</span>
+              <h4>AZ-900, guia de estudo</h4>
+              <p>O que a Microsoft diz que cai em cada domínio. Confira antes de agendar.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:var(--d1)"><i></i>Conceitos</span><span class="etiqueta">fonte</span></span>
+            </a>
+            <a class="repo luz" href="/Preparatorio-AWS/aulas/aula-01.html#c2">
+              <span class="repo-nome"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-repo"/></svg>Preparatório AWS</span>
+              <h4>IaaS, PaaS e SaaS: casa ou hotel</h4>
+              <p>O mesmo assunto pelo lado da AWS, com outra analogia.</p>
+              <span class="repo-pe"><span class="ling" style="--cor:#ff9900"><i></i>AWS</span><span class="etiqueta">como é na AWS</span></span>
+            </a>
+          </div>
+        </section>
+
+        <nav class="nav-aulas" aria-label="Outras aulas">
+          <!-- EDITE AQUI: use <a href="aula-NN.html"> quando a página da aula vizinha for liberada; <span> enquanto não for -->
+          <a class="anterior" href="aula-02.html">
+            <span class="olho">← aula anterior</span>
+            <strong>Aula 2: Benefícios da nuvem</strong>
+          </a>
+          <span class="proxima">
+            <span class="olho">próxima aula</span>
+            <strong>Aula 4: Regiões, zonas e a hierarquia do Azure (em breve)</strong>
+          </span>
+        </nav>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="envolve">
+      <div class="rodape-fim" style="margin-top:0; padding-top:0; border-top:0">
+        <span><a href="../">Preparatório AZ-900</a> · Feito com ♥ e sucata eletrônica.</span>
+        <span>az account show --output table</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ícone de repositório (Octicons, licença MIT) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-repo" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></symbol>
+  </svg>
+
+  <script src="../assets/js/aulas.js"></script>
+  <script src="../assets/js/classifica.js?v=2"></script>
+  <script src="../assets/js/matrix.js?v=2"></script>
+  <script src="../js/vivo.js?v=3"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 /*
-  treino.js: o portal de treino do Preparatório AZ-900 (versão 2 · 2026-11-12 · aula 1, o tour; aula 2, os jeitos de gerenciar).
+  treino.js: o portal de treino do Preparatório AZ-900 (versão 3 · 2026-11-12 · aula 1, o tour; aula 2, os jeitos de gerenciar; aula 3, cada serviço no seu modelo).
   Nasceu do motor do simulador de Fundamentos de Computação em Nuvem (simulador/portal.js), com a cara do
   Stela Cloud: nada de logo da Microsoft, e o nome do serviço no Azure escrito ao lado.
   Aqui é só treino: sem login, sem nota, e nada vai para o banco. O estado fica no navegador (localStorage).
@@ -55,7 +55,33 @@
       ],
       fim: "<strong>🏆 Missão cumprida!</strong> Portal, linha de comando e PowerShell: os jeitos de gerenciar na nuvem. E o SLA diz quanto tempo o serviço promete ficar no ar.",
     },
+    {
+      id: "modelos",
+      aula: 3,
+      titulo: "Aula 3 · Cada serviço no seu modelo",
+      pedido: "A Lia quer saber o que cada serviço entrega pronto. Em \"Criar um recurso\", abra os três serviços em destaque e diga o modelo de cada um:",
+      passos: [
+        { id: "m-vm", texto: "🖥 Máquina virtual: qual é o modelo?" },
+        { id: "m-web", texto: "🌐 Aplicativo Web: qual é o modelo?" },
+        { id: "m-func", texto: "⚡ Aplicativo de funções: qual é o modelo?" },
+      ],
+      fim: "<strong>🏆 Missão cumprida!</strong> Máquina virtual é IaaS, aplicativo web é PaaS e aplicativo de funções é serverless. Quanto mais pronto o serviço, menos você cuida.",
+    },
   ];
+
+  // os serviços em destaque da aula 3: o que cada um entrega pronto e o modelo certo
+  const DESTAQUES = {
+    vm: { icone: "🖥", nome: "Máquina virtual", azure: "Máquinas Virtuais do Azure", certo: "iaas",
+      texto: "Você escolhe o sistema operacional, instala e atualiza o que quiser. O Azure entrega o hardware, a rede e a segurança física.",
+      ok: "IaaS: você recebe a máquina e cuida do sistema operacional para cima. Controle máximo, responsabilidade máxima." },
+    web: { icone: "🌐", nome: "Aplicativo Web", azure: "Serviço de Aplicativo do Azure (App Service)", certo: "paas",
+      texto: "Você envia o código do site. O Azure cuida do sistema operacional, das atualizações e da escala.",
+      ok: "PaaS: a plataforma vem pronta, e você só traz o código e os dados." },
+    func: { icone: "⚡", nome: "Aplicativo de funções", azure: "Azure Functions", certo: "serverless",
+      texto: "O código acorda quando um evento acontece, roda por alguns segundos e para. Você paga só o tempo em que ele rodou.",
+      ok: "Serverless: sem máquina ligada esperando. Um evento acorda a função, e o Azure cobra só o tempo de execução." },
+  };
+  const NOMES_MODELO = { iaas: "IaaS", paas: "PaaS", saas: "SaaS", serverless: "Serverless" };
 
   // ---------- estado ----------
   function estadoInicial() {
@@ -114,8 +140,10 @@
     lista.innerHTML = MISSOES.map((m) => {
       const feitos = m.passos.filter((p) => estado.feitos[p.id]).length;
       const pronta = feitos === m.passos.length;
-      return `<li class="${pronta ? "feita" : ""}"><strong>${pronta ? "✔" : "○"} ${esc(m.titulo)}</strong><span>${esc(m.pedido)}</span>
-        <ol class="sim-passos">${m.passos.map((p) => `<li class="${estado.feitos[p.id] ? "feito" : ""}"><span aria-hidden="true">${estado.feitos[p.id] ? "✅" : "⬜"}</span> ${esc(p.texto)}<span class="visualmente-oculto">${estado.feitos[p.id] ? " (feito)" : " (a fazer)"}</span></li>`).join("")}</ol>
+      const passos = `<ol class="sim-passos">${m.passos.map((p) => `<li class="${estado.feitos[p.id] ? "feito" : ""}"><span aria-hidden="true">${estado.feitos[p.id] ? "✅" : "⬜"}</span> ${esc(p.texto)}<span class="visualmente-oculto">${estado.feitos[p.id] ? " (feito)" : " (a fazer)"}</span></li>`).join("")}</ol>`;
+      // missão cumprida fica recolhida: a lista cresce a cada aula
+      if (pronta) return `<li class="feita"><details><summary><strong>✔ ${esc(m.titulo)}</strong></summary><span>${esc(m.pedido)}</span>${passos}</details></li>`;
+      return `<li><strong>○ ${esc(m.titulo)}</strong><span>${esc(m.pedido)}</span>${passos}
         <span class="sim-barrinha" style="--p:${feitos / m.passos.length}" aria-hidden="true"></span></li>`;
     }).join("");
     const passos = MISSOES.flatMap((m) => m.passos);
@@ -273,7 +301,9 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
           <button type="button" data-acao="breve" data-aula="6"><span aria-hidden="true">🛡</span><span>Rede<small>redes virtuais e VPN · aula 6</small></span></button>
           <button type="button" data-acao="breve" data-aula="7"><span aria-hidden="true">🗄</span><span>Armazenamento<small>contas de armazenamento · aula 7</small></span></button>
           <button type="button" data-acao="breve" data-aula="8"><span aria-hidden="true">🪪</span><span>Identidade<small>usuários e acessos · aula 8</small></span></button>
-        </div>`;
+        </div>
+        <h3 class="sim-sub">Em destaque</h3>
+        <div class="sim-servicos">${Object.entries(DESTAQUES).map(([id, d]) => `<button type="button" data-servico="${id}"><span aria-hidden="true">${d.icone}</span><span>${esc(d.nome)}<small>no Azure: ${esc(d.azure)}</small></span></button>`).join("")}</div>`;
     },
 
     todos() {
@@ -282,6 +312,30 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
         <p class="sim-vazio">Nenhum recurso para exibir. Tudo o que o Cerrado Delivery criar vai aparecer aqui, de todos os tipos.</p>`;
     },
   };
+
+  function telaDestaque(id) {
+    const d = DESTAQUES[id];
+    const feito = estado.feitos["m-" + id];
+    return `${cabecalho(d.nome, [["inicio", "Página inicial"], ["criar", "Criar um recurso"]])}
+      <p class="sim-equivale">No Azure: <strong>${esc(d.azure)}</strong></p>
+      <p>${esc(d.texto)}</p>
+      <h3 class="sim-sub">Qual é o modelo deste serviço?</h3>
+      <div class="sim-modelos" role="group" aria-label="Escolha o modelo">${Object.entries(NOMES_MODELO).map(([m, n]) => `<button type="button" class="sim-botao" data-modelo-resp="${m}" data-servico="${id}"${feito && m === d.certo ? ' aria-pressed="true"' : ""}>${n}</button>`).join("")}</div>
+      <p class="sim-nota">Monte o serviço de verdade nas próximas aulas. Aqui, é só reconhecer o modelo.</p>`;
+  }
+
+  function responderModelo(id, modelo) {
+    const d = DESTAQUES[id];
+    tela.querySelectorAll("[data-modelo-resp]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.modeloResp === modelo)));
+    if (modelo === d.certo) {
+      marcar("m-" + id);
+      avisar(`✔ ${d.nome}: ${NOMES_MODELO[modelo]}.`);
+      const faltam = Object.keys(DESTAQUES).filter((k) => !estado.feitos["m-" + k]).length;
+      if (faltam) dica(`<strong>✔ ${esc(d.ok)}</strong> ${faltam === 1 ? "Falta 1." : `Faltam ${faltam}.`}`);
+    } else {
+      dica(`<strong>Ainda não.</strong> ${modelo === "saas" ? "SaaS é programa pronto para usar, como o e-mail. Aqui o código é seu." : "Releia o que o serviço entrega pronto: quem cuida do sistema operacional? E ele fica ligado o tempo todo?"}`);
+    }
+  }
 
   // ---------- navegação ----------
   function ir(nome) {
@@ -299,8 +353,14 @@ Assinatura de estudo  equipe@cerradodelivery   Cerrado Delivery`,
 
   // ---------- eventos ----------
   document.addEventListener("click", (evento) => {
-    const alvo = evento.target.closest("[data-ir], [data-acao], [data-painel-topo]");
+    const alvo = evento.target.closest("[data-ir], [data-acao], [data-painel-topo], [data-servico]");
     if (!alvo || !alvo.closest(".sim-portal")) return;
+    if (alvo.dataset.modeloResp) return responderModelo(alvo.dataset.servico, alvo.dataset.modeloResp);
+    if (alvo.dataset.servico) {
+      tela.innerHTML = telaDestaque(alvo.dataset.servico);
+      tela.focus({ preventScroll: true });
+      return;
+    }
     if (alvo.dataset.painelTopo) return abrirPainel(alvo.dataset.painelTopo, alvo);
     if (alvo.dataset.ir) return ir(alvo.dataset.ir);
     if (alvo.dataset.acao === "breve") return avisar(`Este recurso entra nas missões da aula ${alvo.dataset.aula}.`);

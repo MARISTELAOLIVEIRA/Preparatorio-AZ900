@@ -1,13 +1,13 @@
 /*
   vivo.js: as peças interativas das aulas "vivas" do Preparatório AZ-900. Só deste site.
-  versão 2 · 2026-11-12 · aulas 1 (o que é nuvem e quem cuida do quê) e 2 (benefícios da nuvem)
+  versão 3 · 2026-11-12 · aulas 1 (o que é nuvem e quem cuida do quê), 2 (benefícios) e 3 (IaaS, PaaS, SaaS e serverless)
   Nasceu do vivo.js do Preparatório AWS (versão 13): o plantão, a central e a placa são os mesmos,
   com os textos do Azure. Cada aula nova ganha as suas configurações aqui.
 
   1. [data-plantao] gancho com palpites (as respostas ficam nos botões, em data-explica)
-  2. [data-central] cada tarefa na sua coluna; data-central escolhe o conjunto (aula 1: "shopping", quem cuida do quê)
-  3. [data-camadas] a responsabilidade compartilhada em camadas: local, IaaS, PaaS e SaaS (aula 1)
-  4. [data-placa]   desmonte: as peças de uma placa e o nome de cada uma no Azure (aula 1)
+  2. [data-central] cada tarefa na sua coluna; data-central escolhe o conjunto (aula 1: "shopping"; aula 3: "pedidos")
+  3. [data-camadas] quem cuida de cada camada em local, IaaS, PaaS e SaaS (aula 1: a responsabilidade; aula 3: data-camadas="pizza")
+  4. [data-placa]   desmonte: as peças de uma placa (aula 1) ou as camadas de uma pizza (aula 3, data-placa="pizza")
   5. [data-domingo] o domingo da pizza: fornos, forno gigante, segunda cozinha, alarme e porteiro, das 18h às 23h (aula 2)
   6. [data-noves]   a régua dos noves: quantos minutos por mês cabem fora do ar em cada SLA (aula 2)
 
@@ -76,6 +76,42 @@
       _certas: "com quem cuida",
       _tudo: "🏆 <strong>Mudança para o shopping sem susto!</strong> O prédio é da Microsoft, a loja é sua, e o meio do caminho depende do serviço. É a responsabilidade compartilhada.",
       _quase: "As amarelas valem às vezes, dependendo do serviço; as vermelhas nunca. Troque e confira de novo."
+    },
+    pedidos: {
+      servidor: { certo: "iaas",
+        iaas: "Leva a máquina do jeito que está, sem reescrever nada: é o lift-and-shift, o cenário clássico de IaaS.",
+        paas: ["meh", "Daria certo, mas antes a Lia teria que adaptar o sistema à plataforma. O pedido era levar como está."],
+        outro: ["falha", "💥 Um sistema antigo inteiro, do jeito que está, precisa de uma máquina virtual: IaaS."] },
+      testes: { certo: "iaas",
+        iaas: "Cópias iguais ao ambiente de verdade, que ligam e desligam rápido, com controle total: IaaS.",
+        paas: ["meh", "Funciona para testar o código, mas o pedido era copiar o ambiente inteiro, com o sistema operacional."],
+        outro: ["falha", "💥 Copiar o ambiente inteiro, do sistema operacional para cima, é com máquinas virtuais: IaaS."] },
+      devs: { certo: "paas",
+        paas: "A plataforma vem pronta, com sistema, atualizações e escala: os programadores só escrevem o código. PaaS.",
+        iaas: ["meh", "Funciona, mas aí a equipe cuida do sistema operacional e das atualizações. O pedido era só programar."],
+        serverless: ["meh", "Serve para pedaços do código que rodam quando algo acontece. Para o aplicativo inteiro no ar, a plataforma (PaaS) é o caminho."],
+        saas: ["falha", "💥 SaaS é programa pronto: não tem onde escrever o código do aplicativo."] },
+      bi: { certo: "paas",
+        paas: "Ferramentas de análise prontas na plataforma: a equipe só traz os dados e as perguntas. É um cenário de PaaS no Learn.",
+        iaas: ["meh", "Daria, instalando tudo numa máquina virtual. Mas aí a equipe cuida de tudo, e o pedido era analisar."],
+        outro: ["falha", "💥 Para analisar os dados com ferramentas prontas, o Learn aponta PaaS."] },
+      email: { certo: "saas",
+        saas: "E-mail pronto, como o Outlook do Microsoft 365: é só usar. SaaS.",
+        iaas: ["falha", "💥 Montar um servidor de e-mail numa máquina virtual? Muito trabalho para algo que já existe pronto."],
+        outro: ["falha", "💥 E-mail é o exemplo clássico de programa pronto: SaaS."] },
+      financas: { certo: "saas",
+        saas: "Um sistema financeiro pronto, no navegador: SaaS. A equipe só usa e cuida dos dados e dos acessos.",
+        outro: ["falha", "💥 Controle de despesas pronto, sem programar nada: SaaS."] },
+      cupom: { certo: "serverless",
+        serverless: "A função acorda a cada pedido, trabalha uns segundos e dorme. Você paga só esses segundos: serverless (no Azure, o Azure Functions).",
+        paas: ["meh", "Funciona, mas a plataforma fica no ar o tempo todo para um trabalho de segundos."],
+        iaas: ["meh", "😴 Uma máquina ligada o dia todo para trabalhar segundos por pedido: você paga cada hora parada."],
+        saas: ["falha", "💥 O cupom do Cerrado Delivery é código seu. SaaS é programa pronto."] },
+      _faltou: "Faltou escolher o modelo de",
+      _unidade: ["pedido", "pedidos"],
+      _certas: "no modelo certo",
+      _tudo: "🏆 <strong>Cada pedido no seu modelo!</strong> IaaS para levar e testar, PaaS para programar e analisar, SaaS para usar pronto e serverless para o que roda por evento.",
+      _quase: "As amarelas funcionam, mas não são a melhor escolha; as vermelhas não servem. Troque e confira de novo."
     }
   };
   document.querySelectorAll("[data-central]").forEach(function (box) {
@@ -128,14 +164,21 @@
 
   // ===================== 3. a responsabilidade compartilhada, em camadas =====================
   // em cada camada, quem cuida em cada modelo (local, IaaS, PaaS, SaaS): v = você, c = compartilhado, m = Microsoft
-  const MODELOS = [
+  const CAMADAS = {};
+  CAMADAS.resp = { rotulo: { v: "você", c: "os dois", m: "Microsoft" }, modelos: [
     { nome: "local", fala: "🏢 <strong>No seu datacenter (local), tudo é com você:</strong> do prédio aos dados. Como a cozinha do Cerrado Delivery hoje, com o servidor no escritório." },
     { nome: "IaaS", fala: "🖥️ <strong>IaaS, como uma máquina virtual do Azure:</strong> o prédio, a rede e os servidores físicos passam para a Microsoft. Do sistema operacional para cima, ainda é com você." },
     { nome: "PaaS", fala: "🧰 <strong>PaaS, como o Azure App Service:</strong> a Microsoft cuida também do sistema operacional. O aplicativo e os controles de rede ficam divididos." },
     { nome: "SaaS", fala: "📧 <strong>SaaS, como o Outlook do Microsoft 365:</strong> a Microsoft cuida de quase tudo. Mas os dados, as contas e quem tem acesso continuam seus, <strong>em qualquer modelo</strong>." }
-  ];
-  const ROTULO = { v: "você", c: "os dois", m: "Microsoft" };
+  ] };
+  CAMADAS.pizza = { rotulo: { v: "você", c: "os dois", m: "provedor" }, modelos: [
+    { fala: "🏠 <strong>Do zero, na sua cozinha = local.</strong> Cozinha, forno, massa, receita: tudo é com você. Como o servidor no fundo da cozinha do Cerrado Delivery." },
+    { fala: "🔑 <strong>Cozinha alugada = IaaS.</strong> A cozinha, o gás e o forno são do dono. A massa, o ponto e a receita são com você. Numa máquina virtual do Azure, o sistema operacional para cima é seu." },
+    { fala: "🛵 <strong>Delivery com a sua receita = PaaS.</strong> Você manda a receita (o código), e a pizzaria faz a massa, assa e entrega (a plataforma). No Azure, o App Service." },
+    { fala: "🍽️ <strong>Restaurante = SaaS.</strong> Cardápio pronto: você só senta, come e paga. Num programa pronto, como o Microsoft 365, você só usa e cuida dos seus dados e acessos." }
+  ] };
   document.querySelectorAll("[data-camadas]").forEach(function (box) {
+    const conf = CAMADAS[box.dataset.camadas || "resp"];
     const botoes = box.querySelectorAll("[data-modelo]");
     const camadas = box.querySelectorAll("[data-quem]");
     const fala = box.querySelector(".casa-fala");
@@ -145,10 +188,10 @@
         const q = c.dataset.quem[m];
         c.classList.remove("voce", "junto", "ms");
         c.classList.add(q === "v" ? "voce" : q === "c" ? "junto" : "ms");
-        c.querySelector(".quem").textContent = ROTULO[q];
+        c.querySelector(".quem").textContent = conf.rotulo[q];
         c.style.setProperty("--atraso", (pausado() ? 0 : k * 60) + "ms");
       });
-      fala.innerHTML = MODELOS[m].fala;
+      fala.innerHTML = conf.modelos[m].fala;
     }
     botoes.forEach((b, k) => b.addEventListener("click", () => escolhe(k)));
     escolhe(0);
@@ -165,6 +208,17 @@
     _fim: "<strong>🔧 Placa desmontada!</strong> Agora você sabe o que está alugando quando liga uma máquina na nuvem.",
     _unidade: "peças"
   };
+  PECAS.pizza = {
+    cobertura: { nome: "🧀 A cobertura e o sabor", azure: "Aplicativo", texto: "O que o cliente vê e escolhe. Na nuvem, é o seu código. Fica com você em IaaS e PaaS; no SaaS, o aplicativo já vem pronto." },
+    molho: { nome: "🍅 O molho e o ponto", azure: "Runtime e middleware", texto: "O que liga a massa à cobertura e faz tudo assar junto. Na nuvem, é o ambiente que roda o seu código. No PaaS, o provedor já entrega pronto." },
+    massa: { nome: "🫓 A massa", azure: "Sistema operacional", texto: "A base de tudo. Numa máquina virtual (IaaS), quem cuida é você: instalar, configurar, atualizar. No PaaS e no SaaS, é o provedor." },
+    forno: { nome: "🔥 O forno", azure: "Servidores e armazenamento", texto: "O equipamento pesado. Em qualquer modelo de nuvem, ele é do provedor: você aluga, não compra." },
+    gas: { nome: "⚡ O gás e a luz", azure: "Rede e energia", texto: "Sem eles, nada assa. Na nuvem, a conexão com a internet, a energia e a segurança física são sempre do provedor." },
+    prato: { nome: "🍽️ O prato e quem come", azure: "Dados e acessos", texto: "O pedaço que é sempre seu, até no restaurante: os seus dados e quem pode entrar. É a responsabilidade que nunca sai da sua mão." },
+    _fim: "<strong>🍕 Pizza desmontada!</strong> Da cobertura à cozinha, cada camada tem um dono diferente em cada modelo.",
+    _unidade: "camadas",
+    _rotulo: "Na nuvem:"
+  };
   document.querySelectorAll("[data-placa]").forEach(function (placa) {
     const conjunto = PECAS[placa.dataset.placa || "placa"];
     const ficha = placa.querySelector(".placa-ficha");
@@ -178,7 +232,7 @@
         const fim = vistas.size === total
           ? "<p>" + conjunto._fim + "</p>"
           : `<p class="placa-contagem">${vistas.size} de ${total} ${conjunto._unidade}</p>`;
-        ficha.innerHTML = `<span class="olho">${p.nome}</span><h4>No Azure:</h4><span class="na-aws">${p.azure}</span><p>${p.texto}</p>${fim}`;
+        ficha.innerHTML = `<span class="olho">${p.nome}</span><h4>${conjunto._rotulo || "No Azure:"}</h4><span class="na-aws">${p.azure}</span><p>${p.texto}</p>${fim}`;
         ficha.classList.remove("troca");
         void ficha.offsetWidth;
         ficha.classList.add("troca");
